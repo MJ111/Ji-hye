@@ -128,7 +128,7 @@ public class DatabaseManager
 			java.sql.Statement statement = mConnection.createStatement();
 			ResultSet resultSet = statement
 					.executeQuery("select page_title, page_latest from " + DatabaseName + ".page where page_title like '%"
-							+ page_title + "%' and page_namespace=0;");
+							+ page_title + "%' and page_is_redirect=0 and page_namespace=0;");
 
 			while (resultSet != null && resultSet.next())
 			{
