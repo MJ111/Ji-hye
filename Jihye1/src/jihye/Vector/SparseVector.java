@@ -1,25 +1,21 @@
 package jihye.Vector;
 
-import java.text.*;
 import java.util.*;
 
-public class SparseVector
-{
+public class SparseVector {
 	private ArrayList<SparseVectorElement> vector;
 	private HashMap<Integer, String> keywordList;
 	public String name = "";
 	private int numberOfWords;
 
-	public SparseVector(Dictionary dictionary, TFMap termFrequencyMap)
-	{
+	public SparseVector(Dictionary dictionary, TFMap termFrequencyMap) {
 		numberOfWords = termFrequencyMap.getWordCount();
 		vector = new ArrayList<SparseVectorElement>();
 		keywordList = new HashMap<Integer, String>();
 		name = termFrequencyMap.getName();
 		Iterator<String> iterator = termFrequencyMap.getIterator();
 
-		while (iterator.hasNext())
-		{
+		while (iterator.hasNext()) {
 			String key = iterator.next();
 			DictionaryElement element = dictionary.get(key);
 			keywordList.put(element.index, key);
@@ -29,118 +25,102 @@ public class SparseVector
 
 			vector.add(new SparseVectorElement(element.index, tf * idf));
 		}
-		Collections.sort(vector,customCoparator );
-	
+		Collections.sort(vector, customCoparator);
 	}
 
-	public int size()
-	{
+	public int size() {
 		return vector.size();
 	}
 
-	public void clear()
-	{
+	public void clear() {
 		vector.clear();
 	}
 
-	public SparseVectorElement get(int i)
-	{
+	public SparseVectorElement get(int i) {
 		return vector.get(i);
 	}
 
-	public Iterator<SparseVectorElement> getIterator()
-	{
+	public Iterator<SparseVectorElement> getIterator() {
 		return vector.iterator();
 	}
 
-	public double getValuebyDimetion(int d)
-	{
-		for (SparseVectorElement e : vector)
-		{
-			if (e.dimension > d) break;
+	public double getValuebyDimetion(int d) {
+		for (SparseVectorElement e : vector) {
+			if (e.dimension > d)
+				break;
 
-			if (e.dimension == d) return e.value;
+			if (e.dimension == d)
+				return e.value;
 		}
 
 		return 0;
 	}
 
-	public double getTfbyDimension(int d)
-	{
+	public double getTfbyDimension(int d) {
 		return getTfbyDimension(d) / numberOfWords;
 	}
 
-	public SimilarityResult getSimilarity(SparseVector target)
-	{
-		SimilarityResult result = null;
+	public SimilarityResult getSimilarity(SparseVector target) {
 		double similarity = 0;
 		String matchedKeyword = "";
 
 		double scalar = 0;
 		double norm1 = 0, norm2 = 0;
-		
-		boolean increment1=false, increment2=false;
-		
+
+		boolean increment1 = false, increment2 = false;
+
 		Iterator<SparseVectorElement> iterator1 = this.getIterator();
 		Iterator<SparseVectorElement> iterator2 = target.getIterator();
 		SparseVectorElement element1 = null;
 		SparseVectorElement element2 = null;
 
-		if (iterator1.hasNext()) element1 = iterator1.next();
-		if (iterator2.hasNext()) element2 = iterator2.next();
+		if (iterator1.hasNext())
+			element1 = iterator1.next();
+		if (iterator2.hasNext())
+			element2 = iterator2.next();
 
-		while ( iterator1.hasNext() && iterator2.hasNext())// question length
+		while (iterator1.hasNext() && iterator2.hasNext())// question length
 		{
-			if(increment1) element1 = iterator1.next();
-			if(increment2) element2 = iterator2.next();
-			
-			if (element1.dimension < element2.dimension)
-			{
+			if (increment1)
+				element1 = iterator1.next();
+			if (increment2)
+				element2 = iterator2.next();
+
+			if (element1.dimension < element2.dimension) {
 				increment1 = true;
 				increment2 = false;
-			}
-			else if (element1.dimension == element2.dimension)
-			{
+			} else if (element1.dimension == element2.dimension) {
 				scalar += element1.value * element2.value;
 				matchedKeyword += keywordList.get(element1.dimension) + " ";
 
 				increment1 = true;
 				increment2 = true;
-			}
-			else
-			{
+			} else {
 				increment1 = false;
-				increment2 = true;;
+				increment2 = true;
+				;
 			}
 		}
 
 		norm1 = this.getNorm();
 		norm2 = target.getNorm();
 		similarity = scalar / Math.sqrt(norm1 * norm2);
-		System.out.println(target.name +": "+similarity);
+		System.out.println(target.name + ": " + similarity);
 		return new SimilarityResult(matchedKeyword, similarity);
 	}
 
-	public double getNorm()
-	{
+	public double getNorm() {
 		double norm = 0;
 
-		for (SparseVectorElement e : vector)
-		{
+		for (SparseVectorElement e : vector) {
 			norm += e.value * e.value;
 		}
 		return norm;
 	}
 
 	private final static Comparator<SparseVectorElement> customCoparator = new Comparator<SparseVectorElement>() {
-
-		private final Collator collator = Collator.getInstance();
-
-		public int compare(SparseVectorElement e1, SparseVectorElement e2)
-		{
-			  return e1.dimension - e2.dimension;
+		public int compare(SparseVectorElement e1, SparseVectorElement e2) {
+			return e1.dimension - e2.dimension;
 		}
-
 	};
-
 }

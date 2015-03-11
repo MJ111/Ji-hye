@@ -13,54 +13,44 @@ import javax.swing.BorderFactory;
 
 import jihye.PS.ResultData;
 
-public class ResultFrame1 extends javax.swing.JFrame
-{
+public class ResultFrameWithGraph extends javax.swing.JFrame {
 	private ResultData resultData;
 	private Point mouseDownCompCoords;
 
-	public ResultFrame1(UserInterface ui, ResultData resultData)
-	{
+	public ResultFrameWithGraph(UserInterface ui, ResultData resultData) {
 		this.resultData = resultData;
 		initComponents(ui);
 	}
 
-	private void initComponents(UserInterface ui)
-	{
+	private void initComponents(UserInterface ui) {
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setUndecorated(true);
 
 		mouseDownCompCoords = null;
 		addMouseListener(new MouseListener() {
-			public void mouseReleased(MouseEvent e)
-			{
+			public void mouseReleased(MouseEvent e) {
 				mouseDownCompCoords = null;
 			}
 
-			public void mousePressed(MouseEvent e)
-			{
+			public void mousePressed(MouseEvent e) {
 				mouseDownCompCoords = e.getPoint();
 			}
 
-			public void mouseExited(MouseEvent e)
-			{
+			public void mouseExited(MouseEvent e) {
 			}
 
-			public void mouseEntered(MouseEvent e)
-			{
+			public void mouseEntered(MouseEvent e) {
 			}
 
-			public void mouseClicked(MouseEvent e)
-			{
+			public void mouseClicked(MouseEvent e) {
 			}
 		});
 
 		addMouseMotionListener(new MouseMotionListener() {
-			public void mouseMoved(MouseEvent e)
-			{
+			public void mouseMoved(MouseEvent e) {
 			}
 
-			public void mouseDragged(MouseEvent e)
-			{
+			public void mouseDragged(MouseEvent e) {
 				Point currCoords = e.getLocationOnScreen();
 				setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y
 						- mouseDownCompCoords.y);
@@ -76,21 +66,19 @@ public class ResultFrame1 extends javax.swing.JFrame
 		resultJLabel = new javax.swing.JLabel();
 
 		Font font = null;
-		try
-		{
-			font = Font.createFont(Font.TRUETYPE_FONT, new java.io.File("resources/NANUMGOTHICBOLD.TTF"));
-		} catch (FontFormatException e)
-		{
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, new java.io.File(
+					"resources/NANUMGOTHICBOLD.TTF"));
+		} catch (FontFormatException e) {
 			e.printStackTrace();
-		} catch (IOException e)
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        font = font.deriveFont(Font.PLAIN, 20);
-		
-        resultJLabel.setFont(font);
-        resultJLabel.setForeground(new Color(44,57,65));
-        
+		font = font.deriveFont(Font.PLAIN, 20);
+
+		resultJLabel.setFont(font);
+		resultJLabel.setForeground(new Color(44, 57, 65));
+
 		mainJPanel.setBackground(new Color(227, 227, 220));
 		mainJPanel.setBorder(BorderFactory.createLineBorder(new Color(220, 106,
 				79), 1));
@@ -101,10 +89,11 @@ public class ResultFrame1 extends javax.swing.JFrame
 		btnJPanel.add(backJButton);
 		btnJPanel.add(replayJButton);
 		btnJPanel.add(moreJButton);
-		
+
 		SimilarlityGraph similarlityGraph = new SimilarlityGraph();
-        graphJPanel = similarlityGraph.getChart(resultData,resultData.getAnswer()-1);
-        
+		graphJPanel = similarlityGraph.getChart(resultData,
+				resultData.getAnswer() - 1);
+
 		javax.swing.GroupLayout graphJPanelLayout = new javax.swing.GroupLayout(
 				graphJPanel);
 		graphJPanel.setLayout(graphJPanelLayout);
@@ -114,11 +103,10 @@ public class ResultFrame1 extends javax.swing.JFrame
 		graphJPanelLayout.setVerticalGroup(graphJPanelLayout
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGap(0, 499, Short.MAX_VALUE));
-		
 
 		resultJLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		int answer = resultData.getAnswer();
-		String resultString = resultData.choices.get(answer-1);
+		String resultString = resultData.choices.get(answer - 1);
 		resultJLabel.setText("정답은 " + answer + "번 " + resultString + "입니다");
 
 		javax.swing.GroupLayout mainJPanelLayout = new javax.swing.GroupLayout(
@@ -202,29 +190,26 @@ public class ResultFrame1 extends javax.swing.JFrame
 
 		setLocationRelativeTo(null);
 	}
-	public void setButtonEventListeners(final UserInterface ui)
-	{
+
+	public void setButtonEventListeners(final UserInterface ui) {
 		backJButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt)
-			{
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				ui.onResultScreenClosed();
 				dispose();
 			}
 		});
 
 		replayJButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt)
-			{
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				ui.onReadAnswer();
 			}
 		});
 		moreJButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt)
-			{
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				ui.onViewDetail();
 			}
 		});
-	}	
+	}
 
 	// Variables declaration
 	private javax.swing.JButton backJButton;

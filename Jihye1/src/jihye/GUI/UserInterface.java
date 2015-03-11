@@ -9,37 +9,30 @@ import jihye.PS.ProblemData;
 import jihye.PS.ResultData;
 import jihye.TTS.TextToSpeech;
 
-public class UserInterface
-{
+public class UserInterface {
 	MainFrame mainFrame;
-	ResultFrame1 resultFrame1;
-	ResultFrame2 resultFrame2;
+	ResultFrameWithGraph resultFrame1;
+	ResultFrameWithKeywords resultFrame2;
 	JihyeController jihyeController;
 	String readString;
 
-	public UserInterface(JihyeController jc)
-	{
+	public UserInterface(JihyeController jc) {
 		jihyeController = jc;
 
-		try
-		{
-			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
-			{
-				if ("Nimbus".equals(info.getName()))
-				{
+		try {
+			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				if ("Nimbus".equals(info.getName())) {
 					UIManager.setLookAndFeel(info.getClassName());
-					UIManager.put("nimbusBase", new ColorUIResource(227, 227, 220));
+					UIManager.put("nimbusBase", new ColorUIResource(227, 227,
+							220));
 					break;
 				}
 			}
-		} catch (Exception e)
-		{
-			try
-			{
+		} catch (Exception e) {
+			try {
 				UIManager.setLookAndFeel(UIManager
 						.getCrossPlatformLookAndFeelClassName());
-			} catch (Exception e1)
-			{
+			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 		}
@@ -49,53 +42,45 @@ public class UserInterface
 	}
 
 	// 리절트 스크린 초기화 (마찬가지)
-	public void initResultScreens(ResultData resultData)
-	{
+	public void initResultScreens(ResultData resultData) {
 		mainFrame.setVisible(false);
 		setReadString(resultData);
-		resultFrame1 = new ResultFrame1(this, resultData);
+		resultFrame1 = new ResultFrameWithGraph(this, resultData);
 		resultFrame1.setVisible(true);
-		resultFrame2 = new ResultFrame2(this, resultData);
+		resultFrame2 = new ResultFrameWithKeywords(this, resultData);
 		onReadAnswer();
 	}
 
 	// 각종 이벤트 리스너들
-	public void onRequestSolve(ProblemData problemData)
-	{
+	public void onRequestSolve(ProblemData problemData) {
 		System.out.println("Solve problem");
 		ResultData resultData = jihyeController.solve(problemData);
 		initResultScreens(resultData);
 	}
 
-	public void onViewDetail()
-	{
+	public void onViewDetail() {
 		resultFrame1.setVisible(false);
 		resultFrame2.setVisible(true);
 	}
 
-	public void onCloseDetail()
-	{
+	public void onCloseDetail() {
 		resultFrame1.setVisible(true);
 	}
 
-	public void onResultScreenClosed()
-	{
+	public void onResultScreenClosed() {
 		mainFrame.setVisible(true);
 	}
 
-	public void onGoHome()
-	{
+	public void onGoHome() {
 		resultFrame1.dispose();
 		resultFrame2.dispose();
 		mainFrame.setVisible(true);
 	}
 
-	public void setReadString(ResultData resultData)
-	{
+	public void setReadString(ResultData resultData) {
 		readString = "";
 
-		switch (resultData.getAnswer())
-		{
+		switch (resultData.getAnswer()) {
 		case 1:
 			readString = "정답은 일번  " + resultData.choices.get(0) + "입니다";
 			break;
@@ -111,17 +96,14 @@ public class UserInterface
 		}
 	}
 
-	public void onReadAnswer()
-	{
+	public void onReadAnswer() {
 		TextToSpeech textToSpeech = new TextToSpeech();
 		textToSpeech.setText(readString);
 		textToSpeech.start();
 	}
 
-	public void terminate()
-	{
+	public void terminate() {
 		System.out.println("Program terminate by user");
 		System.exit(0);
 	}
-
 }

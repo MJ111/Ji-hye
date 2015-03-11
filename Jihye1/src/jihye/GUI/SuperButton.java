@@ -3,60 +3,31 @@ package jihye.GUI;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.KeyStroke;
-import javax.swing.border.Border;
 
 @SuppressWarnings("serial")
-public class SuperButton extends JButton
-{
+public class SuperButton extends JButton {
 	Image image;
 
-	public SuperButton(String fileName)
-	{
-		image = new javax.swing.ImageIcon("image/" + fileName).getImage();//		
+	public SuperButton(String fileName) {
+		image = new javax.swing.ImageIcon("image/" + fileName).getImage();//
 		setButtonMouseEventListener(this);
 	}
 
-	public Image getImage()
-	{
+	public Image getImage() {
 		return image;
 	}
 
-	public void setImage(Image image)
-	{
+	public void setImage(Image image) {
 		this.image = image;
 	}
 
-//	private SuperButton getSClass()
-//	{
-//		return this;
-//	}
-
-//	private void setEnterAction(JButton btn)
-//	{
-//		btn.registerKeyboardAction(btn.getActionForKeyStroke(KeyStroke
-//				.getKeyStroke(KeyEvent.VK_SPACE, 0, false)), KeyStroke
-//				.getKeyStroke(KeyEvent.VK_ENTER, 0, false),
-//				JComponent.WHEN_FOCUSED);
-//		btn.registerKeyboardAction(btn.getActionForKeyStroke(KeyStroke
-//				.getKeyStroke(KeyEvent.VK_SPACE, 0, true)), KeyStroke
-//				.getKeyStroke(KeyEvent.VK_ENTER, 0, true),
-//				JComponent.WHEN_FOCUSED);
-//	}
-
-	private BufferedImage changeBrightness(BufferedImage src, int bright)
-	{
+	private BufferedImage changeBrightness(BufferedImage src, int bright) {
 		// copy BufferedImage to BufferedImage
 		ColorModel cm = src.getColorModel();
 		boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
@@ -65,15 +36,12 @@ public class SuperButton extends JButton
 				isAlphaPremultiplied, null);
 
 		// changing brightness
-		for (int i = 0; i < dest.getWidth(); i++)
-		{
-			for (int j = 0; j < dest.getHeight(); j++)
-			{
+		for (int i = 0; i < dest.getWidth(); i++) {
+			for (int j = 0; j < dest.getHeight(); j++) {
 				int rgb = dest.getRGB(i, j);
 				int alpha = (rgb >> 24) & 0x000000FF;
 				Color c = new Color(rgb);
-				if (alpha != 0)
-				{
+				if (alpha != 0) {
 					int red = (c.getRed() - 10) <= 0 ? 0 : c.getRed() - bright;
 					int green = (c.getGreen() - 10) <= 0 ? 0 : c.getGreen()
 							- bright;
@@ -88,8 +56,7 @@ public class SuperButton extends JButton
 		return dest;
 	}
 
-	private void setButtonMouseEventListener(final SuperButton btn)
-	{
+	private void setButtonMouseEventListener(final SuperButton btn) {
 		// image to BufferedImage
 		final Image origin = btn.getImage();
 		BufferedImage src = new BufferedImage(origin.getWidth(null),
@@ -101,36 +68,30 @@ public class SuperButton extends JButton
 
 		btn.addMouseListener(new java.awt.event.MouseListener() {
 
-			public void mouseClicked(MouseEvent e)
-			{
-				
+			public void mouseClicked(MouseEvent e) {
+
 			}
 
-			public void mousePressed(MouseEvent e)
-			{
+			public void mousePressed(MouseEvent e) {
 				btn.setImage(pressed);
 			}
 
-			public void mouseReleased(MouseEvent e)
-			{
+			public void mouseReleased(MouseEvent e) {
 				btn.setImage(origin);
 			}
 
-			public void mouseEntered(MouseEvent e)
-			{
+			public void mouseEntered(MouseEvent e) {
 				btn.setImage(entered);
 			}
 
-			public void mouseExited(MouseEvent e)
-			{
+			public void mouseExited(MouseEvent e) {
 				btn.setImage(origin);
 			}
 		});
 	}
 
 	@Override
-	protected void paintComponent(java.awt.Graphics g)
-	{
+	protected void paintComponent(java.awt.Graphics g) {
 		super.paintComponent(g);
 		// System.out.printf("%d %d",getWidth(), getHeight());
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
