@@ -22,56 +22,46 @@ import javax.swing.text.JTextComponent;
 
 import jihye.PS.ProblemData;
 
-public class MainFrame extends javax.swing.JFrame
-{
+public class MainFrame extends javax.swing.JFrame {
 	Point mouseDownCompCoords = null;
 	private Font hintFont;
 
 	/**
 	 * Creates new form frame1
 	 */
-	public MainFrame(UserInterface ui)
-	{
+	public MainFrame(UserInterface ui) {
 		initComponents();
 		setButtonEventListeners(ui);
 	}
 
-	private void initComponents()
-	{
+	private void initComponents() {
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setUndecorated(true);
 
 		addMouseListener(new MouseListener() {
-			public void mouseReleased(MouseEvent e)
-			{
+			public void mouseReleased(MouseEvent e) {
 				mouseDownCompCoords = null;
 			}
 
-			public void mousePressed(MouseEvent e)
-			{
+			public void mousePressed(MouseEvent e) {
 				mouseDownCompCoords = e.getPoint();
 			}
 
-			public void mouseExited(MouseEvent e)
-			{
+			public void mouseExited(MouseEvent e) {
 			}
 
-			public void mouseEntered(MouseEvent e)
-			{
+			public void mouseEntered(MouseEvent e) {
 			}
 
-			public void mouseClicked(MouseEvent e)
-			{
+			public void mouseClicked(MouseEvent e) {
 			}
 		});
 
 		addMouseMotionListener(new MouseMotionListener() {
-			public void mouseMoved(MouseEvent e)
-			{
+			public void mouseMoved(MouseEvent e) {
 			}
 
-			public void mouseDragged(MouseEvent e)
-			{
+			public void mouseDragged(MouseEvent e) {
 				Point currCoords = e.getLocationOnScreen();
 				setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y
 						- mouseDownCompCoords.y);
@@ -96,15 +86,12 @@ public class MainFrame extends javax.swing.JFrame
 				79), 1));
 
 		Font font = null;
-		try
-		{
+		try {
 			font = Font.createFont(Font.TRUETYPE_FONT, new java.io.File(
 					"resources/NANUMGOTHIC.TTF"));
-		} catch (FontFormatException e)
-		{
+		} catch (FontFormatException e) {
 			e.printStackTrace();
-		} catch (IOException e)
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -112,8 +99,8 @@ public class MainFrame extends javax.swing.JFrame
 		problemTextArea.setLineWrap(true);
 		problemTextArea.setColumns(30);
 		problemTextArea.setRows(10);
-//		problemTextArea.setBackground(new Color(239, 239, 239));
-		problemTextArea.setBackground(new Color(255,255,255));
+		// problemTextArea.setBackground(new Color(239, 239, 239));
+		problemTextArea.setBackground(new Color(255, 255, 255));
 		problemTextArea.setBorder(BorderFactory.createLineBorder(new Color(242,
 				108, 99), 1));
 		setProblemTextAreaTabAction();
@@ -203,31 +190,26 @@ public class MainFrame extends javax.swing.JFrame
 	}
 
 	private void setFocusAction(final JTextComponent textCompo,
-			final String hintStr, Font font, int fontSize)
-	{
+			final String hintStr, Font font, int fontSize) {
 		final Font normalFont = font.deriveFont(Font.PLAIN, fontSize);
 		final Font hintFont = font.deriveFont(Font.ITALIC, fontSize);
 
 		textCompo.addFocusListener(new FocusListener() {
 
-			public void focusLost(FocusEvent e)
-			{
-				if (textCompo.getText().isEmpty())
-				{
+			public void focusLost(FocusEvent e) {
+				if (textCompo.getText().isEmpty()) {
 					textCompo.setFont(hintFont);
 					textCompo.setText(hintStr);
-//					textCompo.setForeground(new Color(165, 154, 126));
+					// textCompo.setForeground(new Color(165, 154, 126));
 				}
 				textCompo.setBorder(BorderFactory.createEmptyBorder());
 			}
 
-			public void focusGained(FocusEvent e)
-			{
-				if (textCompo.getText().equals(hintStr))
-				{
+			public void focusGained(FocusEvent e) {
+				if (textCompo.getText().equals(hintStr)) {
 					textCompo.setFont(normalFont);
 					textCompo.setText("");
-//					textCompo.setForeground(new Color(0, 0, 0));
+					// textCompo.setForeground(new Color(0, 0, 0));
 				}
 				textCompo.setBorder(BorderFactory.createLineBorder(new Color(
 						242, 108, 99), 1));
@@ -236,27 +218,23 @@ public class MainFrame extends javax.swing.JFrame
 	}
 
 	private void setTextField(JTextField textField, Font hintFont,
-			String hintStr)
-	{
+			String hintStr) {
 		textField.setPreferredSize(new Dimension(90, 30));
 		textField.setText(hintStr);
 		textField.setHorizontalAlignment(SwingConstants.CENTER);
-//		textField.setBackground(new Color(239, 239, 239));
-		textField.setBackground(new Color(255,255,255));
-//		textField.setForeground(new Color(165, 154, 126));
+		// textField.setBackground(new Color(239, 239, 239));
+		textField.setBackground(new Color(255, 255, 255));
+		// textField.setForeground(new Color(165, 154, 126));
 		textField.setBorder(BorderFactory.createEmptyBorder());
 		problemJPanel.add(textField);
 		textField.setFont(hintFont);
 		setFocusAction(textField, hintStr, hintFont, 14);
 	}
 
-	private void setProblemTextAreaTabAction()
-	{
+	private void setProblemTextAreaTabAction() {
 		problemTextArea.addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent e)
-			{
-				if (e.getKeyCode() == KeyEvent.VK_TAB)
-				{
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_TAB) {
 					// System.out.println(e.getModifiers());
 					if (e.getModifiers() > 0)
 						problemTextArea.transferFocusBackward();
@@ -269,32 +247,27 @@ public class MainFrame extends javax.swing.JFrame
 
 	}
 
-	private void setButtonEventListeners(final UserInterface ui)
-	{
+	private void setButtonEventListeners(final UserInterface ui) {
 		closeBtn.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt)
-			{
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				dispose();
-				ui.terminate();
+				ui.terminateMainProgram();
 			}
 		});
 
 		solveBtn.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt)
-			{
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				solveBtnActionPerformed(evt, ui);
 			}
 		});
 		refreshBtn.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt)
-			{
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				refreshBtnActionPerformed(evt);
 			}
 		});
 	}
 
-	private void refreshBtnActionPerformed(ActionEvent evt)
-	{
+	private void refreshBtnActionPerformed(ActionEvent evt) {
 		this.problemTextArea.setText("문제를 입력해주세요^^");
 		setTextField(choice1TextField, hintFont, "1번");
 		setTextField(choice2TextField, hintFont, "2번");
@@ -302,12 +275,11 @@ public class MainFrame extends javax.swing.JFrame
 		setTextField(choice4TextField, hintFont, "4번");
 	}
 
-	private void solveBtnActionPerformed(ActionEvent evt, final UserInterface ui)
-	{
+	private void solveBtnActionPerformed(ActionEvent evt, final UserInterface ui) {
 		ProblemData problemData = new ProblemData(problemTextArea.getText(),
 				choice1TextField.getText(), choice2TextField.getText(),
 				choice3TextField.getText(), choice4TextField.getText());
-		ui.onRequestSolve(problemData);
+		ui.requestSolve(problemData);
 	}
 
 	// Variables declaration

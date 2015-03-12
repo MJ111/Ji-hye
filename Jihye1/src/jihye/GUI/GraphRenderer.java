@@ -1,4 +1,5 @@
 package jihye.GUI;
+
 import java.awt.*;
 
 import org.jfree.chart.renderer.category.*;
@@ -7,22 +8,21 @@ import org.jfree.chart.renderer.category.*;
 @SuppressWarnings("serial")
 public class GraphRenderer extends BarRenderer {
 
-	//정답의 색
-	private Paint correctColor = new Color(192,80,77);
-	//오답의 색
-	private Paint incorrectColor =  new Color(79,129,189);
-	
+	// 정답의 색
+	private Paint answerColor = new Color(192, 80, 77);
+	// 오답의 색
+	private Paint candidateColor = new Color(79, 129, 189);
+
 	private int correctColumn;
-	
-	public GraphRenderer(int correctColumn)
-	{
-		this.correctColumn = correctColumn;		
-	}
-	
-	public Paint getItemPaint(final int row, final int column) {
-		if(column == correctColumn) return correctColor;
-		else return incorrectColor;	
-		
+
+	public GraphRenderer(int correctColumn) {
+		this.correctColumn = correctColumn;
 	}
 
+	public Paint getItemPaint(final int row, final int column) {
+		if (column == correctColumn)
+			return answerColor;
+		else
+			return candidateColor;
+	}
 }

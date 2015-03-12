@@ -3,75 +3,58 @@ package jihye.GUI;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import javax.swing.JTextArea;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.plaf.metal.MetalTabbedPaneUI;
-import javax.swing.plaf.synth.SynthTabbedPaneUI;
 
 import jihye.PS.ResultData;
 
-public class ResultFrame2 extends javax.swing.JFrame
-{
+public class ResultFrameWithKeywords extends javax.swing.JFrame {
 
 	private ResultData resultData;
 
 	private Point mouseDownCompCoords;
 
-	public ResultFrame2(UserInterface ui, ResultData resultData)
-	{
+	public ResultFrameWithKeywords(UserInterface ui, ResultData resultData) {
 		this.resultData = resultData;
 		initComponents(ui);
 	}
 
-	private void initComponents(UserInterface ui)
-	{
+	private void initComponents(UserInterface ui) {
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setUndecorated(true);
 
 		mouseDownCompCoords = null;
 		addMouseListener(new MouseListener() {
-			public void mouseReleased(MouseEvent e)
-			{
+			public void mouseReleased(MouseEvent e) {
 				mouseDownCompCoords = null;
 			}
 
-			public void mousePressed(MouseEvent e)
-			{
+			public void mousePressed(MouseEvent e) {
 				mouseDownCompCoords = e.getPoint();
 			}
 
-			public void mouseExited(MouseEvent e)
-			{
+			public void mouseExited(MouseEvent e) {
 			}
 
-			public void mouseEntered(MouseEvent e)
-			{
+			public void mouseEntered(MouseEvent e) {
 			}
 
-			public void mouseClicked(MouseEvent e)
-			{
+			public void mouseClicked(MouseEvent e) {
 			}
 		});
 
 		addMouseMotionListener(new MouseMotionListener() {
-			public void mouseMoved(MouseEvent e)
-			{
+			public void mouseMoved(MouseEvent e) {
 			}
 
-			public void mouseDragged(MouseEvent e)
-			{
+			public void mouseDragged(MouseEvent e) {
 				Point currCoords = e.getLocationOnScreen();
 				setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y
 						- mouseDownCompCoords.y);
@@ -105,17 +88,14 @@ public class ResultFrame2 extends javax.swing.JFrame
 
 		Font labelFont = null;
 		Font keywordFont = null;
-		try
-		{
+		try {
 			labelFont = Font.createFont(Font.TRUETYPE_FONT, new java.io.File(
 					"resources/NANUMGOTHICBOLD.TTF"));
 			keywordFont = Font.createFont(Font.TRUETYPE_FONT, new java.io.File(
 					"resources/NANUMGOTHIC.TTF"));
-		} catch (FontFormatException e)
-		{
+		} catch (FontFormatException e) {
 			e.printStackTrace();
-		} catch (IOException e)
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		labelFont = labelFont.deriveFont(Font.PLAIN, 20);
@@ -135,11 +115,10 @@ public class ResultFrame2 extends javax.swing.JFrame
 
 		choiceKeywordJTabbedPane.setFont(keywordFont);
 
-		
 		mainJPanel.setBackground(new java.awt.Color(227, 227, 220));
 		mainJPanel.setBorder(BorderFactory.createLineBorder(new Color(220, 106,
 				79), 1));
-		
+
 		problemJLabel.setForeground(new Color(44, 57, 65));
 		choice1JLabel.setForeground(new Color(44, 57, 65));
 		problemJLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -148,10 +127,10 @@ public class ResultFrame2 extends javax.swing.JFrame
 		choiceJLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		choiceJLabel.setText("보기 키워드");
 
-//		choiceKeywordJTabbedPane
-//				.setBackground(new java.awt.Color(231, 233, 230));
+		// choiceKeywordJTabbedPane
+		// .setBackground(new java.awt.Color(231, 233, 230));
 
-//		choice1JPanel.setBackground(new java.awt.Color(231, 233, 230));
+		// choice1JPanel.setBackground(new java.awt.Color(231, 233, 230));
 
 		choice1JLabel.setText(resultData.matchKeywords.get(0));
 
@@ -172,7 +151,7 @@ public class ResultFrame2 extends javax.swing.JFrame
 		choiceKeywordJTabbedPane.addTab(resultData.choices.get(0),
 				choice1JPanel);
 
-//		choice2JPanel.setBackground(new java.awt.Color(231, 233, 230));
+		// choice2JPanel.setBackground(new java.awt.Color(231, 233, 230));
 
 		choice2JLabel.setText(resultData.matchKeywords.get(1));
 
@@ -211,7 +190,7 @@ public class ResultFrame2 extends javax.swing.JFrame
 		choiceKeywordJTabbedPane.addTab(resultData.choices.get(1),
 				choice2JPanel);
 
-//		choice3JPanel.setBackground(new java.awt.Color(231, 233, 230));
+		// choice3JPanel.setBackground(new java.awt.Color(231, 233, 230));
 
 		choice3JLabel.setText(resultData.matchKeywords.get(2));
 
@@ -232,7 +211,7 @@ public class ResultFrame2 extends javax.swing.JFrame
 		choiceKeywordJTabbedPane.addTab(resultData.choices.get(2),
 				choice3JPanel);
 
-//		choice4JPanel.setBackground(new java.awt.Color(231, 233, 230));
+		// choice4JPanel.setBackground(new java.awt.Color(231, 233, 230));
 
 		choice4JLabel.setText(resultData.matchKeywords.get(3));
 
@@ -260,7 +239,8 @@ public class ResultFrame2 extends javax.swing.JFrame
 		btnJPanel.add(homeJButton);
 		btnJPanel.add(wikiJButton);
 
-//		problemKeywordJPanel.setBackground(new java.awt.Color(231, 233, 230));
+		// problemKeywordJPanel.setBackground(new java.awt.Color(231, 233,
+		// 230));
 
 		problemKeywordJLabel.setText(resultData.analyzedProblem);
 
@@ -402,63 +382,52 @@ public class ResultFrame2 extends javax.swing.JFrame
 		setLocationRelativeTo(null);
 	}
 
-	private void makeMultilineLabel(JTextArea area)
-	{
+	private void makeMultilineLabel(JTextArea area) {
 		area.setBorder(BorderFactory.createEmptyBorder());
 		area.setEditable(false);
-//		area.setOpaque(false);
-		if (area instanceof JTextArea)
-		{
+		// area.setOpaque(false);
+		if (area instanceof JTextArea) {
 			((JTextArea) area).setWrapStyleWord(true);
 			((JTextArea) area).setLineWrap(true);
 		}
 	}
 
-	private String getResultStr()
-	{
-		return resultData.choices.get(resultData.getAnswer()-1);
+	private String getResultStr() {
+		return resultData.choices.get(resultData.getAnswer() - 1);
 	}
 
-	public void setButtonEventListeners(final UserInterface ui)
-	{
+	public void setButtonEventListeners(final UserInterface ui) {
 		backJButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt)
-			{
-				ui.onCloseDetail();
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				ui.closeResultFrameWithKeywords();
 				dispose();
 			}
 		});
 
 		homeJButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt)
-			{
-				ui.onGoHome();
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				ui.goMainFrame();
 			}
 		});
 
 		wikiJButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt)
-			{
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				String anwserString = getResultStr();
 				openUrl("http://ko.wikipedia.org/wiki/" + anwserString);
 			}
 		});
 	}
 
-	private void openUrl(String url)
-	{
+	private void openUrl(String url) {
 		String os = System.getProperty("os.name");
 		Runtime runtime = Runtime.getRuntime();
-		try
-		{
+		try {
 			// Block for Windows Platform
-			if (os.startsWith("Windows"))
-			{
+			if (os.startsWith("Windows")) {
 				String cmd = "rundll32 url.dll,FileProtocolHandler " + url;
 				Process p = runtime.exec(cmd);
 			}
-		} catch (Exception x)
-		{
+		} catch (Exception x) {
 			System.err.println("Exception occurd while invoking Browser!");
 			x.printStackTrace();
 		}

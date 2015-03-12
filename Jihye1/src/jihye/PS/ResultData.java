@@ -2,20 +2,16 @@ package jihye.PS;
 
 import java.util.ArrayList;
 
-import javax.xml.ws.soap.*;
+import jihye.Vector.SimilarityResult;
 
-import jihye.Vector.*;
-
-public class ResultData
-{
+public class ResultData {
 
 	public ArrayList<Double> similiarty;
 	public ArrayList<String> choices;
 	public String analyzedProblem;
 	public ArrayList<String> matchKeywords;
 
-	public ResultData(String analyzedProblem)
-	{
+	public ResultData(String analyzedProblem) {
 
 		this.analyzedProblem = analyzedProblem;
 		similiarty = new ArrayList<Double>();
@@ -23,23 +19,22 @@ public class ResultData
 		matchKeywords = new ArrayList<String>();
 	}
 
-	public void add(String choice, SimilarityResult result)
-	{
+	public void add(String choice, SimilarityResult result) {
 
 		choices.add(choice);
 		similiarty.add(result.similarity);
 		matchKeywords.add(result.matchedKeyword);
 	}
-	
+
 	public int getAnswer() {
 		double max = -2.0f;
-		int answer=0;
-		for(int i = 0; i < 4; i++) {
-			if(similiarty.get(i) > max) {
+		int answer = 0;
+		for (int i = 0; i < 4; i++) {
+			if (similiarty.get(i) > max) {
 				max = similiarty.get(i);
 				answer = i;
 			}
 		}
-		return answer+1;
+		return answer + 1;
 	}
 }

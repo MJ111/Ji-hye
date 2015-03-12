@@ -5,14 +5,13 @@ import jihye.PS.ProblemSolver;
 import jihye.PS.ResultData;
 
 public class JihyeController {
-	ProblemSolver mProblemSolver;
-	
+	ProblemSolver problemSolver;
+
 	public JihyeController() {
-		mProblemSolver = new ProblemSolver();
+		problemSolver = new ProblemSolver();
 	}
-	
+
 	public ResultData solve(ProblemData problemData) {
-		return mProblemSolver.solve(problemData);
+		return problemSolver.solve(problemData);
 	}
-	
 }
