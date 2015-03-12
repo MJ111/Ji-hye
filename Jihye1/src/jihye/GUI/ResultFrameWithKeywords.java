@@ -399,14 +399,14 @@ public class ResultFrameWithKeywords extends javax.swing.JFrame {
 	public void setButtonEventListeners(final UserInterface ui) {
 		backJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				ui.onCloseDetail();
+				ui.closeResultFrameWithKeywords();
 				dispose();
 			}
 		});
 
 		homeJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				ui.onGoHome();
+				ui.goMainFrame();
 			}
 		});
 

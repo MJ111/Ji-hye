@@ -251,7 +251,7 @@ public class MainFrame extends javax.swing.JFrame {
 		closeBtn.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				dispose();
-				ui.terminate();
+				ui.terminateMainProgram();
 			}
 		});
 
@@ -279,7 +279,7 @@ public class MainFrame extends javax.swing.JFrame {
 		ProblemData problemData = new ProblemData(problemTextArea.getText(),
 				choice1TextField.getText(), choice2TextField.getText(),
 				choice3TextField.getText(), choice4TextField.getText());
-		ui.onRequestSolve(problemData);
+		ui.requestSolve(problemData);
 	}
 
 	// Variables declaration

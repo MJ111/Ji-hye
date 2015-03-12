@@ -11,10 +11,10 @@ import jihye.TTS.TextToSpeech;
 
 public class UserInterface {
 	MainFrame mainFrame;
-	ResultFrameWithGraph resultFrame1;
-	ResultFrameWithKeywords resultFrame2;
+	ResultFrameWithGraph resultFrameWithhGraph;
+	ResultFrameWithKeywords resultFrameWithKeywords;
 	JihyeController jihyeController;
-	String readString;
+	String answerInformationString;
 
 	public UserInterface(JihyeController jc) {
 		jihyeController = jc;
@@ -44,65 +44,68 @@ public class UserInterface {
 	// 리절트 스크린 초기화 (마찬가지)
 	public void initResultScreens(ResultData resultData) {
 		mainFrame.setVisible(false);
-		setReadString(resultData);
-		resultFrame1 = new ResultFrameWithGraph(this, resultData);
-		resultFrame1.setVisible(true);
-		resultFrame2 = new ResultFrameWithKeywords(this, resultData);
-		onReadAnswer();
+		setAnswerString(resultData);
+		resultFrameWithhGraph = new ResultFrameWithGraph(this, resultData);
+		resultFrameWithhGraph.setVisible(true);
+		resultFrameWithKeywords = new ResultFrameWithKeywords(this, resultData);
+		readAnswerString();
 	}
 
 	// 각종 이벤트 리스너들
-	public void onRequestSolve(ProblemData problemData) {
+	public void requestSolve(ProblemData problemData) {
 		System.out.println("Solve problem");
 		ResultData resultData = jihyeController.solve(problemData);
 		initResultScreens(resultData);
 	}
 
-	public void onViewDetail() {
-		resultFrame1.setVisible(false);
-		resultFrame2.setVisible(true);
+	public void showResultFrameWithGraph() {
+		resultFrameWithhGraph.setVisible(false);
+		resultFrameWithKeywords.setVisible(true);
 	}
 
-	public void onCloseDetail() {
-		resultFrame1.setVisible(true);
+	public void closeResultFrameWithKeywords() {
+		resultFrameWithhGraph.setVisible(true);
 	}
 
-	public void onResultScreenClosed() {
+	public void showMainFrame() {
 		mainFrame.setVisible(true);
 	}
 
-	public void onGoHome() {
-		resultFrame1.dispose();
-		resultFrame2.dispose();
+	public void goMainFrame() {
+		//Dispose Result Frames
+		resultFrameWithhGraph.dispose();
+		resultFrameWithKeywords.dispose();
+		
+		//Make main frame visible
 		mainFrame.setVisible(true);
 	}
 
-	public void setReadString(ResultData resultData) {
-		readString = "";
+	public void setAnswerString(ResultData resultData) {
+		answerInformationString = "";
 
 		switch (resultData.getAnswer()) {
 		case 1:
-			readString = "정답은 일번  " + resultData.choices.get(0) + "입니다";
+			answerInformationString = "정답은 일번  " + resultData.choices.get(0) + "입니다";
 			break;
 		case 2:
-			readString = "정답은 이번  " + resultData.choices.get(1) + "입니다";
+			answerInformationString = "정답은 이번  " + resultData.choices.get(1) + "입니다";
 			break;
 		case 3:
-			readString = "정답은 삼번  " + resultData.choices.get(2) + "입니다";
+			answerInformationString = "정답은 삼번  " + resultData.choices.get(2) + "입니다";
 			break;
 		case 4:
-			readString = "정답은 사번  " + resultData.choices.get(3) + "입니다";
+			answerInformationString = "정답은 사번  " + resultData.choices.get(3) + "입니다";
 			break;
 		}
 	}
 
-	public void onReadAnswer() {
+	public void readAnswerString() {
 		TextToSpeech textToSpeech = new TextToSpeech();
-		textToSpeech.setText(readString);
+		textToSpeech.setText(answerInformationString);
 		textToSpeech.start();
 	}
 
-	public void terminate() {
+	public void terminateMainProgram() {
 		System.out.println("Program terminate by user");
 		System.exit(0);
 	}

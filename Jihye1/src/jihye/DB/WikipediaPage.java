@@ -1,27 +1,27 @@
 package jihye.DB;
 
 public class WikipediaPage {
-	private String Title;
-	private String Text;
+	private String pageTitle;
+	private String pageContent;
 
 	public WikipediaPage(String Title, String Text) {
-		this.Title = Title;
-		this.Text = Text;
+		this.pageTitle = Title;
+		this.pageContent = Text;
 	}
 
 	public String getTitle() {
-		return Title;
+		return pageTitle;
 	}
 
 	public String getText() {
-		return Text;
+		return pageContent;
 	}
 
 	public void setTitle(String Title) {
-		this.Title = Title;
+		this.pageTitle = Title;
 	}
 
 	public void setText(String Text) {
-		this.Text = Text;
+		this.pageContent = Text;
 	}
 }

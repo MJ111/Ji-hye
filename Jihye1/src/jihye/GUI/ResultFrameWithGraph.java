@@ -194,19 +194,19 @@ public class ResultFrameWithGraph extends javax.swing.JFrame {
 	public void setButtonEventListeners(final UserInterface ui) {
 		backJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				ui.onResultScreenClosed();
+				ui.showMainFrame();
 				dispose();
 			}
 		});
 
 		replayJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				ui.onReadAnswer();
+				ui.readAnswerString();
 			}
 		});
 		moreJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				ui.onViewDetail();
+				ui.showResultFrameWithGraph();
 			}
 		});
 	}

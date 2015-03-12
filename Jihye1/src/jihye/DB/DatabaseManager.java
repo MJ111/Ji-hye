@@ -7,13 +7,13 @@ import java.util.ArrayList;
 
 public class DatabaseManager {
 
-	private Connection mConnection;
-	private String DatabaseName = "wikidb";
+	private static final String DATABASE_NAME = "wikidb";
+	private Connection connection;
 
 	public DatabaseManager() {
 		try {
-			mConnection = null;
-			mConnection = DriverManager.getConnection(
+			connection = null;
+			connection = DriverManager.getConnection(
 					"jdbc:mysql://knuwooseok.iptime.org", "cheolsu",
 					"NaturalIntelligence");
 			log("Database connected successfully");
@@ -27,9 +27,9 @@ public class DatabaseManager {
 		dictionary.add("don't read me");
 
 		try {
-			java.sql.Statement statement = mConnection.createStatement();
+			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery("select * from "
-					+ DatabaseName + ".word_vectors;");
+					+ DATABASE_NAME + ".word_vectors;");
 
 			while (resultSet != null && resultSet.next()) {
 				dictionary.add(getStringFromBLOB(resultSet.getBlob(2)));
@@ -59,15 +59,15 @@ public class DatabaseManager {
 	public String getRedirectedPageTitle(String page_title) {
 		try {
 			int CurrentPageId = 0;
-			java.sql.Statement statement = mConnection.createStatement();
+			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery("select page_id from "
-					+ DatabaseName + ".page where page_title like '"
+					+ DATABASE_NAME + ".page where page_title like '"
 					+ page_title + "';");
 			if (resultSet != null && resultSet.next())
 				CurrentPageId = resultSet.getInt(1);
 
 			resultSet = statement.executeQuery("select rd_title from "
-					+ DatabaseName + ".redirect where rd_from=" + CurrentPageId
+					+ DATABASE_NAME + ".redirect where rd_from=" + CurrentPageId
 					+ ";");
 			if (resultSet != null && resultSet.next()) {
 				return getStringFromBLOB(resultSet.getBlob(1)).trim();
@@ -81,10 +81,10 @@ public class DatabaseManager {
 
 	public boolean isRedirectedPage(String page_title) {
 		try {
-			java.sql.Statement statement = mConnection.createStatement();
+			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement
 					.executeQuery("select page_is_redirect from "
-							+ DatabaseName + ".page where page_title='"
+							+ DATABASE_NAME + ".page where page_title='"
 							+ page_title + "';");
 
 			if (resultSet != null && resultSet.next()
@@ -103,10 +103,10 @@ public class DatabaseManager {
 		ArrayList<WikipediaPage> pages = new ArrayList<WikipediaPage>();
 
 		try {
-			java.sql.Statement statement = mConnection.createStatement();
+			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement
 					.executeQuery("select page_title, page_latest from "
-							+ DatabaseName + ".page where page_title like '%"
+							+ DATABASE_NAME + ".page where page_title like '%"
 							+ page_title
 							+ "%' and page_is_redirect=0 and page_namespace=0;");
 
@@ -127,9 +127,9 @@ public class DatabaseManager {
 
 	public String getWikipediaTextFromOldID(int old_id) {
 		try {
-			java.sql.Statement statement = mConnection.createStatement();
+			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement
-					.executeQuery("select old_text from " + DatabaseName
+					.executeQuery("select old_text from " + DATABASE_NAME
 							+ ".text where old_id=" + old_id + ";");
 
 			if (resultSet != null && resultSet.next()) {

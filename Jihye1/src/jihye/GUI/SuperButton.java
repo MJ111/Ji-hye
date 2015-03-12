@@ -12,7 +12,7 @@ import javax.swing.JButton;
 
 @SuppressWarnings("serial")
 public class SuperButton extends JButton {
-	Image image;
+	private Image image;
 
 	public SuperButton(String fileName) {
 		image = new javax.swing.ImageIcon("image/" + fileName).getImage();//

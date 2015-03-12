@@ -9,9 +9,9 @@ import org.jfree.chart.renderer.category.*;
 public class GraphRenderer extends BarRenderer {
 
 	// 정답의 색
-	private Paint correctColor = new Color(192, 80, 77);
+	private Paint answerColor = new Color(192, 80, 77);
 	// 오답의 색
-	private Paint incorrectColor = new Color(79, 129, 189);
+	private Paint candidateColor = new Color(79, 129, 189);
 
 	private int correctColumn;
 
@@ -21,8 +21,8 @@ public class GraphRenderer extends BarRenderer {
 
 	public Paint getItemPaint(final int row, final int column) {
 		if (column == correctColumn)
-			return correctColor;
+			return answerColor;
 		else
-			return incorrectColor;
+			return candidateColor;
 	}
 }
