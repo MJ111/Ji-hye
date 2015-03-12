@@ -17,7 +17,7 @@ public class Dictionary {
 			return null;
 	}
 
-	public void add(TFMap termFrequencyMap) {
+	public void add(TermFrequencyMap termFrequencyMap) {
 
 		if (termFrequencyMap == null)
 			return;

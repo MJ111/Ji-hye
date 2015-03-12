@@ -2,13 +2,13 @@ package jihye.Vector;
 
 import java.util.*;
 
-public class TFMap {
+public class TermFrequencyMap {
 	HashMap<String, Integer> termFrequency;
 	private int wordCount = 0;
 	private String name = "";
 
 	// 생성자
-	public TFMap(String name, ArrayList<String> documentMorph) {
+	public TermFrequencyMap(String name, ArrayList<String> documentMorph) {
 		termFrequency = new HashMap<String, Integer>();
 		wordCount = documentMorph.size();
 		this.name = name;
@@ -18,7 +18,7 @@ public class TFMap {
 		}
 	}
 
-	public TFMap(String name) {
+	public TermFrequencyMap(String name) {
 		termFrequency = new HashMap<String, Integer>();
 		wordCount = 0;
 		this.name = name;
@@ -40,7 +40,7 @@ public class TFMap {
 		return termFrequency.get(word) / (double) wordCount;
 	}
 
-	public double getSimilarity(TFMap target) {
+	public double getSimilarity(TermFrequencyMap target) {
 		int count = 0;
 		int matchedCount = 0;
 		Iterator<String> it = termFrequency.keySet().iterator();

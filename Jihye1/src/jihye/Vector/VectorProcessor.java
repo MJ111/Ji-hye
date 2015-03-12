@@ -16,11 +16,11 @@ public class VectorProcessor {
 		this.keywordExtractor = keywordExtractor;
 	}
 
-	public TFMap getMaxSimilarityTFMap(TFMap problem, ArrayList<TFMap> choices) {
+	public TermFrequencyMap getMaxSimilarityTFMap(TermFrequencyMap problem, ArrayList<TermFrequencyMap> choices) {
 		double maxSimilarity = -1, similarity;
-		TFMap maxSimilarityTFMap = null;
+		TermFrequencyMap maxSimilarityTFMap = null;
 
-		for (TFMap choice : choices) {
+		for (TermFrequencyMap choice : choices) {
 			similarity = problem.getSimilarity(choice);
 
 			if (maxSimilarity < similarity) {
@@ -31,8 +31,8 @@ public class VectorProcessor {
 		return maxSimilarityTFMap;
 	}
 
-	public ArrayList<TFMap> getTFMap(String title) {
-		ArrayList<TFMap> termFrequencyList = new ArrayList<TFMap>();
+	public ArrayList<TermFrequencyMap> getTFMap(String title) {
+		ArrayList<TermFrequencyMap> termFrequencyList = new ArrayList<TermFrequencyMap>();
 		ArrayList<WikipediaPage> pages;
 		String redirectTitle = "";
 		if (databaseManager.isRedirectedPage(title)) {
@@ -49,7 +49,7 @@ public class VectorProcessor {
 		for (WikipediaPage page : pages) {
 			ArrayList<String> analyzedDocument = keywordExtractor
 					.analyzeDocument(page.getText());
-			termFrequencyList.add(new TFMap(title.replaceAll("_", " "),
+			termFrequencyList.add(new TermFrequencyMap(title.replaceAll("_", " "),
 					analyzedDocument));
 		}
 

@@ -17,13 +17,13 @@ public class ProblemSolver {
 
 	public ResultData solve(ProblemData problemData) {
 
-		TFMap problemTF;
-		ArrayList<TFMap> maxSimilarityChoiceTFList = new ArrayList<TFMap>();
+		TermFrequencyMap problemTF;
+		ArrayList<TermFrequencyMap> maxSimilarityChoiceTFList = new ArrayList<TermFrequencyMap>();
 
 		// get problem tf
 		ArrayList<String> problemMorph = keywordExtractor
 				.analyzeDocument(problemData.problem);
-		problemTF = new TFMap("%problem%", problemMorph);
+		problemTF = new TermFrequencyMap("%problem%", problemMorph);
 		System.out.println(problemTF.toString());
 
 		Dictionary dictionary = new Dictionary();
@@ -32,11 +32,11 @@ public class ProblemSolver {
 		// get choice tf
 		for (String choice : problemData.choices) {
 			// 보기에 like되는 문서들의 TFMap
-			ArrayList<TFMap> choiceTFList = vectorProcessor.getTFMap(choice);
+			ArrayList<TermFrequencyMap> choiceTFList = vectorProcessor.getTFMap(choice);
 
 			// 일치되는 문서가 없으면 maxSimilarityChoiceTFList에 빈 TFMap 넣음
 			if (choiceTFList.size() == 0) {
-				maxSimilarityChoiceTFList.add(new TFMap(choice));
+				maxSimilarityChoiceTFList.add(new TermFrequencyMap(choice));
 			}
 			// 하나만 일치하면 maxSimilarityChoiceTFList에 일치되는 TFMap 넣음
 			else if (choiceTFList.size() == 1) {
@@ -45,12 +45,12 @@ public class ProblemSolver {
 			// 여러개가 일치하면 가장 일치도가 높은 TFMap을 maxSimilarityChoiceTFList에 넣음.
 			else {
 
-				for (TFMap t : choiceTFList) {
+				for (TermFrequencyMap t : choiceTFList) {
 					System.out.println(choice + " : ");
 					System.out.println(t.toString());
 					System.out.println("\n\n");
 				}
-				TFMap maxSimilarityChoiceTF = vectorProcessor
+				TermFrequencyMap maxSimilarityChoiceTF = vectorProcessor
 						.getMaxSimilarityTFMap(problemTF, choiceTFList);
 				maxSimilarityChoiceTFList.add(maxSimilarityChoiceTF);
 			}
@@ -58,14 +58,14 @@ public class ProblemSolver {
 
 		// 사전 생성
 		dictionary.add(problemTF);
-		for (TFMap ctf : maxSimilarityChoiceTFList) {
+		for (TermFrequencyMap ctf : maxSimilarityChoiceTFList) {
 			dictionary.add(ctf);
 		}
 
 		// 벡터 생성 및 일치도 검사
 		SparseVector problemVector = new SparseVector(dictionary, problemTF);
 
-		for (TFMap ctf : maxSimilarityChoiceTFList) {
+		for (TermFrequencyMap ctf : maxSimilarityChoiceTFList) {
 			if (ctf != null) {
 				SparseVector choiceVector = new SparseVector(dictionary, ctf);
 				SimilarityResult result = problemVector

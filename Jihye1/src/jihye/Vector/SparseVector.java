@@ -8,7 +8,7 @@ public class SparseVector {
 	public String name = "";
 	private int numberOfWords;
 
-	public SparseVector(Dictionary dictionary, TFMap termFrequencyMap) {
+	public SparseVector(Dictionary dictionary, TermFrequencyMap termFrequencyMap) {
 		numberOfWords = termFrequencyMap.getWordCount();
 		vector = new ArrayList<SparseVectorElement>();
 		keywordList = new HashMap<Integer, String>();
