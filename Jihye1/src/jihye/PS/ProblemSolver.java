@@ -6,15 +6,13 @@ import jihye.NLP.KeywordExtrator;
 import jihye.Vector.*;
 
 public class ProblemSolver {
-	// ProblemData 는 문제 풀때마다만 받아오면 되기때문에 노필요.
 
-	VectorProcessor mVectorProcessor;
-	KeywordExtrator mKeywordExtractor;
+	VectorProcessor vectorProcessor;
+	KeywordExtrator keywordExtractor;
 
 	public ProblemSolver() {
-		mKeywordExtractor = new KeywordExtrator();
-		mVectorProcessor = new VectorProcessor(mKeywordExtractor);
-		// initialize wordDimension
+		keywordExtractor = new KeywordExtrator();
+		vectorProcessor = new VectorProcessor(keywordExtractor);
 	}
 
 	public ResultData solve(ProblemData problemData) {
@@ -23,7 +21,7 @@ public class ProblemSolver {
 		ArrayList<TFMap> maxSimilarityChoiceTFList = new ArrayList<TFMap>();
 
 		// get problem tf
-		ArrayList<String> problemMorph = mKeywordExtractor
+		ArrayList<String> problemMorph = keywordExtractor
 				.analyzeDocument(problemData.problem);
 		problemTF = new TFMap("%problem%", problemMorph);
 		System.out.println(problemTF.toString());
@@ -34,7 +32,7 @@ public class ProblemSolver {
 		// get choice tf
 		for (String choice : problemData.choices) {
 			// 보기에 like되는 문서들의 TFMap
-			ArrayList<TFMap> choiceTFList = mVectorProcessor.getTFMap(choice);
+			ArrayList<TFMap> choiceTFList = vectorProcessor.getTFMap(choice);
 
 			// 일치되는 문서가 없으면 maxSimilarityChoiceTFList에 빈 TFMap 넣음
 			if (choiceTFList.size() == 0) {
@@ -52,7 +50,7 @@ public class ProblemSolver {
 					System.out.println(t.toString());
 					System.out.println("\n\n");
 				}
-				TFMap maxSimilarityChoiceTF = mVectorProcessor
+				TFMap maxSimilarityChoiceTF = vectorProcessor
 						.getMaxSimilarityTFMap(problemTF, choiceTFList);
 				maxSimilarityChoiceTFList.add(maxSimilarityChoiceTF);
 			}
