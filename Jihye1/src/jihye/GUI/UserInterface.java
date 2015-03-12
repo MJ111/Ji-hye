@@ -41,7 +41,6 @@ public class UserInterface {
 		mainFrame.setVisible(true);
 	}
 
-	// 리절트 스크린 초기화 (마찬가지)
 	public void initResultScreens(ResultData resultData) {
 		mainFrame.setVisible(false);
 		setAnswerString(resultData);
@@ -106,7 +105,7 @@ public class UserInterface {
 	}
 
 	public void terminateMainProgram() {
-		System.out.println("Program terminate by user");
+		System.out.println("Program terminated by user");
 		System.exit(0);
 	}
 }

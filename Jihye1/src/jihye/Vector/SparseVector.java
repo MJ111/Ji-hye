@@ -81,10 +81,8 @@ public class SparseVector {
 
 		while (iterator1.hasNext() && iterator2.hasNext())// question length
 		{
-			if (increment1)
-				element1 = iterator1.next();
-			if (increment2)
-				element2 = iterator2.next();
+			if (increment1) element1 = iterator1.next();
+			if (increment2) element2 = iterator2.next();
 
 			if (element1.dimension < element2.dimension) {
 				increment1 = true;
@@ -98,7 +96,6 @@ public class SparseVector {
 			} else {
 				increment1 = false;
 				increment2 = true;
-				;
 			}
 		}
 
