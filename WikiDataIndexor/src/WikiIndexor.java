@@ -14,7 +14,7 @@ import tool.xmlparsetool.WikiData;
 public class WikiIndexor {
 	private String directory;
 	private File[] matchingFiles;
-	private static int NUM_THREADS = 5;
+	private final static int NUM_THREADS = 5;
 	
 	public WikiIndexor(String directory) throws IOException {
 		this.directory = directory;
@@ -33,9 +33,22 @@ public class WikiIndexor {
 		for(File file : matchingFiles) {
 			Vector<WikiData> wikiDatas = getWikiDataVector(file);
 			ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREADS);
-			Vector<Future<IndexedData>> arrFutures = new Vector<Future<IndexedData>>();	
+			Vector<Future<IndexedData>> arrFutures = new Vector<Future<IndexedData>>();
 			
 			while(!wikiDatas.isEmpty()) {
+				if(arrFutures.size() > NUM_THREADS) return;
+				else {		
+					//Add Thread data into Array Futures
+					arrFutures.add(executorService.submit(new WikiThreadedIndexor(wikiDatas.remove(0))));
+				}
+				
+				//If Thread is done, remove from Thread Lists
+				for(Future<IndexedData> future : arrFutures) {
+					if(future.isDone()) {
+						arrFutures.remove(future);						
+					}
+				}
+				
 			}
 			
 		}
