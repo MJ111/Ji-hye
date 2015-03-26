@@ -3,6 +3,7 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -14,7 +15,7 @@ import tool.xmlparsetool.WikiData;
 public class WikiIndexor {
 	private String directory;
 	private File[] matchingFiles;
-	private final static int NUM_THREADS = 5;
+	private final static int NUM_THREADS = 8;
 	
 	public WikiIndexor(String directory) throws IOException {
 		this.directory = directory;
@@ -36,17 +37,22 @@ public class WikiIndexor {
 			Vector<Future<IndexedData>> arrFutures = new Vector<Future<IndexedData>>();
 			
 			while(!wikiDatas.isEmpty()) {
+				if(wikiDatas.isEmpty()) {
+					if(arrFutures.size() != 0) continue;
+					else break;
+				}				
+				
 				if(arrFutures.size() > NUM_THREADS) return;
 				else {		
-					//Add Thread data into Array Futures
+					//Add Thread information into Array Futures (Thread Lists)
 					arrFutures.add(executorService.submit(new WikiThreadedIndexor(wikiDatas.remove(0))));
 				}
 				
-				//If Thread is done, remove from Thread Lists
-				for(Future<IndexedData> future : arrFutures) {
-					if(future.isDone()) {
-						arrFutures.remove(future);						
-					}
+				//if thread is finished, remove from threads list and process datas.
+				for(Iterator<Future<IndexedData>> it = arrFutures.iterator(); it.hasNext();) {
+					Future<IndexedData> future = it.next();
+					System.out.println(future.get().getDocumentID());					
+					it.remove();
 				}
 				
 			}
@@ -54,14 +60,15 @@ public class WikiIndexor {
 		}
 	}
 	
-	public Vector<WikiData> getWikiDataVector(File file) {
+	public Vector<WikiData> getWikiDataVector(File file) throws Exception {
 		Vector<WikiData> wikiDatas = null;
 		try {
 			FileInputStream fis = new FileInputStream(file);
 			ObjectInputStream ois = new ObjectInputStream(fis);			
 			wikiDatas = (Vector<WikiData>)ois.readObject();
 		} catch (Exception e) {
-			return null;
+			Exception exp = new Exception("객체 캐스팅 에러. (동일 라이브러라 사용 확인요)");
+			throw exp;
 		}
 		return wikiDatas;
 	}

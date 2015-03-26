@@ -29,6 +29,8 @@ public class Main {
 			System.out.println("Start indexing");
 			try {
 				wi.startIndexing();
+				System.out.println("Indexing finished!!");
+				System.exit(0);
 			} catch(Exception e) {
 				e.printStackTrace();
 				System.exit(1);

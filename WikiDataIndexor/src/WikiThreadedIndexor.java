@@ -30,8 +30,6 @@ public class WikiThreadedIndexor implements Callable<IndexedData>{
 		
 		komoran.analyze(wikiData.getText());
 		
-		System.out.println(id);
-		
 		return indexedData;
 	}
 
