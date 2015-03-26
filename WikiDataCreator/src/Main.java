@@ -40,9 +40,10 @@ public class Main {
 				{
 					pageCounter++;
 					String strTitle = deleteEscape(page.getTitle());
-					String strTextWithoutInfoBox = page.getText();						
+					String strTextWithoutInfoBox = page.getText();
+					String strDocumentID = page.getID();
 
-					WikiData wd = new WikiData(strTitle, strTextWithoutInfoBox);
+					WikiData wd = new WikiData(strTitle, strTextWithoutInfoBox, strDocumentID);
 					tempvecWikiData.add(wd);
 
 					if(pageCounter % 50000 == 0) {
