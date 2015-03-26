@@ -20,11 +20,12 @@ import tool.xmlparsetool.WikiData;
 public class WikiIndexor {
 	private String directory;
 	private File[] matchingFiles;
-	private final static int NUM_THREADS = 4;
+	private int NUM_THREADS;
 	private ArrayList<Komoran> komorans;
 	
-	public WikiIndexor(String directory) throws IOException {
+	public WikiIndexor(String directory, int Threads) throws IOException {
 		this.directory = directory;
+		this.NUM_THREADS = Threads;
 		
 		File f = new File(directory);
 		matchingFiles = f.listFiles(new FilenameFilter() {

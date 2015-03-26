@@ -3,14 +3,15 @@ import java.util.Scanner;
 
 
 public class Main {
-	private static String WIKIDATA_PATH = "D:/kowiki";	
+	private final static String WIKIDATA_PATH = "D:/kowiki";
+	private final static int NUM_THREADS = 16;
 	
 	public static void main(String args[]) {
 		WikiIndexor wi = null;
 		int input = 0;
 		
 		try {
-			wi = new WikiIndexor(WIKIDATA_PATH);
+			wi = new WikiIndexor(WIKIDATA_PATH, NUM_THREADS);
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
