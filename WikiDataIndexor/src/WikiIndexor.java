@@ -3,17 +3,18 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
-import tool.xmlparsetool.*;
+import tool.xmlparsetool.WikiData;
 
 
 public class WikiIndexor {
 	private String directory;
 	private File[] matchingFiles;
+	private static int NUM_THREADS = 5;
 	
 	public WikiIndexor(String directory) throws IOException {
 		this.directory = directory;
@@ -25,22 +26,30 @@ public class WikiIndexor {
 		    }
 		});
 		
-		if(f.length() == 0) throw new IOException("Can not find Wikidata files");
+		if(f.length() == 0) throw new IOException("위키 데이터를 찾을 수 없습니다! (경로확인요)");
 	}
 	
 	public void startIndexing() throws Exception{
 		for(File file : matchingFiles) {
-			HashMap<String, ArrayList<Integer>> map = new HashMap<String, ArrayList<Integer>>();			
-			Komoran komoran = new Komoran("./resources/models-light");
+			Vector<WikiData> wikiDatas = getWikiDataVector(file);
+			ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREADS);
+			Vector<Future<IndexedData>> arrFutures = new Vector<Future<IndexedData>>();	
 			
-			try {
-				FileInputStream fis = new FileInputStream(file);
-				ObjectInputStream ois = new ObjectInputStream(fis);
-				Vector<WikiData> wikidata = (Vector<WikiData>)ois.readObject();					
-				
-			} catch (Exception e) {
-				throw e;
+			while(!wikiDatas.isEmpty()) {
 			}
+			
 		}
+	}
+	
+	public Vector<WikiData> getWikiDataVector(File file) {
+		Vector<WikiData> wikiDatas = null;
+		try {
+			FileInputStream fis = new FileInputStream(file);
+			ObjectInputStream ois = new ObjectInputStream(fis);			
+			wikiDatas = (Vector<WikiData>)ois.readObject();
+		} catch (Exception e) {
+			return null;
+		}
+		return wikiDatas;
 	}
 }
