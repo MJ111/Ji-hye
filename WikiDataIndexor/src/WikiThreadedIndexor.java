@@ -9,10 +9,10 @@ public class WikiThreadedIndexor implements Callable<IndexedData>{
 	private Komoran komoran;
 	
 	
-	public WikiThreadedIndexor(WikiData wikidata) {
+	public WikiThreadedIndexor(WikiData wikidata, Komoran komoran) {
 		super();
 		this.wikiData = wikidata;
-		komoran = new Komoran("./resources/models-light");
+		this.komoran = komoran;
 	}
 	
 
@@ -26,7 +26,7 @@ public class WikiThreadedIndexor implements Callable<IndexedData>{
 			return null;
 		}
 		
-		IndexedData indexedData = new IndexedData(id);
+		IndexedData indexedData = new IndexedData(id, komoran);
 		
 		komoran.analyze(wikiData.getText());
 		
