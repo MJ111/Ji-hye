@@ -32,13 +32,18 @@ public class WikiThreadedIndexor implements Callable<ExtractedWikiData>{
 		
 		ExtractedWikiData extractedData = new ExtractedWikiData(id, komoran);
 		
-		List<List<Pair<String, String>>> result = komoran.analyze(wikiData.getText());
-		for (List<Pair<String, String>> eojeolResult : result) {
-			for (Pair<String, String> wordMorph : eojeolResult) {
-				if (morphTag.contains(wordMorph.getSecond())) {
-					extractedData.add(wordMorph.getFirst());
+		try {
+			List<List<Pair<String, String>>> result = komoran.analyze(wikiData.getText());
+			for (List<Pair<String, String>> eojeolResult : result) {
+				for (Pair<String, String> wordMorph : eojeolResult) {
+					if (morphTag.contains(wordMorph.getSecond())) {
+						extractedData.add(wordMorph.getFirst());
+					}
 				}
 			}
+		} catch (Exception e) {
+			System.out.print(e);
+			System.out.println("FAULT:" + wikiData.getTitle());
 		}
 		
 		return extractedData;
