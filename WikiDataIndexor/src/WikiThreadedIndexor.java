@@ -1,10 +1,12 @@
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
+import kr.co.shineware.util.common.model.Pair;
 import tool.xmlparsetool.WikiData;
 
 
-public class WikiThreadedIndexor implements Callable<IndexedData>{
+public class WikiThreadedIndexor implements Callable<ExtractedWikiData>{
 	private WikiData wikiData;
 	private Komoran komoran;
 	
@@ -17,7 +19,7 @@ public class WikiThreadedIndexor implements Callable<IndexedData>{
 	
 
 	@Override
-	public IndexedData call() throws Exception {
+	public ExtractedWikiData call() throws Exception {
 		long id;
 		
 		try {
@@ -26,11 +28,16 @@ public class WikiThreadedIndexor implements Callable<IndexedData>{
 			return null;
 		}
 		
-		IndexedData indexedData = new IndexedData(id, komoran);
+		ExtractedWikiData extractedData = new ExtractedWikiData(id, komoran);
 		
-		komoran.analyze(wikiData.getText());
+		List<List<Pair<String, String>>> result = komoran.analyze(wikiData.getText());
+		for (List<Pair<String, String>> eojeolResult : result) {
+			for (Pair<String, String> wordMorph : eojeolResult) {
+					extractedData.add(wordMorph.getFirst());
+			}
+		}
 		
-		return indexedData;
+		return extractedData;
 	}
 
 }

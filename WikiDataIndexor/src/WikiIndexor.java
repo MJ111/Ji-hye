@@ -1,8 +1,10 @@
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -49,7 +51,7 @@ public class WikiIndexor {
 		for(File file : matchingFiles) {
 			Vector<WikiData> wikiDatas = getWikiDataVector(file);
 			ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREADS);
-			Vector<Future<IndexedData>> arrFutures = new Vector<Future<IndexedData>>();
+			Vector<Future<ExtractedWikiData>> arrFutures = new Vector<Future<ExtractedWikiData>>();
 			HashMap<String, ArrayList<Long>> map = new HashMap<String, ArrayList<Long>>();
 			
 			while(true) {				
@@ -60,48 +62,62 @@ public class WikiIndexor {
 				
 				//쓰레드 풀이 비어있고, 위키 데이터가 남아있으면		
 				if(arrFutures.size() < NUM_THREADS && !wikiDatas.isEmpty()) {
-					int iKomoran = arrFutures.size();
 					arrFutures.add(executorService.submit(new WikiThreadedIndexor(wikiDatas.remove(0), komorans.remove(0))));
 				}
 				
 				//if thread is finished, remove from threads list and process datas.
-				for(Iterator<Future<IndexedData>> it = arrFutures.iterator(); it.hasNext();) {					
-					Future<IndexedData> future = it.next();
+				for(Iterator<Future<ExtractedWikiData>> it = arrFutures.iterator(); it.hasNext();) {					
+					Future<ExtractedWikiData> future = it.next();
 					
 					if(!future.isDone()) {
 						continue;
 					} else {		
-						System.out.println(future.get().getDocumentID());						
-						//Set<String> keySet = future.get().keySet();
-						//Iterator<String> iterator = keySet.iterator();
-						/*
-						while(iterator.hasNext()) {
-							String key = iterator.next();
-							ArrayList<Long> value = map.get(key);
-							if(value == null) {
+						//만약 완료된 쓰레드를 찾으면, ArrayList 와 HashMap을 조인시킨 후, Komoran 과 Thread 를 Pool 에 집어넣는다.			
+						ExtractedWikiData ewd = future.get();
+						long documentID = future.get().getDocumentID(); //Document ID of current Thread processing
+						
+						for(String key : ewd) {
+							ArrayList<Long> arrHashMapValue = map.get(key);
+							if(arrHashMapValue == null) {
 								ArrayList<Long> newValue = new ArrayList<Long>();
-								newValue.add(future.get().getDocumentID());
+								newValue.add(documentID);
 								map.put(key, newValue);
 							} else {
-								value.add(future.get().getDocumentID());
+								arrHashMapValue.add(documentID);
 							}
-						}		
-						*/
-						komorans.add(future.get().getKomoran());
-						it.remove();
-						
+						}						
+						komorans.add(future.get().getKomoran()); //Komoran 반환
+						it.remove(); //Thread 반환						
 					}
 				}
-			}		
+			}			
+			saveIndexedWikiData(map, file);			
 		}
 	}
 	
-	public Vector<WikiData> getWikiDataVector(File file) throws Exception {
+	private void saveIndexedWikiData(HashMap<String, ArrayList<Long>> data, File currentFile) throws Exception {
+		File file = new File(currentFile.getAbsolutePath() +"ex");
+		try {
+			FileOutputStream fos = new FileOutputStream(file);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			
+			oos.writeObject(data);
+			
+			oos.close();
+			fos.close();
+		} catch (IOException e) {
+			throw new IOException("객체 저장중 오류가 발생하였습니다.");
+		}
+	}
+	
+	private Vector<WikiData> getWikiDataVector(File file) throws Exception {
 		Vector<WikiData> wikiDatas = null;
 		try {
 			FileInputStream fis = new FileInputStream(file);
 			ObjectInputStream ois = new ObjectInputStream(fis);			
 			wikiDatas = (Vector<WikiData>)ois.readObject();
+			ois.close();
+			fis.close();
 		} catch (Exception e) {
 			Exception exp = new Exception("객체 캐스팅 에러. (동일 라이브러라 사용 확인요)");
 			throw exp;

@@ -1,14 +1,13 @@
-import java.awt.List;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
 
 
-public class IndexedData extends HashMap<String, Integer> {
+public class ExtractedWikiData extends ArrayList<String> {
 	private long documentID;
 	private Komoran komoran;
 	
-	public IndexedData(long documentID, Komoran komoran) {
+	public ExtractedWikiData(long documentID, Komoran komoran) {
 		super();
 		this.documentID = documentID;
 		this.komoran = komoran;
