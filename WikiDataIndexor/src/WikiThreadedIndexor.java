@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -7,6 +8,7 @@ import tool.xmlparsetool.WikiData;
 
 
 public class WikiThreadedIndexor implements Callable<ExtractedWikiData>{
+	private static final List<String> morphTag = Arrays.asList("NNG", "NNP", "NR", "SH", "SL", "SN", "ETN", "VV", "VA", "VX", "ETN", "XR", "NF", "NV", "XPN");
 	private WikiData wikiData;
 	private Komoran komoran;
 	
@@ -33,7 +35,9 @@ public class WikiThreadedIndexor implements Callable<ExtractedWikiData>{
 		List<List<Pair<String, String>>> result = komoran.analyze(wikiData.getText());
 		for (List<Pair<String, String>> eojeolResult : result) {
 			for (Pair<String, String> wordMorph : eojeolResult) {
+				if (morphTag.contains(wordMorph.getSecond())) {
 					extractedData.add(wordMorph.getFirst());
+				}
 			}
 		}
 		

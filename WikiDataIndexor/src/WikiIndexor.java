@@ -95,7 +95,7 @@ public class WikiIndexor {
 		}
 	}
 	
-	private void saveIndexedWikiData(HashMap<String, ArrayList<Long>> data, File currentFile) throws Exception {
+	private void saveIndexedWikiData(HashMap<String, ArrayList<Long>> data, File currentFile) throws Exception {		
 		File file = new File(currentFile.getAbsolutePath() +"ex");
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
