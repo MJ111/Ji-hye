@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -52,7 +54,7 @@ public class WikiIndexor {
 			Vector<WikiData> wikiDatas = getWikiDataVector(file);
 			ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREADS);
 			Vector<Future<ExtractedWikiData>> arrFutures = new Vector<Future<ExtractedWikiData>>();
-			HashMap<String, ArrayList<Long>> map = new HashMap<String, ArrayList<Long>>();
+			HashMap<String, SortedSet<Long>> map = new HashMap<String, SortedSet<Long>>();
 			
 			while(true) {				
 				//만약 더이상 처리할 데이터가 없고, 현재 실행중인 쓰레드가 없을경우 종료한다.
@@ -77,9 +79,9 @@ public class WikiIndexor {
 						long documentID = future.get().getDocumentID(); //Document ID of current Thread processing
 						
 						for(String key : ewd) {
-							ArrayList<Long> arrHashMapValue = map.get(key);
+							SortedSet<Long> arrHashMapValue = map.get(key);
 							if(arrHashMapValue == null) {
-								ArrayList<Long> newValue = new ArrayList<Long>();
+								SortedSet<Long> newValue = new TreeSet<Long>();
 								newValue.add(documentID);
 								map.put(key, newValue);
 							} else {
@@ -95,7 +97,7 @@ public class WikiIndexor {
 		}
 	}
 	
-	private void saveIndexedWikiData(HashMap<String, ArrayList<Long>> data, File currentFile) throws Exception {		
+	private void saveIndexedWikiData(HashMap<String, SortedSet<Long>> data, File currentFile) throws Exception {		
 		File file = new File(currentFile.getAbsolutePath() +"ex");
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
