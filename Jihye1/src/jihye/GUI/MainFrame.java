@@ -1,11 +1,13 @@
 package jihye.GUI;
 
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -23,50 +25,26 @@ import javax.swing.text.JTextComponent;
 import jihye.PS.ProblemData;
 
 public class MainFrame extends javax.swing.JFrame {
-	Point mouseDownCompCoords = null;
+	private Point mouseDownCompCoords = null;
 	private Font hintFont;
+	private Boolean noChoiceModeFlag;
+	private ActionListener noChoiceActionListener;
+	private ActionListener choiceActionListener;
 
 	/**
 	 * Creates new form frame1
 	 */
 	public MainFrame(UserInterface ui) {
+		noChoiceModeFlag = true;
 		initComponents();
 		setButtonEventListeners(ui);
 	}
-
+	
 	private void initComponents() {
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setUndecorated(true);
-
-		addMouseListener(new MouseListener() {
-			public void mouseReleased(MouseEvent e) {
-				mouseDownCompCoords = null;
-			}
-
-			public void mousePressed(MouseEvent e) {
-				mouseDownCompCoords = e.getPoint();
-			}
-
-			public void mouseExited(MouseEvent e) {
-			}
-
-			public void mouseEntered(MouseEvent e) {
-			}
-
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
-
-		addMouseMotionListener(new MouseMotionListener() {
-			public void mouseMoved(MouseEvent e) {
-			}
-
-			public void mouseDragged(MouseEvent e) {
-				Point currCoords = e.getLocationOnScreen();
-				setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y
-						- mouseDownCompCoords.y);
-			}
-		});
+		
+		setMouseListener();
 
 		mainJPanel = new javax.swing.JPanel();
 		problemJScrollPane = new javax.swing.JScrollPane();
@@ -77,10 +55,14 @@ public class MainFrame extends javax.swing.JFrame {
 		choice3TextField = new javax.swing.JTextField();
 		choice4TextField = new javax.swing.JTextField();
 		btnJPanel = new javax.swing.JPanel();
-		closeBtn = new SuperButton("close.png");
-		solveBtn = new SuperButton("jihye.png");
-		refreshBtn = new SuperButton("refresh.png");
-
+//		closeBtn = new ImageButton("close.png");
+//		solveBtn = new ImageButton("jihye.png");
+//		refreshBtn = new ImageButton("refresh.png");
+		closeBtn = new Button("닫기");
+		solveBtn = new Button("문제풀기");
+		refreshBtn = new Button("새로고침");
+		changeModeButton = new Button("모드변경");
+		
 		mainJPanel.setBackground(new Color(227, 227, 220));
 		mainJPanel.setBorder(BorderFactory.createLineBorder(new Color(220, 106,
 				79), 1));
@@ -99,7 +81,6 @@ public class MainFrame extends javax.swing.JFrame {
 		problemTextArea.setLineWrap(true);
 		problemTextArea.setColumns(30);
 		problemTextArea.setRows(10);
-		// problemTextArea.setBackground(new Color(239, 239, 239));
 		problemTextArea.setBackground(new Color(255, 255, 255));
 		problemTextArea.setBorder(BorderFactory.createLineBorder(new Color(242,
 				108, 99), 1));
@@ -111,18 +92,24 @@ public class MainFrame extends javax.swing.JFrame {
 		setTextField(choice2TextField, hintFont, "2번");
 		setTextField(choice3TextField, hintFont, "3번");
 		setTextField(choice4TextField, hintFont, "4번");
+		
+		choice1TextField.setVisible(false);
+		choice2TextField.setVisible(false);
+		choice3TextField.setVisible(false);
+		choice4TextField.setVisible(false);
 
 		problemJScrollPane.setViewportView(problemTextArea);
-
+		
 		problemJPanel.setBackground(new Color(227, 227, 220));
 		problemJPanel.setLayout(new java.awt.GridLayout(1, 4, 30, 0));
 
 		btnJPanel.setLayout(new java.awt.GridLayout(1, 3, 60, 0));
 		btnJPanel.setBackground(new Color(227, 227, 220));
-
+		
 		btnJPanel.add(closeBtn);
 		btnJPanel.add(solveBtn);
 		btnJPanel.add(refreshBtn);
+		btnJPanel.add(changeModeButton);
 
 		javax.swing.GroupLayout mainJPanelLayout = new javax.swing.GroupLayout(
 				mainJPanel);
@@ -188,6 +175,38 @@ public class MainFrame extends javax.swing.JFrame {
 
 		setLocationRelativeTo(null);
 	}
+	
+	private void setMouseListener() {
+		addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent e) {
+				mouseDownCompCoords = null;
+			}
+
+			public void mousePressed(MouseEvent e) {
+				mouseDownCompCoords = e.getPoint();
+			}
+
+			public void mouseExited(MouseEvent e) {
+			}
+
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
+
+		addMouseMotionListener(new MouseMotionListener() {
+			public void mouseMoved(MouseEvent e) {
+			}
+
+			public void mouseDragged(MouseEvent e) {
+				Point currCoords = e.getLocationOnScreen();
+				setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y
+						- mouseDownCompCoords.y);
+			}
+		});
+	}
 
 	private void setFocusAction(final JTextComponent textCompo,
 			final String hintStr, Font font, int fontSize) {
@@ -248,6 +267,17 @@ public class MainFrame extends javax.swing.JFrame {
 	}
 
 	private void setButtonEventListeners(final UserInterface ui) {
+		noChoiceActionListener = new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+			}
+		};
+		
+		choiceActionListener = new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				solveChoiceProblem(evt, ui);
+			}
+		};
+		
 		closeBtn.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				dispose();
@@ -257,12 +287,39 @@ public class MainFrame extends javax.swing.JFrame {
 
 		solveBtn.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				solveBtnActionPerformed(evt, ui);
 			}
 		});
+		
 		refreshBtn.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				refreshBtnActionPerformed(evt);
+			}
+		});
+		
+		changeModeButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				if (noChoiceModeFlag) {
+					choice1TextField.setVisible(true);
+					choice2TextField.setVisible(true);
+					choice3TextField.setVisible(true);
+					choice4TextField.setVisible(true);
+					
+					solveBtn.removeActionListener(noChoiceActionListener);
+					solveBtn.addActionListener(choiceActionListener);
+					
+					noChoiceModeFlag = false;
+				} else {
+					choice1TextField.setVisible(false);
+					choice2TextField.setVisible(false);
+					choice3TextField.setVisible(false);
+					choice4TextField.setVisible(false);
+					
+					solveBtn.removeActionListener(choiceActionListener);
+					solveBtn.addActionListener(noChoiceActionListener);
+					
+					noChoiceModeFlag = true;
+				}
+				
 			}
 		});
 	}
@@ -275,11 +332,15 @@ public class MainFrame extends javax.swing.JFrame {
 		setTextField(choice4TextField, hintFont, "4번");
 	}
 
-	private void solveBtnActionPerformed(ActionEvent evt, final UserInterface ui) {
+	private void solveChoiceProblem(ActionEvent evt, final UserInterface ui) {
 		ProblemData problemData = new ProblemData(problemTextArea.getText(),
 				choice1TextField.getText(), choice2TextField.getText(),
 				choice3TextField.getText(), choice4TextField.getText());
 		ui.requestSolve(problemData);
+	}
+	
+	private void solveNoChoiceProblem() {
+		
 	}
 
 	// Variables declaration
@@ -288,12 +349,16 @@ public class MainFrame extends javax.swing.JFrame {
 	private javax.swing.JTextField choice2TextField;
 	private javax.swing.JTextField choice3TextField;
 	private javax.swing.JTextField choice4TextField;
-	private SuperButton closeBtn;
+//	private ImageButton closeBtn;
 	private javax.swing.JPanel mainJPanel;
 	private javax.swing.JPanel problemJPanel;
 	private javax.swing.JScrollPane problemJScrollPane;
 	private javax.swing.JTextArea problemTextArea;
-	private SuperButton refreshBtn;
-	private SuperButton solveBtn;
+//	private ImageButton refreshBtn;
+//	private ImageButton solveBtn;
+	private Button closeBtn;
+	private Button refreshBtn;
+	private Button solveBtn;
+	private Button changeModeButton;
 	// End of variables declaration
 }

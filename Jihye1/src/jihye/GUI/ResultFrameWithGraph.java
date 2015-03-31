@@ -59,9 +59,9 @@ public class ResultFrameWithGraph extends javax.swing.JFrame {
 
 		mainJPanel = new javax.swing.JPanel();
 		btnJPanel = new javax.swing.JPanel();
-		backJButton = new SuperButton("back.png");
-		replayJButton = new SuperButton("replay.png");
-		moreJButton = new SuperButton("more.png");
+		backJButton = new ImageButton("back.png");
+		replayJButton = new ImageButton("replay.png");
+		moreJButton = new ImageButton("more.png");
 		graphJPanel = new javax.swing.JPanel();
 		resultJLabel = new javax.swing.JLabel();
 

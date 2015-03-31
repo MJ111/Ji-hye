@@ -74,9 +74,9 @@ public class ResultFrameWithKeywords extends javax.swing.JFrame {
 		choice4JPanel = new javax.swing.JPanel();
 		choice4JLabel = new javax.swing.JTextArea();
 		btnJPanel = new javax.swing.JPanel();
-		backJButton = new SuperButton("back.png");
-		homeJButton = new SuperButton("home.png");
-		wikiJButton = new SuperButton("wiki.png");
+		backJButton = new ImageButton("back.png");
+		homeJButton = new ImageButton("home.png");
+		wikiJButton = new ImageButton("wiki.png");
 		problemKeywordJPanel = new javax.swing.JPanel();
 		problemKeywordJLabel = new javax.swing.JTextArea();
 

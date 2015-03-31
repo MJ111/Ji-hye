@@ -11,10 +11,10 @@ import java.awt.image.WritableRaster;
 import javax.swing.JButton;
 
 @SuppressWarnings("serial")
-public class SuperButton extends JButton {
+public class ImageButton extends JButton {
 	private Image image;
 
-	public SuperButton(String fileName) {
+	public ImageButton(String fileName) {
 		image = new javax.swing.ImageIcon("image/" + fileName).getImage();//
 		setButtonMouseEventListener(this);
 	}
@@ -56,7 +56,7 @@ public class SuperButton extends JButton {
 		return dest;
 	}
 
-	private void setButtonMouseEventListener(final SuperButton btn) {
+	private void setButtonMouseEventListener(final ImageButton btn) {
 		// image to BufferedImage
 		final Image origin = btn.getImage();
 		BufferedImage src = new BufferedImage(origin.getWidth(null),
