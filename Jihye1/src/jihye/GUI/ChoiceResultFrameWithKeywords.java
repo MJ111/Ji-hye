@@ -14,13 +14,13 @@ import javax.swing.JTextArea;
 
 import jihye.PS.ResultData;
 
-public class ResultFrameWithKeywords extends javax.swing.JFrame {
+public class ChoiceResultFrameWithKeywords extends javax.swing.JFrame {
 
 	private ResultData resultData;
 
 	private Point mouseDownCompCoords;
 
-	public ResultFrameWithKeywords(UserInterface ui, ResultData resultData) {
+	public ChoiceResultFrameWithKeywords(UserInterface ui, ResultData resultData) {
 		this.resultData = resultData;
 		initComponents(ui);
 	}
@@ -30,36 +30,7 @@ public class ResultFrameWithKeywords extends javax.swing.JFrame {
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setUndecorated(true);
 
-		mouseDownCompCoords = null;
-		addMouseListener(new MouseListener() {
-			public void mouseReleased(MouseEvent e) {
-				mouseDownCompCoords = null;
-			}
-
-			public void mousePressed(MouseEvent e) {
-				mouseDownCompCoords = e.getPoint();
-			}
-
-			public void mouseExited(MouseEvent e) {
-			}
-
-			public void mouseEntered(MouseEvent e) {
-			}
-
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
-
-		addMouseMotionListener(new MouseMotionListener() {
-			public void mouseMoved(MouseEvent e) {
-			}
-
-			public void mouseDragged(MouseEvent e) {
-				Point currCoords = e.getLocationOnScreen();
-				setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y
-						- mouseDownCompCoords.y);
-			}
-		});
+		setMouseListener();
 
 		mainJPanel = new javax.swing.JPanel();
 		problemJLabel = new javax.swing.JLabel();
@@ -380,6 +351,38 @@ public class ResultFrameWithKeywords extends javax.swing.JFrame {
 		pack();
 
 		setLocationRelativeTo(null);
+	}
+	
+	private void setMouseListener() {
+		addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent e) {
+				mouseDownCompCoords = null;
+			}
+
+			public void mousePressed(MouseEvent e) {
+				mouseDownCompCoords = e.getPoint();
+			}
+
+			public void mouseExited(MouseEvent e) {
+			}
+
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
+
+		addMouseMotionListener(new MouseMotionListener() {
+			public void mouseMoved(MouseEvent e) {
+			}
+
+			public void mouseDragged(MouseEvent e) {
+				Point currCoords = e.getLocationOnScreen();
+				setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y
+						- mouseDownCompCoords.y);
+			}
+		});
 	}
 
 	private void makeMultilineLabel(JTextArea area) {

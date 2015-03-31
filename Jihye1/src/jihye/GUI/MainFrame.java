@@ -269,6 +269,7 @@ public class MainFrame extends javax.swing.JFrame {
 	private void setButtonEventListeners(final UserInterface ui) {
 		noChoiceActionListener = new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				solveNoChoiceProblem(ui);
 			}
 		};
 		
@@ -285,10 +286,7 @@ public class MainFrame extends javax.swing.JFrame {
 			}
 		});
 
-		solveBtn.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-			}
-		});
+		solveBtn.addActionListener(noChoiceActionListener);
 		
 		refreshBtn.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -336,11 +334,11 @@ public class MainFrame extends javax.swing.JFrame {
 		ProblemData problemData = new ProblemData(problemTextArea.getText(),
 				choice1TextField.getText(), choice2TextField.getText(),
 				choice3TextField.getText(), choice4TextField.getText());
-		ui.requestSolve(problemData);
+		ui.requestSolveChoiceProblem(problemData);
 	}
 	
-	private void solveNoChoiceProblem() {
-		
+	private void solveNoChoiceProblem(final UserInterface ui) {
+		ui.requestSolveNoChoiceProblem();
 	}
 
 	// Variables declaration

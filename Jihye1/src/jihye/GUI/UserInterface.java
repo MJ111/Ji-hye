@@ -10,11 +10,12 @@ import jihye.PS.ResultData;
 import jihye.TTS.TextToSpeech;
 
 public class UserInterface {
-	MainFrame mainFrame;
-	ResultFrameWithGraph resultFrameWithhGraph;
-	ResultFrameWithKeywords resultFrameWithKeywords;
-	JihyeController jihyeController;
-	String answerInformationString;
+	private MainFrame mainFrame;
+	private ChoiceResultFrameWithGraph resultFrameWithhGraph;
+	private ChoiceResultFrameWithKeywords resultFrameWithKeywords;
+	private NoChoiceResultFrame noChoiceResultFrame;
+	private JihyeController jihyeController;
+	private String answerInformationString;
 
 	public UserInterface(JihyeController jc) {
 		jihyeController = jc;
@@ -41,20 +42,31 @@ public class UserInterface {
 		mainFrame.setVisible(true);
 	}
 
-	public void initResultScreens(ResultData resultData) {
+	public void initChoiceResultScreens(ResultData resultData) {
 		mainFrame.setVisible(false);
 		setAnswerString(resultData);
-		resultFrameWithhGraph = new ResultFrameWithGraph(this, resultData);
+		resultFrameWithhGraph = new ChoiceResultFrameWithGraph(this, resultData);
 		resultFrameWithhGraph.setVisible(true);
-		resultFrameWithKeywords = new ResultFrameWithKeywords(this, resultData);
+		resultFrameWithKeywords = new ChoiceResultFrameWithKeywords(this, resultData);
 		readAnswerString();
+	}
+	
+	public void initNoChoiceResultScreens() {
+		mainFrame.setVisible(false);
+		noChoiceResultFrame = new NoChoiceResultFrame(this);
+		noChoiceResultFrame.setVisible(true);
 	}
 
 	// 각종 이벤트 리스너들
-	public void requestSolve(ProblemData problemData) {
+	public void requestSolveChoiceProblem(ProblemData problemData) {
 		System.out.println("Solve problem");
 		ResultData resultData = jihyeController.solve(problemData);
-		initResultScreens(resultData);
+		initChoiceResultScreens(resultData);
+	}
+	
+	public void requestSolveNoChoiceProblem() {
+		System.out.println("Solve no choice problem");
+		initNoChoiceResultScreens();
 	}
 
 	public void showResultFrameWithGraph() {

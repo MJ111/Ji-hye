@@ -27,6 +27,10 @@ public class ResultData {
 	}
 
 	public int getAnswer() {
+		if (similiarty.size() == 0) {
+			return 1;
+		}
+		
 		double max = -2.0f;
 		int answer = 0;
 		for (int i = 0; i < 4; i++) {
