@@ -9,6 +9,7 @@ import tool.xmlparsetool.WikiData;
 
 public class WikiThreadedIndexor implements Callable<ExtractedWikiData>{
 	private static final List<String> morphTag = Arrays.asList("NNG", "NNP", "NR", "SH", "SL", "SN", "ETN", "VV", "VA", "VX", "ETN", "XR", "NF", "NV", "XPN");
+	private static final List<String> verbTag = Arrays.asList("VV", "VA", "VX");
 	private WikiData wikiData;
 	private Komoran komoran;
 	
@@ -24,6 +25,8 @@ public class WikiThreadedIndexor implements Callable<ExtractedWikiData>{
 	public ExtractedWikiData call() throws Exception {
 		long id;
 		
+		
+		
 		try {
 			id = Long.parseLong(wikiData.getDocumentID());
 		} catch (NumberFormatException e) {
@@ -37,7 +40,11 @@ public class WikiThreadedIndexor implements Callable<ExtractedWikiData>{
 			for (List<Pair<String, String>> eojeolResult : result) {
 				for (Pair<String, String> wordMorph : eojeolResult) {
 					if (morphTag.contains(wordMorph.getSecond())) {
-						extractedData.add(wordMorph.getFirst());
+						if(verbTag.contains(wordMorph.getSecond())) {
+							extractedData.add(wordMorph.getFirst() + "´Ù");
+						} else {
+							extractedData.add(wordMorph.getFirst());
+						}
 					}
 				}
 			}
