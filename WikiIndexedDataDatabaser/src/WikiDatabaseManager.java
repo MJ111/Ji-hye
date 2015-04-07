@@ -2,6 +2,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.SortedSet;
@@ -9,20 +10,18 @@ import java.util.SortedSet;
 
 public class WikiDatabaseManager {
 	private WikiIndexDataManager widm;
-	private String strQuery;
-	private int iQueryCounter;
 	private long iTermCounter;
-	private long iPairCounter;
+	private long iPostingCounter;
 	private long iTotalQueryCounter;
 	private Connection connection;
+	private ArrayList<String> queries;
 	
 	public WikiDatabaseManager(WikiIndexDataManager widm) throws SQLException{
 		this.widm = widm;
-		strQuery = "";
-		iQueryCounter = 0;
 		iTotalQueryCounter = 0;
 		iTermCounter = 0;
-		iPairCounter = 0;
+		iPostingCounter = 0;
+		queries = new ArrayList<String>();
 		
 		try {
 			connection = null;
@@ -47,9 +46,9 @@ public class WikiDatabaseManager {
 				//termID find
 				Long termID;
 				if(!termMap.containsKey(key)) {
-					termMap.put(key, Long.valueOf((iTermCounter)));
-					termID = ++iTermCounter;
-					//strQuery += "INSERT INTO WIKIDB_INDEX.TERM "
+					termMap.put(key, Long.valueOf((++iTermCounter)));
+					termID = iTermCounter;
+					queries.add("INSERT INTO WIKIDB_INDEX.TERMS (term) values ('" + key + "');");
 				}else {
 					termID = termMap.get(key);
 				}
@@ -57,23 +56,28 @@ public class WikiDatabaseManager {
 				//get Postings
 				SortedSet<Long> postings = data.get(key);				
 				for(Long posting : postings) {
-					strQuery += "";
+					queries.add("INSERT INTO WIKIDB_INDEX.POSTINGS VALUES (" + termID + "," + posting + ");");
+					iPostingCounter++;
 				}
 				
-				if(iQueryCounter > 1000) {
+				if(queries.size() > 1000) {
 					sendQuery();
 				}
 			}			
 		}
+		
+		System.out.println("Total " + termMap.size() + " words");
+		System.out.println("Total " + iPostingCounter + " postings");
 	}
 	
 	private void sendQuery() {
 		try {
 			Statement stmt = connection.createStatement();
-			stmt.execute(strQuery);
-			iTotalQueryCounter += iQueryCounter;
-			iQueryCounter = 0;
-			strQuery = "";
+			for (String queri : queries) {
+				stmt.execute(queri);
+			}
+			iTotalQueryCounter += queries.size();
+			queries.clear();
 		}catch (SQLException e) {
 			e.printStackTrace();
 			return;

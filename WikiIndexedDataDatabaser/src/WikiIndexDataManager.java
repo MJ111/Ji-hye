@@ -21,7 +21,7 @@ public class WikiIndexDataManager {
 		    }
 		});
 		
-		if(f.length() == 0) throw new IOException("위키 데이터를 찾을 수 없습니다! (경로확인요)");	
+		if(f.length() == 0) throw new IOException("File not found exceptioin");	
 		else iFileIndex = 0;
 	}
 	
