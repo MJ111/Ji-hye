@@ -27,8 +27,8 @@ public class WikiIndexor {
 	private int NUM_THREADS;
 	private ArrayList<Komoran> komorans;
 	
-	public WikiIndexor(String directory, int Threads) throws IOException {
-		this.directory = directory;
+	public WikiIndexor(String directoryPath, int Threads) throws IOException {
+		this.directory = directoryPath;
 		this.NUM_THREADS = Threads;
 		
 		File f = new File(directory);
