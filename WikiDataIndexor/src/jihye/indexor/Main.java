@@ -1,5 +1,6 @@
 ﻿package jihye.indexor;
 import jihye.indexor.indexor.WikiIndexor;
+import jihye.indexor.merger.WikiIndexMerger;
 import jihye.indexor.parser.WikiParser;
 
 public class Main {
@@ -18,21 +19,21 @@ public class Main {
 //		}
 		
 		//Indexing part
-		try {
-			WikiIndexor wi = new WikiIndexor(WIKIDATA_PATH, NUM_THREADS);
-			wi.startIndexing();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-		
-		//Merge part
 //		try {
-//			WikiIndexMerger wim = new WikiIndexMerger(WIKIDATA_PATH);
-//			wim.startMerge();
+//			WikiIndexor wi = new WikiIndexor(WIKIDATA_PATH, NUM_THREADS);
+//			wi.startIndexing();
 //		} catch (Exception e) {
 //			e.printStackTrace();
+//			System.exit(1);
 //		}
+		
+		//Merge part
+		try {
+			WikiIndexMerger wim = new WikiIndexMerger(WIKIDATA_PATH);
+			wim.startMerge();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 }

@@ -17,24 +17,28 @@ public class WikiIndexMerger {
 	private SortedSet<String> dictionary;
 	
 	public WikiIndexMerger(String dictionaryPath) throws Exception{
-		matchingFiles = Utility.getInstance().getFiles(dictionaryPath, "jhdex");
-		dictionary = getDictionary();
+		matchingFiles = Utility.getInstance().getFiles(dictionaryPath, "jhdex");		
 	}
 	
 	public void startMerge() {
-		
+		dictionary = getDictionary();
+		System.out.println("Total : " + dictionary.size() + "terms");
 	}
 	
 	private SortedSet<String> getDictionary() {
 		SortedSet<String> dic = new TreeSet<String>();
 		for (File f : matchingFiles) {
+			System.gc();
 			HashMap<String, SortedSet<Long>> map = null;
 			
 			try {
 				FileInputStream fis = new FileInputStream(f);
 				ObjectInputStream ois = new ObjectInputStream(fis);
 				map = (HashMap<String, SortedSet<Long>>)ois.readObject();
-				
+				System.out.println(f);
+				System.out.println("total terms in index : " + map.keySet().size());
+				ois.close();
+				fis.close();				
 			} catch (Exception e) {
 				System.out.print(e);
 			}
@@ -42,6 +46,8 @@ public class WikiIndexMerger {
 			for(String key : map.keySet()) {
 				dic.add(key);
 			}
+			map.clear();
+			System.out.println(dic.size());
 		}
 		return dic;
 	}
