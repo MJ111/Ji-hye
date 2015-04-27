@@ -2,7 +2,6 @@
 import jihye.indexor.indexor.WikiIndexor;
 import jihye.indexor.parser.WikiParser;
 
-
 public class Main {
 	private final static String WIKIDATA_PATH = "D:/WikiData";
 	private final static int NUM_THREADS = 8;

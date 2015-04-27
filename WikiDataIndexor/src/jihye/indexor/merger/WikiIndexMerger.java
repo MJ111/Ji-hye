@@ -9,13 +9,15 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jihye.indexor.util.Utility;
+
 
 public class WikiIndexMerger {
 	private File[] matchingFiles;
 	private SortedSet<String> dictionary;
 	
 	public WikiIndexMerger(String dictionaryPath) throws Exception{
-		matchingFiles = getFiles(dictionaryPath);
+		matchingFiles = Utility.getInstance().getFiles(dictionaryPath, "jhdex");
 		dictionary = getDictionary();
 	}
 	
@@ -42,19 +44,5 @@ public class WikiIndexMerger {
 			}
 		}
 		return dic;
-	}
-	
-	private File[] getFiles(String dictionaryPath) throws IOException {
-		File [] files;
-		File f = new File(dictionaryPath);
-		files = f.listFiles(new FilenameFilter() {
-		    public boolean accept(File dir, String name) {
-		        return name.endsWith("jhdex");
-		    }
-		});
-		
-		if(f.length() == 0) throw new IOException("위키 데이터를 찾을 수 없습니다! (경로확인요)");
-		
-		return files;
 	}
 }

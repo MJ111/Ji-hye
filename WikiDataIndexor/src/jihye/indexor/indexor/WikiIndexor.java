@@ -28,13 +28,12 @@ public class WikiIndexor {
 	private int NUM_THREADS;
 	private ArrayList<Komoran> komorans;
 	
-	public WikiIndexor(String directoryPath, int Threads) throws IOException {
+	public WikiIndexor(String directoryPath, int Threads) throws Exception {
 		this.directory = directoryPath;
-		this.NUM_THREADS = Threads;
-				
+		this.NUM_THREADS = Threads;				
 		
 		matchingFiles = Utility.getInstance().getFiles(directoryPath, "jhd");		
-		if(matchingFiles.length == 0) throw new IOException("위키 데이터를 찾을 수 없습니다! (경로확인요)");
+		if(matchingFiles.length == 0) throw Utility.getInstance().makeException(Utility.ERROR_FILE, ".ex 파일 로드 실패");
 		
 		//코모란 생성하는 비용이 커서 재미있는 방법으로 코모란 돌릴거임..
 		komorans = new ArrayList<Komoran>();
@@ -105,7 +104,7 @@ public class WikiIndexor {
 			oos.close();
 			fos.close();
 		} catch (IOException e) {
-			throw new IOException("객체 저장중 오류가 발생하였습니다.");
+			throw Utility.getInstance().makeException(Utility.ERROR_FILE, ".ex 데이터 생성 실패");
 		}
 	}
 	
@@ -117,9 +116,8 @@ public class WikiIndexor {
 			wikiDatas = (Vector<WikiData>)ois.readObject();
 			ois.close();
 			fis.close();
-		} catch (Exception e) {
-			Exception exp = new Exception("객체 캐스팅 에러. (동일 라이브러라 사용 확인요)");
-			throw exp;
+		} catch (Exception e) {			
+			throw Utility.getInstance().makeException(Utility.ERROR_OBJECT_CAST, "객체 변환 실패");
 		}
 		return wikiDatas;
 	}

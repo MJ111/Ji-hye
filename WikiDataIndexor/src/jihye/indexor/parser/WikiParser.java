@@ -66,8 +66,7 @@ public class WikiParser {
 
 					if(pageCounter % split == 0) {
 						try {
-							String strOutFile = String.format("%s/WikiData%02d.jhd", wikiDataPath, fileCounter++);
-							File outfile = new File(strOutFile);
+							File outfile = new File(String.format("%s/WikiData%02d.jhd", wikiDataPath, fileCounter++));
 							FileOutputStream fos = new FileOutputStream(outfile);
 							ObjectOutputStream oos = new ObjectOutputStream(fos); 
 							

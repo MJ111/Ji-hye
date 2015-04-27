@@ -3,7 +3,6 @@ import java.util.ArrayList;
 
 import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
 
-
 public class ExtractedWikiData extends ArrayList<String> {
 	private long documentID;
 	private Komoran komoran;
