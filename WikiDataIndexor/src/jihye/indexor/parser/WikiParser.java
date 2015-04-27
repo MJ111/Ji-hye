@@ -8,7 +8,7 @@ import java.io.ObjectOutputStream;
 import java.util.Vector;
 
 import jihye.indexor.WikiData;
-import jihye.indexor.util.FileManager;
+import jihye.indexor.util.Utility;
 import edu.jhu.nlp.wikipedia.PageCallbackHandler;
 import edu.jhu.nlp.wikipedia.WikiPage;
 import edu.jhu.nlp.wikipedia.WikiXMLParser;
@@ -32,7 +32,7 @@ public class WikiParser {
 	}
 	
 	private File getRawDumpFile() throws IOException {
-		File [] files = FileManager.getInstance().getFiles(wikiDumpPath, "xml");
+		File [] files = Utility.getInstance().getFiles(wikiDumpPath, "xml");
 		if(files.length == 0) throw new IOException("위키 데이터를 찾을 수 없습니다! (경로확인요)");
 		else if(files.length != 1) throw new IOException("xml 파일이 여러개입니다. (1개만 놓아두세요)");
 		System.out.println("Using Dump : " + files[0].getPath());
@@ -107,7 +107,6 @@ public class WikiParser {
 		}
 		
 		lnEndTime = System.currentTimeMillis();
-
 		System.out.println("WikiData 생성 시간 : " + (lnEndTime - lnStartTime) / 1000);
 	}	
 	

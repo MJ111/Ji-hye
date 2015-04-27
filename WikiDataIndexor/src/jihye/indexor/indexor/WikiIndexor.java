@@ -18,7 +18,7 @@ import java.util.concurrent.Future;
 
 import jihye.indexor.ExtractedWikiData;
 import jihye.indexor.WikiData;
-import jihye.indexor.util.FileManager;
+import jihye.indexor.util.Utility;
 import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
 
 
@@ -33,7 +33,7 @@ public class WikiIndexor {
 		this.NUM_THREADS = Threads;
 				
 		
-		matchingFiles = FileManager.getInstance().getFiles(directoryPath, "jdh");		
+		matchingFiles = Utility.getInstance().getFiles(directoryPath, "jhd");		
 		if(matchingFiles.length == 0) throw new IOException("위키 데이터를 찾을 수 없습니다! (경로확인요)");
 		
 		//코모란 생성하는 비용이 커서 재미있는 방법으로 코모란 돌릴거임..
@@ -43,7 +43,7 @@ public class WikiIndexor {
 			komorans.add(k);
 		}
 		
-		System.out.println("Threads are ready");
+		System.out.println("Indexor : Threads are ready");
 	}
 	
 	public void startIndexing() throws Exception{
