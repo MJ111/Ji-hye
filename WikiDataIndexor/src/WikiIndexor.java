@@ -8,7 +8,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -16,7 +15,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import javafx.util.Pair;
 import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
 import tool.xmlparsetool.WikiData;
 

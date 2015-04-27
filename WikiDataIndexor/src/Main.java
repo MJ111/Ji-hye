@@ -16,7 +16,12 @@ public class Main {
 //		}
 		
 		//Merge part
-		
+		try {
+			WikiIndexMerger wim = new WikiIndexMerger(WIKIDATA_PATH);
+			wim.startMerge();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 }

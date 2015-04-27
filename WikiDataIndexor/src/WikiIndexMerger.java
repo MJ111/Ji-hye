@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 
 public class WikiIndexMerger {
@@ -17,10 +18,14 @@ public class WikiIndexMerger {
 		dictionary = getDictionary();
 	}
 	
-	private SortedSet<String> getDictionary() {
+	public void startMerge() {
 		
+	}
+	
+	private SortedSet<String> getDictionary() {
+		SortedSet<String> dic = new TreeSet<String>();
 		for (File f : matchingFiles) {
-			HashMap<String, SortedSet<Long>> map;
+			HashMap<String, SortedSet<Long>> map = null;
 			
 			try {
 				FileInputStream fis = new FileInputStream(f);
@@ -31,11 +36,11 @@ public class WikiIndexMerger {
 				System.out.print(e);
 			}
 			
+			for(String key : map.keySet()) {
+				dic.add(key);
+			}
 		}
-		
-		
-		//HashMap<String, SortedSet<Long>>
-		return null;
+		return dic;
 	}
 	
 	private File[] getFiles(String dictionaryPath) throws IOException {
