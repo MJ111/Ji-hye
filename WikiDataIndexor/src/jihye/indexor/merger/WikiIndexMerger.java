@@ -4,9 +4,12 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import jihye.indexor.util.Utility;
@@ -26,7 +29,8 @@ public class WikiIndexMerger {
 	}
 	
 	private SortedSet<String> getDictionary() {
-		SortedSet<String> dic = new TreeSet<String>();
+		long postings = 0;
+		SortedMap<String, LinkedList<Integer>> dic = new TreeMap<String, LinkedList<Integer>>();
 		for (File f : matchingFiles) {
 			System.gc();
 			HashMap<String, SortedSet<Long>> map = null;
@@ -41,14 +45,27 @@ public class WikiIndexMerger {
 				fis.close();				
 			} catch (Exception e) {
 				System.out.print(e);
-			}
+			}		
 			
 			for(String key : map.keySet()) {
-				dic.add(key);
+				LinkedList<Integer> post = null;
+				if(dic.containsKey(key))  {
+					post = dic.get(key);
+				}
+				else {
+					dic.put(key, new LinkedList<Integer>());
+					post = dic.get(key);					
+				}
+				
+				for (Long val : map.get(key)) {
+					post.add(val.intValue());
+				}
 			}
 			map.clear();
 			System.out.println(dic.size());
 		}
-		return dic;
+		System.out.println("Total postings : " + postings);
+		
+		return null;
 	}
 }

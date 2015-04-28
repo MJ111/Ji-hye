@@ -10,7 +10,7 @@ import kr.co.shineware.util.common.model.Pair;
 
 
 public class WikiThreadedIndexor implements Callable<ExtractedWikiData>{
-	private static final List<String> morphTag = Arrays.asList("NNG", "NNP", "NR", "SH", "SL", "SN", "ETN", "VV", "VA", "VX", "ETN", "XR", "NF", "NV", "XPN");
+	private static final List<String> morphTag = Arrays.asList("NNG", "NNP", "NR", "SH", "SL", "SN", "VV", "VA", "VX", "XR", "NF", "NV", "XPN");
 	private static final List<String> verbTag = Arrays.asList("VV", "VA", "VX");
 	private WikiData wikiData;
 	private Komoran komoran;
