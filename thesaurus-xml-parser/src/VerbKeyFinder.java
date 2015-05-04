@@ -17,7 +17,7 @@ public class VerbKeyFinder {
 			
 			for(Row row : table) {
 				if (row.get("orthtext").equals(verb)) {
-					key = (int)row.get("superEntryKey");
+					key = row.getInt("superEntryKey");
 				}
 			}
 		} catch (IOException e) {

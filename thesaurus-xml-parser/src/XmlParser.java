@@ -18,7 +18,7 @@ import org.xml.sax.SAXException;
 
 public class XmlParser {
 	public ArrayList<String> parser(String xml) {
-		ArrayList<String> resultStrs = new ArrayList<>();
+		ArrayList<String> resultStrs = new ArrayList<String>();
 		
 //		System.out.println(xml);
 		InputSource is = new InputSource(new StringReader(xml)); 
@@ -62,11 +62,7 @@ public class XmlParser {
 					}
 				}
 			}
-		} catch (SAXException | IOException | ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (XPathExpressionException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return resultStrs;
