@@ -1,12 +1,16 @@
 ﻿package jihye.indexor.merger;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -17,55 +21,73 @@ import jihye.indexor.util.Utility;
 
 public class WikiIndexMerger {
 	private File[] matchingFiles;
-	private SortedSet<String> dictionary;
-	
+	private Map<String, Integer> index;
+	private String dictionaryPath;
+	private int iNumOfIndex;
 	public WikiIndexMerger(String dictionaryPath) throws Exception{
-		matchingFiles = Utility.getInstance().getFiles(dictionaryPath, "jhdex");		
+		this.dictionaryPath = dictionaryPath;
+		matchingFiles = Utility.getInstance().getFiles(dictionaryPath, "jhdex");
 	}
 	
-	public void startMerge() {
-		dictionary = getDictionary();
-		System.out.println("Total : " + dictionary.size() + "terms");
+	public void startMerge(int seperate) {
+		index = getIndexOfIndices(seperate);
+		merge();
 	}
 	
-	private SortedSet<String> getDictionary() {
-		long postings = 0;
-		SortedMap<String, LinkedList<Integer>> dic = new TreeMap<String, LinkedList<Integer>>();
+	private void merge() {
+		//Make files
+		File[] files = Utility.getInstance().createFiles(dictionaryPath, iNumOfIndex, Utility.FILE_TYPE_INDEX);
+	}
+	
+	private Map<String, Integer> getIndexOfIndices(int seperate) {
+		//Index of Indices
+		//음.. 몇번 인덱스에 어느 텀이 있는지 알려준다?
+		int termCounter = 0;
+		int indexCounter = 1;
+		Map<String, Integer> Index = new TreeMap<String, Integer>();
+		
 		for (File f : matchingFiles) {
-			System.gc();
 			HashMap<String, SortedSet<Long>> map = null;
+			System.out.println("Merging : " + f);
 			
 			try {
 				FileInputStream fis = new FileInputStream(f);
 				ObjectInputStream ois = new ObjectInputStream(fis);
 				map = (HashMap<String, SortedSet<Long>>)ois.readObject();
-				System.out.println(f);
-				System.out.println("total terms in index : " + map.keySet().size());
 				ois.close();
-				fis.close();				
-			} catch (Exception e) {
-				System.out.print(e);
-			}		
-			
-			for(String key : map.keySet()) {
-				LinkedList<Integer> post = null;
-				if(dic.containsKey(key))  {
-					post = dic.get(key);
-				}
-				else {
-					dic.put(key, new LinkedList<Integer>());
-					post = dic.get(key);					
-				}
+				fis.close();
 				
-				for (Long val : map.get(key)) {
-					post.add(val.intValue());
-				}
-			}
-			map.clear();
-			System.out.println(dic.size());
+				Set<String> keys = map.keySet();
+				
+				for(String key : keys) {
+					if(!Index.containsKey(key)) {						
+						//If index of index doesn't contains term, insert into index of index
+						Index.put(key, indexCounter);
+						termCounter++;						
+						//만약, 하나의 인덱스에 들어갈수 있는 텀의 갯수가 초과하면? 다음 index 번호로 넘어간다.
+						if(termCounter > seperate) {
+							indexCounter ++;
+							termCounter = 0;
+						}
+					}
+				}				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}			
 		}
-		System.out.println("Total postings : " + postings);
+		System.out.println(String.format("Total %d indices, %d terms", indexCounter, Index.size()));	
+		this.iNumOfIndex = indexCounter;
 		
-		return null;
+		try {
+			FileOutputStream fos = new FileOutputStream(dictionaryPath +  "/Index.jhdindex");
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			//Primitive of Index : Map<String, Integer>
+			oos.writeObject(Index);
+			oos.close();
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return Index;
 	}
 }

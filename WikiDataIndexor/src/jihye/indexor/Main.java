@@ -7,6 +7,7 @@ public class Main {
 	private final static String WIKIDATA_PATH = "D:/WikiData";
 	private final static int NUM_THREADS = 8;
 	private final static int NUM_SPLIT = 30000;
+	private final static int NUM_INDEX_SPLIT = 100000;
 	
 	public static void main(String args[]) {
 		//Parse part
@@ -30,7 +31,7 @@ public class Main {
 		//Merge part
 		try {
 			WikiIndexMerger wim = new WikiIndexMerger(WIKIDATA_PATH);
-			wim.startMerge();
+			wim.startMerge(NUM_INDEX_SPLIT);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

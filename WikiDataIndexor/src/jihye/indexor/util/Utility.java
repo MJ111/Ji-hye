@@ -9,12 +9,36 @@ public class Utility {
 	public static final int ERROR_DEFAULT = 0;
 	public static final int ERROR_FILE = 1;
 	public static final int ERROR_OBJECT_CAST = 2;
+	public static final int FILE_TYPE_INDEX = 3;
 	
 	public static Utility getInstance() {
 		if(fileManager == null) {
 			fileManager = new Utility();
 		}
 		return fileManager;
+	}
+	
+	public File[] createFiles(String directory, int NumOfFiles, int FileType) {
+		File[] files = null;
+		if(FileType == FILE_TYPE_INDEX) {
+			files = createIndexFiles(directory, NumOfFiles);
+		}		
+		return files;
+	}
+	
+	private File[] createIndexFiles(String directory, int NumOfFiles) {
+		File[] files = null;
+		
+		if(NumOfFiles == 0) return files;
+		
+		File dir = new File(directory);
+		if(!dir.exists()) return files;
+		
+		for(int i = 0; i < NumOfFiles; i++) {
+			String str = String.format("%s/JihyeIndexes%02d.jhidx", directory , i);
+			files[i] = new File(str);
+		}		
+		return files;
 	}
 	
 	public File[] getFiles(String directory, final String endsWith) {
