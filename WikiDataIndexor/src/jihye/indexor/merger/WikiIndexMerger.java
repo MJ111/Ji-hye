@@ -21,7 +21,7 @@ import jihye.indexor.util.Utility;
 
 public class WikiIndexMerger {
 	private File[] matchingFiles;
-	private Map<String, Integer> index;
+	private SortedMap<String, Integer> index;
 	private String dictionaryPath;
 	private int iNumOfIndex;
 	public WikiIndexMerger(String dictionaryPath) throws Exception{
@@ -41,12 +41,12 @@ public class WikiIndexMerger {
 		
 	}
 	
-	private Map<String, Integer> getIndexOfIndices(int seperate) {
+	private SortedMap<String, Integer> getIndexOfIndices(int seperate) {
 		//Index of Indices
 		//음.. 몇번 인덱스에 어느 텀이 있는지 알려준다?
 		int termCounter = 0;
 		int indexCounter = 0;
-		Map<String, Integer> Index = new TreeMap<String, Integer>();
+		SortedMap<String, Integer> Index = new TreeMap<String, Integer>();
 		
 		for (File f : matchingFiles) {
 			HashMap<String, SortedSet<Long>> map = null;
@@ -89,7 +89,7 @@ public class WikiIndexMerger {
 		try {
 			FileOutputStream fos = new FileOutputStream(dictionaryPath +  "/Index.jhdindex");
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			//Primitive of Index : Map<String, Integer>
+			//Primitive of Index : SortedMap<String, Integer>
 			oos.writeObject(Index);
 			oos.close();
 			fos.close();
