@@ -37,13 +37,15 @@ public class WikiIndexMerger {
 	private void merge() {
 		//Make files
 		File[] files = Utility.getInstance().createFiles(dictionaryPath, iNumOfIndex, Utility.FILE_TYPE_INDEX);
+		
+		
 	}
 	
 	private Map<String, Integer> getIndexOfIndices(int seperate) {
 		//Index of Indices
 		//음.. 몇번 인덱스에 어느 텀이 있는지 알려준다?
 		int termCounter = 0;
-		int indexCounter = 1;
+		int indexCounter = 0;
 		Map<String, Integer> Index = new TreeMap<String, Integer>();
 		
 		for (File f : matchingFiles) {
@@ -62,19 +64,25 @@ public class WikiIndexMerger {
 				for(String key : keys) {
 					if(!Index.containsKey(key)) {						
 						//If index of index doesn't contains term, insert into index of index
-						Index.put(key, indexCounter);
-						termCounter++;						
-						//만약, 하나의 인덱스에 들어갈수 있는 텀의 갯수가 초과하면? 다음 index 번호로 넘어간다.
-						if(termCounter > seperate) {
-							indexCounter ++;
-							termCounter = 0;
-						}
+						Index.put(key, 0);
 					}
 				}				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}			
 		}
+		
+		//Assign Index File Numbers
+		Set<String> keys = Index.keySet();
+		for(String key : keys) {
+			Index.replace(key, indexCounter);
+			if(termCounter++ > seperate) {
+				indexCounter++;
+				termCounter = 0;				
+			}
+		}
+		
+		
 		System.out.println(String.format("Total %d indices, %d terms", indexCounter, Index.size()));	
 		this.iNumOfIndex = indexCounter;
 		

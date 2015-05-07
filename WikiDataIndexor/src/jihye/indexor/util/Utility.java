@@ -28,15 +28,14 @@ public class Utility {
 	
 	private File[] createIndexFiles(String directory, int NumOfFiles) {
 		File[] files = null;
-		
-		if(NumOfFiles == 0) return files;
-		
 		File dir = new File(directory);
-		if(!dir.exists()) return files;
 		
-		for(int i = 0; i < NumOfFiles; i++) {
-			String str = String.format("%s/JihyeIndexes%02d.jhidx", directory , i);
-			files[i] = new File(str);
+		if(dir.exists()) {
+			files = new File[NumOfFiles];
+			for(int i = 0; i < NumOfFiles; i++) {
+				String str = String.format("%s/JihyeIndices%02d.jhidx", directory , i);
+				files[i] = new File(str);
+			}
 		}		
 		return files;
 	}
