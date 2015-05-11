@@ -3,12 +3,18 @@ package jihye.PS;
 import java.util.ArrayList;
 
 import jihye.NLP.KeywordExtrator;
-import jihye.Vector.*;
+import jihye.Vector.Dictionary;
+import jihye.Vector.SimilarityResult;
+import jihye.Vector.SparseVector;
+import jihye.Vector.TermFrequencyMap;
+import jihye.Vector.VectorProcessor;
 
 public class ProblemSolver {
 
 	VectorProcessor vectorProcessor;
 	KeywordExtrator keywordExtractor;
+	public TermFrequencyMap problemTF;
+	public ArrayList<TermFrequencyMap> maxSimilarityChoiceTFList;
 
 	public ProblemSolver() {
 		keywordExtractor = new KeywordExtrator();
@@ -17,8 +23,7 @@ public class ProblemSolver {
 
 	public ResultData solve(ProblemData problemData) {
 
-		TermFrequencyMap problemTF;
-		ArrayList<TermFrequencyMap> maxSimilarityChoiceTFList = new ArrayList<TermFrequencyMap>();
+		maxSimilarityChoiceTFList = new ArrayList<TermFrequencyMap>();
 
 		// get problem tf
 		ArrayList<String> problemMorph = keywordExtractor
@@ -48,16 +53,20 @@ public class ProblemSolver {
 			}
 			// 여러개가 일치하면 가장 일치도가 높은 TFMap을 maxSimilarityChoiceTFList에 넣음.
 			else {
-
-				for (TermFrequencyMap t : choiceTFList) {
-					System.out.println(choice + " : ");
-					System.out.println(t.toString());
-					System.out.println("\n\n");
-				}
+//				for (TermFrequencyMap t : choiceTFList) {
+//					System.out.println(choice + " : ");
+//					System.out.println(t.toString());
+//					System.out.println("\n\n");
+//				}
 				TermFrequencyMap maxSimilarityChoiceTF = vectorProcessor
 						.getMaxSimilarityTFMap(problemTF, choiceTFList);
 				maxSimilarityChoiceTFList.add(maxSimilarityChoiceTF);
 			}
+		}
+		
+		for (TermFrequencyMap t : maxSimilarityChoiceTFList) {
+			System.out.print(t.getName() + " : ");
+			System.out.println(t.toString());
 		}
 
 		// 사전 생성
@@ -77,7 +86,6 @@ public class ProblemSolver {
 				resultData.add(ctf.getName(), result);
 			} else {
 				resultData.add("", new SimilarityResult("", 0));
-
 			}
 		}
 

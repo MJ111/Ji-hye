@@ -9,6 +9,7 @@ import java.io.IOException;
 import jihye.PS.ProblemData;
 import jihye.PS.ProblemSolver;
 import jihye.PS.ResultData;
+import jihye.Vector.TermFrequencyMap;
 
 public class TestProblemsSolver {
 	ProblemSolver problemSolver;
@@ -36,7 +37,7 @@ public class TestProblemsSolver {
 		try { 
 			BufferedWriter out = new BufferedWriter(new FileWriter("solveData.txt"));
 	
-			String[] problemsString = fileString.split("\n");
+			String[] problemsString = fileString.split("\r\n");
 	        
 			int rightAnswerNum = 0;
 	        int count = 0;
@@ -69,10 +70,17 @@ public class TestProblemsSolver {
 	        			noData++;
 	        		}
 	        		
+	        		out.write(problemSolver.problemTF.toString());
+	        		out.newLine();
+	        		for (TermFrequencyMap termFrequencyMap : problemSolver.maxSimilarityChoiceTFList) {
+	        			out.write(termFrequencyMap.getName() + ": " + termFrequencyMap.toString());
+	        			out.newLine();
+	        		}
+
 	        		for (int index1 = 0; index1 < 4; index1++) {
 	        			out.write(resultData.choices.get(index1) + ": " + resultData.similiarty.get(index1));
+	        			out.newLine();
 	        		}
-	        		out.newLine();
 	        		out.write("wrong answer - rightAnswer : " + rightAnswer + " jihye : " + resultAnswer);
 	        		out.newLine();
 	        	}
