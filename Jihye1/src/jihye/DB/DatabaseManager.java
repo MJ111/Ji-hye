@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class DatabaseManager {
 
-	private static final String DATABASE_NAME = "wikidb";
+	private static final String DATABASE_NAME = "web_wikidb";
 	private Connection connection;
 
 	public DatabaseManager() {
