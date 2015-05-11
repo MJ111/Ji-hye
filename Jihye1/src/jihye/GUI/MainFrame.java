@@ -338,7 +338,8 @@ public class MainFrame extends javax.swing.JFrame {
 	}
 	
 	private void solveNoChoiceProblem(final UserInterface ui) {
-		ui.requestSolveNoChoiceProblem();
+		ProblemData problemData = new ProblemData(problemTextArea.getText());
+		ui.requestSolveNoChoiceProblem(problemData);
 	}
 
 	// Variables declaration

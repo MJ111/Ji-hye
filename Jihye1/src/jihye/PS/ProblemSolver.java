@@ -28,6 +28,10 @@ public class ProblemSolver {
 
 		Dictionary dictionary = new Dictionary();
 		ResultData resultData = new ResultData(problemTF.toString());
+		
+		if(!problemData.hasChoice()) {
+			
+		}
 
 		// get choice tf
 		for (String choice : problemData.choices) {

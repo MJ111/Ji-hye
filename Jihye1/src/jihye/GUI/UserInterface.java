@@ -51,7 +51,7 @@ public class UserInterface {
 		readAnswerString();
 	}
 	
-	public void initNoChoiceResultScreens() {
+	public void initNoChoiceResultScreens(ResultData resultData) {
 		mainFrame.setVisible(false);
 		noChoiceResultFrame = new NoChoiceResultFrame(this);
 		noChoiceResultFrame.setVisible(true);
@@ -64,9 +64,10 @@ public class UserInterface {
 		initChoiceResultScreens(resultData);
 	}
 	
-	public void requestSolveNoChoiceProblem() {
+	public void requestSolveNoChoiceProblem(ProblemData problemData) {
 		System.out.println("Solve no choice problem");
-		initNoChoiceResultScreens();
+		ResultData resultData = jihyeController.solve(problemData);		
+		initNoChoiceResultScreens(resultData);
 	}
 
 	public void showResultFrameWithGraph() {
