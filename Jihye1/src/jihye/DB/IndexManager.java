@@ -64,19 +64,33 @@ public class IndexManager {
 	}
 	
 	public int[] mergePostings(List<int[]> postings, int documentCount) {
-		int size = 0;
+		int [] merged = null;
 		for(int[] arr : postings) {
-			size += arr.length;
+			merged = ArrayUtils.addAll(merged, arr);
 		}
 		
+		Arrays.sort(merged);	
 		
-		int[] merged = new int[size];
-		for(int[] arr : postings) {
-			ArrayUtils.addAll(merged, arr);
+		int counter = 1;
+		int last = merged[0];
+		int[] ret = null;
+		
+		for(int i = 1; i < merged.length; i++) {
+			if(merged[i] == last) {
+				counter ++;
+			} else {
+				last = merged[i];
+				counter = 1;
+			}
+			
+			if(counter >= documentCount) {
+				ret = ArrayUtils.add(ret, last);
+				while(i+1 < merged.length && merged[i+1] == last) {
+					i++;
+				}
+			}
 		}
 		
-		Arrays.sort(merged);		
-		
-		return merged;
+		return ret;
 	}
 }
