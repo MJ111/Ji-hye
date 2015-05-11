@@ -151,7 +151,8 @@ public class WikiIndexMerger {
 		//Assign Index File Numbers
 		Set<String> keys = Index.keySet();
 		for(String key : keys) {
-			Index.replace(key, indexCounter);
+			Index.remove(key);
+			Index.put(key, indexCounter);
 			if(termCounter++ > seperate) {
 				indexCounter++;
 				termCounter = 0;				

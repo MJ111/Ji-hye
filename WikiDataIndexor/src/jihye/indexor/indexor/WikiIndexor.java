@@ -1,4 +1,5 @@
 ﻿package jihye.indexor.indexor;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -9,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -97,11 +99,19 @@ public class WikiIndexor {
 		File file = new File(currentFile.getAbsolutePath() +"ex");
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+			Set<String> dic = data.keySet();
 			
-			oos.writeObject(data);
-			
-			oos.close();
+			for(String term : dic) {
+				String write = term +",";
+				SortedSet<Long> postings = data.get(term);
+				for(Long posting : postings) {
+					write += posting.toString() +",";
+				}
+				write += "\n";
+				bos.write(write.getBytes());
+			}
+			bos.close();
 			fos.close();
 		} catch (IOException e) {
 			throw Utility.getInstance().makeException(Utility.ERROR_FILE, ".ex 데이터 생성 실패");
