@@ -1,12 +1,19 @@
 ﻿package jihye.indexor.merger;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -17,6 +24,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.text.html.HTMLDocument.Iterator;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 import jihye.indexor.util.Utility;
 
@@ -33,70 +42,76 @@ public class WikiIndexMerger {
 	
 	public void startMerge(int seperate) {
 		//index = getIndexOfIndices(seperate);
-		index = readIndexOfIndicesFromFile();
-		iNumOfIndex = index.size() / seperate + 1;
+		//index = readIndexOfIndicesFromFile(seperate);
 		merge();
 	}
 	
 	private void merge() {
-		ArrayList<HashMap<String, SortedSet<Long>>> ret = new ArrayList<HashMap<String,SortedSet<Long>>>();
+		Map<String, Integer[]> ret = new TreeMap<String, Integer[]>();
 		//Make files
-		File[] files = Utility.getInstance().createFiles(dictionaryPath, iNumOfIndex, Utility.FILE_TYPE_INDEX);
+		File[] files = Utility.getInstance().createFiles(dictionaryPath, 1, Utility.FILE_TYPE_INDEX);
 		System.out.println("Found " + matchingFiles.length + " to be merged");
 		
 		for(File f : matchingFiles) {
 			try {
-				FileInputStream fis = new FileInputStream(f);
-				ObjectInputStream ois = new ObjectInputStream(fis);
-				ret.add((HashMap<String, SortedSet<Long>>)ois.readObject());
-				ois.close();
-				fis.close();
+				FileReader fr = new FileReader(f);
+				BufferedReader br = new BufferedReader(fr);
+				
+				while(br.ready()) {
+					String line = br.readLine();
+					String lines[] = line.split(",");
+					
+					String term = lines[0];
+					ArrayList<Integer> postings = new ArrayList<Integer>();
+					for(int i = 1; i < lines.length; i++) {
+						postings.add(Integer.parseInt(lines[i]));
+					}
+					
+					if(ret.containsKey(term)) {
+						Integer a[] = ret.get(term);
+						Integer b[] = postings.toArray(new Integer[postings.size()]);
+						Integer[] merged = ArrayUtils.addAll(a, b);
+						ret.put(term, merged);
+						//Arrays.
+					}else {
+						ret.put(term, postings.toArray(new Integer[postings.size()]));
+					}
+				}
+				br.close();
+				fr.close();
 			} catch(Exception e){
 				e.printStackTrace();
 			}
 		}
 		
-		
-		Set<String> keys = index.keySet();			
-		
-		for(int i = 0; i < iNumOfIndex;) {
-			System.out.println("merging :" + i);
-			SortedMap<String, SortedSet<Long>> nIndex = new TreeMap<String, SortedSet<Long>>();	
-			
-			
-			Set<String> nKeys = new TreeSet<String>();
-			for(String key : keys) {
-				if(index.get(key) == i) {
-					nKeys.add(key);
+		try {
+			FileWriter fw = new FileWriter(files[0]);
+			BufferedWriter bw = new BufferedWriter(fw);
+			class Comp implements Comparator<Integer>{
+				public int compare(Integer o1, Integer o2){ //compara 메소드를 오버라이드 
+					return o1 < o2 ? -1 : (o1 == o2 ? 0 : 1); //위의 if 문을 조건삼항 연산자로 대체
 				}
 			}
 			
-			for(String key : nKeys) {
-				SortedSet<Long> set = new TreeSet<Long>();
-				nIndex.put(key, set);
+			Set<String> keys = ret.keySet();
+			for(String key : keys){
+				bw.write(key +",");
+				Integer[] postings = ret.get(key);
+				Arrays.sort(postings, new Comp());
 				
-				for(HashMap<String, SortedSet<Long>> map : ret) {
-					if(map.containsKey(key)) {
-						set.addAll(map.get(key));
-					}
-				}
-			}
-			
-			try {				
-				
-				FileOutputStream fos = new FileOutputStream(files[i]);
-				ObjectOutputStream oos = new ObjectOutputStream(fos);
-				oos.writeObject(null);
-				fos.close();
-				oos.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		}	
+				for(Integer posting : postings) {
+					bw.write(posting.toString() + ",");
+				}				
+				bw.write("\n");
+			}			
+			bw.close();
+			fw.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
-	private SortedMap<String, Integer> readIndexOfIndicesFromFile() {
+	private SortedMap<String, Integer> readIndexOfIndicesFromFile(int seperate) {
 		SortedMap<String, Integer> ret = null;
 		
 		File[] f = Utility.getInstance().getFiles(dictionaryPath, "jhdindex");
@@ -114,6 +129,7 @@ public class WikiIndexMerger {
 		}else {
 			System.out.println("Index of Index Data Not Found : " + dictionaryPath);
 		}
+		iNumOfIndex = ret.size() / seperate + 1;
 		return ret;		
 	}
 	
@@ -121,28 +137,27 @@ public class WikiIndexMerger {
 		//Index of Indices
 		//음.. 몇번 인덱스에 어느 텀이 있는지 알려준다?
 		int termCounter = 0;
-		int indexCounter = 0;
+		int indexCounter = 1;
+		boolean isNumber = false;
 		SortedMap<String, Integer> Index = new TreeMap<String, Integer>();
 		
 		for (File f : matchingFiles) {
-			HashMap<String, SortedSet<Long>> map = null;
 			System.out.println("Merging : " + f);
 			
-			try {
-				FileInputStream fis = new FileInputStream(f);
-				ObjectInputStream ois = new ObjectInputStream(fis);
-				map = (HashMap<String, SortedSet<Long>>)ois.readObject();
-				ois.close();
-				fis.close();
+			try {				
+				FileReader fr = new FileReader(f);
+				BufferedReader br = new BufferedReader(fr);
 				
-				Set<String> keys = map.keySet();
-				
-				for(String key : keys) {
-					if(!Index.containsKey(key)) {						
-						//If index of index doesn't contains term, insert into index of index
+				while(br.ready()) {
+					String line = br.readLine();
+					String key = line.split(",")[0];
+					if(!Index.containsKey(key)) {
 						Index.put(key, 0);
-					}
+					}					
 				}				
+				br.close();
+				fr.close();
+					
 			} catch (Exception e) {
 				e.printStackTrace();
 			}			
@@ -151,14 +166,23 @@ public class WikiIndexMerger {
 		//Assign Index File Numbers
 		Set<String> keys = Index.keySet();
 		for(String key : keys) {
-			Index.remove(key);
-			Index.put(key, indexCounter);
-			if(termCounter++ > seperate) {
-				indexCounter++;
-				termCounter = 0;				
+			try {
+				Integer.parseInt(key);
+				isNumber = true;
+			} catch (Exception e) {
+				isNumber = false;
+			} finally {
+				if(isNumber) {
+					Index.put(key, 0);
+				}else {
+					Index.put(key, indexCounter);
+					if(termCounter ++ > seperate) {
+						indexCounter++;
+						termCounter = 0;
+					}
+				}
 			}
-		}
-		
+		}		
 		
 		System.out.println(String.format("Total %d indices, %d terms", indexCounter, Index.size()));	
 		this.iNumOfIndex = indexCounter;
