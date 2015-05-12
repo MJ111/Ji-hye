@@ -39,7 +39,6 @@ public class UserInterface {
 		}
 
 		mainFrame = new MainFrame(this);
-		mainFrame.setVisible(true);
 	}
 
 	public void initChoiceResultScreens(ResultData resultData) {

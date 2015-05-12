@@ -1,4 +1,4 @@
-package jihye.DB;
+package jihye.PS;
 
 import java.io.BufferedReader;
 import java.io.File;

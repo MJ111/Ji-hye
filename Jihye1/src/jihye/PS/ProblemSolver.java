@@ -3,7 +3,6 @@ package jihye.PS;
 import java.util.ArrayList;
 
 import jihye.DB.DatabaseManager;
-import jihye.DB.IndexProcessor;
 import jihye.NLP.KeywordExtrator;
 import jihye.Vector.Dictionary;
 import jihye.Vector.SimilarityResult;
