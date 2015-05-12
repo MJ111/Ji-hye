@@ -24,7 +24,8 @@ public class IndexProcessor {
 	private void loadIndex(String indexPath) throws IOException{
 		if(indices != null) return;
 		indices = new TreeMap<String, int[]>();
-		File file = new File(indexPath + "/JihyeIndices00.jhidx");
+		//TODO : Something wrong with this... 파일을 메인에서 받아야할텐데..
+		File file = new File(indexPath);
 		
 		FileInputStream fis = new FileInputStream(file);
 		InputStreamReader isr = new InputStreamReader(fis,"UTF-8");

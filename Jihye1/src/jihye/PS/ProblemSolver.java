@@ -24,7 +24,7 @@ public class ProblemSolver {
 		databaseManager = new DatabaseManager();
 		vectorProcessor = new VectorProcessor(keywordExtractor, databaseManager);
 		try {
-			indexProcessor = new IndexProcessor("D:/WikiData");
+			indexProcessor = new IndexProcessor("D:/WikiData/JihyeIndices00.jhidx");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -53,7 +53,7 @@ public class ProblemSolver {
 			//포스팅을 찾아온다.
 			noChoices = true;
 			int[] postings;
-			postings = indexProcessor.getMergedPostings(problemMorph, (int)(problemMorph.size() * 0.7));
+			postings = indexProcessor.getMergedPostings(problemMorph, (int)(problemMorph.size() * 0.1));
 			problemData.choices = databaseManager.getPageTitlesFromPageIDs(postings);
 		}
 
