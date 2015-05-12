@@ -14,7 +14,11 @@ import jihye.Vector.TermFrequencyMap;
 public class TestProblemsSolver {
 	ProblemSolver problemSolver;
 	
-	public String fileRead() throws IOException {
+	public TestProblemsSolver() {
+		problemSolver = new ProblemSolver();
+	}
+	
+	public String readFile() throws IOException {
 		String fileString = new String();
 		BufferedReader br = new BufferedReader(new FileReader("./resources/problems.txt"));
 	    try {
@@ -33,7 +37,7 @@ public class TestProblemsSolver {
 	    return fileString;
 	}
 	
-	public void parsingProblems(String fileString) {
+	public void solveProblems(String fileString) {
 		try { 
 			BufferedWriter out = new BufferedWriter(new FileWriter("solveData.txt"));
 	
@@ -101,10 +105,6 @@ public class TestProblemsSolver {
 	    }
 	}
 	
-	public TestProblemsSolver() {
-		problemSolver = new ProblemSolver();
-	}
-	
 	public static void main(String[] args) {
 		TestProblemsSolver testProblemsSolver = new TestProblemsSolver();
 		
@@ -112,8 +112,8 @@ public class TestProblemsSolver {
 
 			long startTime = System.currentTimeMillis();
 			
-			String fileString = testProblemsSolver.fileRead();
-			testProblemsSolver.parsingProblems(fileString);
+			String fileString = testProblemsSolver.readFile();
+			testProblemsSolver.solveProblems(fileString);
 			
 			long endTime = System.currentTimeMillis();
 
