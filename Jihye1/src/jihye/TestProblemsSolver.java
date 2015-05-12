@@ -109,8 +109,15 @@ public class TestProblemsSolver {
 		TestProblemsSolver testProblemsSolver = new TestProblemsSolver();
 		
 		try {
+
+			long startTime = System.currentTimeMillis();
+			
 			String fileString = testProblemsSolver.fileRead();
 			testProblemsSolver.parsingProblems(fileString);
+			
+			long endTime = System.currentTimeMillis();
+
+			System.out.println( "실행 시간 : " + ( endTime - startTime )/1000.0 );
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
