@@ -1,6 +1,9 @@
 package jihye.PS;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeMap;
 
 import jihye.DB.DatabaseManager;
 import jihye.NLP.KeywordExtrator;
@@ -24,7 +27,7 @@ public class ProblemSolver {
 		databaseManager = new DatabaseManager();
 		vectorProcessor = new VectorProcessor(keywordExtractor, databaseManager);
 		try {
-			indexProcessor = new IndexProcessor("C:/Users/2012105010.COM/Desktop/stopwordDeleteTool/JihyeIndices00.jhidx");
+			indexProcessor = new IndexProcessor("./JihyeIndices00Delete.jhidx");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -48,12 +51,11 @@ public class ProblemSolver {
 		ResultData resultData = new ResultData(problemTF.toString());
 		
 		boolean noChoices = false;
-		//주관식 문제
 		if(!problemData.hasChoice()) {
-			//포스팅을 찾아온다.
+			// 포스팅을 찾아온다.
 			noChoices = true;
 			int[] postings;
-			postings = indexProcessor.getMergedPostings(problemMorph, 0.8f);
+			postings = indexProcessor.getMergedPostings(problemMorph, 0.9f);
 			problemData.choices = databaseManager.getPageTitlesFromPageIDs(postings);
 		}
 
@@ -77,11 +79,6 @@ public class ProblemSolver {
 			}
 			// 여러개가 일치하면 가장 일치도가 높은 TFMap을 maxSimilarityChoiceTFList에 넣음.
 			else {
-//				for (TermFrequencyMap t : choiceTFList) {
-//					System.out.println(choice + " : ");
-//					System.out.println(t.toString());
-//					System.out.println("\n\n");
-//				}
 				TermFrequencyMap maxSimilarityChoiceTF = vectorProcessor
 						.getMaxSimilarityTFMap(problemTF, choiceTFList);
 				maxSimilarityChoiceTFList.add(maxSimilarityChoiceTF);
@@ -112,7 +109,46 @@ public class ProblemSolver {
 				resultData.add("", new SimilarityResult("", 0));
 			}
 		}
+		
+		if (noChoices) {
+			newTop4ResultData(resultData);
+		}
 
 		return resultData;
 	}
+	
+	private void newTop4ResultData(ResultData resultData) {
+		TreeMap<Double, String> resultMap = new TreeMap<Double, String>(new SimComp());
+		
+		for (int index=0; index<resultData.choices.size(); index++) {
+			if (resultData.similiarty.get(index).isNaN()) continue;
+			
+			resultMap.put(resultData.similiarty.get(index), resultData.choices.get(index));
+		}
+		
+		int resultDataSize = resultData.choices.size();
+		int choiceSize = resultDataSize < 4 ? resultDataSize : 4;
+		
+		resultData.clear();
+		Set<Double> set = resultMap.keySet();
+        Object []resultMapKeys = set.toArray();
+        for(int i = 0; i < choiceSize; i++) {
+        	Double key = (Double)resultMapKeys[i];
+            
+            System.out.print(key);
+            System.out.print(" - ");
+            System.out.println((String)resultMap.get(key));
+            
+            resultData.add((String)resultMap.get(key), key);
+        }
+	}
+}
+
+
+class SimComp implements Comparator<Double>{
+	 
+    @Override
+    public int compare(Double d1, Double d2) {
+        return d1 > d2 ? -1 : d1 == d2 ? 0 : 1;
+    }    
 }

@@ -20,10 +20,20 @@ public class ResultData {
 	}
 
 	public void add(String choice, SimilarityResult result) {
-
 		choices.add(choice);
 		similiarty.add(result.similarity);
 		matchKeywords.add(result.matchedKeyword);
+	}
+	
+	public void add(String choice, Double similarity) {
+		choices.add(choice);
+		similiarty.add(similarity);
+	}
+	
+	public void clear() {
+		choices.clear();
+		similiarty.clear();
+		matchKeywords.clear();
 	}
 
 	public int getAnswer() {

@@ -86,7 +86,7 @@ public class TestProblemsSolver {
 	        	}
 	        	count++;
 	        }
-	        out.write("noDate : " + noData); 
+	        out.write("noData : " + noData); 
 	        out.newLine();
 	        out.write("rightAnswerNum : " + rightAnswerNum);
 	        out.newLine();

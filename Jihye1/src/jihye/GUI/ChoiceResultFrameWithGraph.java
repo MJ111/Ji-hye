@@ -13,6 +13,7 @@ import javax.swing.BorderFactory;
 
 import jihye.PS.ResultData;
 
+@SuppressWarnings("serial")
 public class ChoiceResultFrameWithGraph extends javax.swing.JFrame {
 	private ResultData resultData;
 	private Point mouseDownCompCoords;
@@ -76,10 +77,7 @@ public class ChoiceResultFrameWithGraph extends javax.swing.JFrame {
 				.addGap(0, 499, Short.MAX_VALUE));
 
 		resultJLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		int answer = resultData.getAnswer();
-		String resultString = resultData.choices.get(answer - 1);
-		resultJLabel.setText("정답은 " + answer + "번 " + resultString + "입니다");
-
+		
 		javax.swing.GroupLayout mainJPanelLayout = new javax.swing.GroupLayout(
 				mainJPanel);
 		mainJPanel.setLayout(mainJPanelLayout);
@@ -156,10 +154,18 @@ public class ChoiceResultFrameWithGraph extends javax.swing.JFrame {
 								javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addGap(0, 0, Short.MAX_VALUE)));
 
+		setAnswerLabel();
 		setButtonEventListeners(ui);
+		
 		pack();
 
 		setLocationRelativeTo(null);
+	}
+	
+	private void setAnswerLabel() {
+		int answer = resultData.getAnswer();
+		String resultString = resultData.choices.get(answer - 1);
+		resultJLabel.setText("정답은 " + answer + "번 " + resultString + "입니다");
 	}
 	
 	private void setMouseListener() {

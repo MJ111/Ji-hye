@@ -46,12 +46,13 @@ public class SimilarlityGraph {
 
 		for (int i = 0; i < resultData.choices.size(); i++) {
 			// 일치하는 데이터가 없을시 일치도가 음수(-2)로 넘어오는데 이를 예외처리함.
-			if (resultData.similiarty.get(i) >= 0)
+			if (resultData.similiarty.get(i) >= 0) {
 				categoryDataset.addValue(resultData.similiarty.get(i), "",
 						resultData.choices.get(i));
-			else
+			}
+			else {
 				categoryDataset.addValue(0, "", resultData.choices.get(i));
-
+			}
 		}
 		return categoryDataset;
 	}

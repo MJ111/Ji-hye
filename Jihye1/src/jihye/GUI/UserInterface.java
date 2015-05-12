@@ -43,20 +43,21 @@ public class UserInterface {
 
 	public void initChoiceResultScreens(ResultData resultData) {
 		mainFrame.setVisible(false);
-		setAnswerString(resultData);
 		resultFrameWithhGraph = new ChoiceResultFrameWithGraph(this, resultData);
 		resultFrameWithhGraph.setVisible(true);
 		resultFrameWithKeywords = new ChoiceResultFrameWithKeywords(this, resultData);
+		setAnswerString(resultData);
 		readAnswerString();
 	}
 	
 	public void initNoChoiceResultScreens(ResultData resultData) {
 		mainFrame.setVisible(false);
-		noChoiceResultFrame = new NoChoiceResultFrame(this);
+		noChoiceResultFrame = new NoChoiceResultFrame(this, resultData);
 		noChoiceResultFrame.setVisible(true);
+		setAnswerString(resultData);
+		readAnswerString();
 	}
 
-	// 각종 이벤트 리스너들
 	public void requestSolveChoiceProblem(ProblemData problemData) {
 		System.out.println("Solve problem");
 		ResultData resultData = jihyeController.solve(problemData);
@@ -66,8 +67,7 @@ public class UserInterface {
 	public void requestSolveNoChoiceProblem(ProblemData problemData) {
 		System.out.println("Solve no choice problem");
 		ResultData resultData = jihyeController.solve(problemData);	
-		initChoiceResultScreens(resultData);
-		//initNoChoiceResultScreens(resultData);
+		initNoChoiceResultScreens(resultData);
 	}
 
 	public void showResultFrameWithGraph() {
@@ -84,11 +84,9 @@ public class UserInterface {
 	}
 
 	public void goMainFrame() {
-		//Dispose Result Frames
 		resultFrameWithhGraph.dispose();
 		resultFrameWithKeywords.dispose();
 		
-		//Make main frame visible
 		mainFrame.setVisible(true);
 	}
 
@@ -114,6 +112,7 @@ public class UserInterface {
 	public void readAnswerString() {
 		TextToSpeech textToSpeech = new TextToSpeech();
 		textToSpeech.setText(answerInformationString);
+		System.out.println(answerInformationString);
 		textToSpeech.start();
 	}
 

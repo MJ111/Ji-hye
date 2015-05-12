@@ -15,12 +15,13 @@ import javax.swing.JFrame;
 
 import jihye.PS.ResultData;
 
+@SuppressWarnings("serial")
 public class NoChoiceResultFrame extends JFrame {
 	private ResultData resultData;
 	private Point mouseDownCompCoords;
 
-	public NoChoiceResultFrame(UserInterface ui) {
-		this.resultData = new ResultData("");
+	public NoChoiceResultFrame(UserInterface ui, ResultData resultData) {
+		this.resultData = resultData;
 		initComponents(ui);
 	}
 
@@ -32,8 +33,6 @@ public class NoChoiceResultFrame extends JFrame {
 		
 		mainJPanel = new javax.swing.JPanel();
 		btnJPanel = new javax.swing.JPanel();
-//		backJButton = new ImageButton("back.png");
-//		replayJButton = new ImageButton("replay.png");
 		backJButton = new Button("Back");
 		replayJButton = new Button("Replay");
 		graphJPanel = new javax.swing.JPanel();
@@ -64,8 +63,7 @@ public class NoChoiceResultFrame extends JFrame {
 		btnJPanel.add(replayJButton);
 
 		SimilarlityGraph similarlityGraph = new SimilarlityGraph();
-		graphJPanel = similarlityGraph.getChart(resultData,
-				1);
+		graphJPanel = similarlityGraph.getChart(resultData, resultData.getAnswer()-1);
 
 		javax.swing.GroupLayout graphJPanelLayout = new javax.swing.GroupLayout(
 				graphJPanel);
@@ -78,9 +76,6 @@ public class NoChoiceResultFrame extends JFrame {
 				.addGap(0, 499, Short.MAX_VALUE));
 
 		resultJLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		int answer = resultData.getAnswer();
-		String resultString = "";
-		resultJLabel.setText("정답은 " + answer + "번 " + resultString + "입니다");
 
 		javax.swing.GroupLayout mainJPanelLayout = new javax.swing.GroupLayout(
 				mainJPanel);
@@ -158,10 +153,17 @@ public class NoChoiceResultFrame extends JFrame {
 								javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addGap(0, 0, Short.MAX_VALUE)));
 
+		setAnswerLabel();
 		setButtonEventListeners(ui);
 		pack();
 
 		setLocationRelativeTo(null);
+	}
+	
+	private void setAnswerLabel() {
+		int answer = resultData.getAnswer();
+		String resultString = resultData.choices.get(answer - 1);
+		resultJLabel.setText("정답은 " + answer + "번 " + resultString + "입니다");
 	}
 	
 	private void setMouseListener() {

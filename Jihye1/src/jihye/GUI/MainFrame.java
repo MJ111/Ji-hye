@@ -24,6 +24,7 @@ import javax.swing.text.JTextComponent;
 
 import jihye.PS.ProblemData;
 
+@SuppressWarnings("serial")
 public class MainFrame extends javax.swing.JFrame {
 	private Point mouseDownCompCoords = null;
 	private Font hintFont;
