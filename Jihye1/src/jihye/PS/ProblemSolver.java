@@ -53,7 +53,7 @@ public class ProblemSolver {
 			//포스팅을 찾아온다.
 			noChoices = true;
 			int[] postings;
-			postings = indexProcessor.getMergedPostings(problemMorph, (int)(problemMorph.size() * 0.1));
+			postings = indexProcessor.getMergedPostings(problemMorph, 0.8f);
 			problemData.choices = databaseManager.getPageTitlesFromPageIDs(postings);
 		}
 

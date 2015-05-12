@@ -114,6 +114,8 @@ public class DatabaseManager {
 				String title = getStringFromBLOB(resultSet.getBlob(1));
 				String text = getWikipediaTextFromOldID(resultSet.getInt(2));
 				page = new WikipediaPage(title, text);
+			} else {
+				page = new WikipediaPage("DUMMYDUMMYDUMMYDUMMY", "");
 			}
 
 		} catch (Exception e) {

@@ -53,7 +53,7 @@ public class IndexProcessor {
 		return indices.get(term);
 	}
 	
-	public int[] getMergedPostings(List<String> terms, int documentCount) {
+	public int[] getMergedPostings(List<String> terms, float rate) {
 		List<int[]> postings = new ArrayList<int[]>();		
 		
 		for(String term : terms) {
@@ -61,10 +61,10 @@ public class IndexProcessor {
 				postings.add(indices.get(term));
 		}
 		
-		return mergePostings(postings, documentCount);
+		return mergePostings(postings, rate);
 	}
 	
-	public int[] mergePostings(List<int[]> postings, int documentCount) {
+	public int[] mergePostings(List<int[]> postings, float propotion) {
 		int [] merged = null;
 		for(int[] arr : postings) {
 			merged = ArrayUtils.addAll(merged, arr);
@@ -73,7 +73,26 @@ public class IndexProcessor {
 		Arrays.sort(merged);	
 		
 		int counter = 1;
+		int maxCounter = 0;
 		int last = merged[0];
+		
+		for(int i = 1; i < merged.length; i++) {
+			if(merged[i] == last) {
+				counter++;				
+			}else {
+				last = merged[i];
+				counter = 1;
+			}
+			
+			if(counter > maxCounter) {
+				maxCounter = counter;
+			}
+		}	
+		
+		int documentCount = (int) (maxCounter * propotion);
+		System.out.println("Get : " + documentCount);
+		
+		int postingCounter = 0;
 		int[] ret = null;
 		
 		for(int i = 1; i < merged.length; i++) {
@@ -85,12 +104,15 @@ public class IndexProcessor {
 			}
 			
 			if(counter >= documentCount) {
+				 postingCounter++;
 				ret = ArrayUtils.add(ret, last);
 				while(i+1 < merged.length && merged[i+1] == last) {
 					i++;
 				}
 			}
 		}
+		
+		System.out.println("Total : " + postingCounter);
 		
 		return ret;
 	}

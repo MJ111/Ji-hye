@@ -62,8 +62,10 @@ public class VectorProcessor {
 		ArrayList<TermFrequencyMap> termFrequencyList = new ArrayList<TermFrequencyMap>();
 		WikipediaPage page = databaseManager.getPageFromTitle(title);
 
-		ArrayList<String> analyzedDocument = keywordExtractor
-				.analyzeDocument(page.getText());
+		ArrayList<String> analyzedDocument = new ArrayList<String>();
+		
+		if(page.getText() != null)
+			analyzedDocument = keywordExtractor.analyzeDocument(page.getText());
 		termFrequencyList.add(new TermFrequencyMap(page.getTitle().replaceAll("_", " "),analyzedDocument));
 
 		return termFrequencyList;
