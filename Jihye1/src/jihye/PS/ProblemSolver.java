@@ -24,7 +24,7 @@ public class ProblemSolver {
 		databaseManager = new DatabaseManager();
 		vectorProcessor = new VectorProcessor(keywordExtractor, databaseManager);
 		try {
-			indexProcessor = new IndexProcessor("D:/WikiData/JihyeIndices00.jhidx");
+			indexProcessor = new IndexProcessor("C:/Users/2012105010.COM/Desktop/stopwordDeleteTool/JihyeIndices00.jhidx");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
