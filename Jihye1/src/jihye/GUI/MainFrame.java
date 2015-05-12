@@ -58,10 +58,10 @@ public class MainFrame extends javax.swing.JFrame {
 //		closeBtn = new ImageButton("close.png");
 //		solveBtn = new ImageButton("jihye.png");
 //		refreshBtn = new ImageButton("refresh.png");
-		closeBtn = new Button("닫기");
-		solveBtn = new Button("문제풀기");
-		refreshBtn = new Button("새로고침");
-		changeModeButton = new Button("모드변경");
+		closeBtn = new Button("Close");
+		solveBtn = new Button("Solve");
+		refreshBtn = new Button("Refresh");
+		changeModeButton = new Button("Change mode");
 		
 		mainJPanel.setBackground(new Color(227, 227, 220));
 		mainJPanel.setBorder(BorderFactory.createLineBorder(new Color(220, 106,

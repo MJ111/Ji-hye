@@ -34,8 +34,8 @@ public class NoChoiceResultFrame extends JFrame {
 		btnJPanel = new javax.swing.JPanel();
 //		backJButton = new ImageButton("back.png");
 //		replayJButton = new ImageButton("replay.png");
-		backJButton = new Button("뒤로가기");
-		replayJButton = new Button("다시듣기");
+		backJButton = new Button("Back");
+		replayJButton = new Button("Replay");
 		graphJPanel = new javax.swing.JPanel();
 		resultJLabel = new javax.swing.JLabel();
 
