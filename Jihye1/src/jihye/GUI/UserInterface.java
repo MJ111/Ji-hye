@@ -65,8 +65,9 @@ public class UserInterface {
 	
 	public void requestSolveNoChoiceProblem(ProblemData problemData) {
 		System.out.println("Solve no choice problem");
-		ResultData resultData = jihyeController.solve(problemData);		
-		initNoChoiceResultScreens(resultData);
+		ResultData resultData = jihyeController.solve(problemData);	
+		initChoiceResultScreens(resultData);
+		//initNoChoiceResultScreens(resultData);
 	}
 
 	public void showResultFrameWithGraph() {
