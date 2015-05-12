@@ -124,6 +124,32 @@ public class DatabaseManager {
 
 		return pages;
 	}
+	
+	public WikipediaPage getPageFromPageID(int page_id) {
+		int page_latest = 0;
+		String page_title = null;
+		String text = null;
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("select page_title, page_latest from "
+					+ DATABASE_NAME + ".page where page_id=" + page_id +";");
+			
+			if(resultSet != null && resultSet.next()) {
+				page_title = resultSet.getString(1);
+				page_latest = resultSet.getInt(2);
+			}
+			statement.close();
+			resultSet.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		text = getWikipediaTextFromOldID(page_latest);
+		
+		WikipediaPage wp = new WikipediaPage(page_title, text);		
+		
+		return wp;
+	}
 
 	public String getWikipediaTextFromOldID(int old_id) {
 		try {
