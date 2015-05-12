@@ -98,6 +98,30 @@ public class DatabaseManager {
 			return false;
 		}
 	}
+	
+	public WikipediaPage getPageFromTitle(String page_title) {
+		WikipediaPage page = null;
+		
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement
+					.executeQuery("select page_title, page_latest from "
+							+ DATABASE_NAME + ".page where page_title like '"
+							+ page_title
+							+ "' and page_is_redirect=0 and page_namespace=0;");
+
+			if (resultSet != null && resultSet.next()) {
+				String title = getStringFromBLOB(resultSet.getBlob(1));
+				String text = getWikipediaTextFromOldID(resultSet.getInt(2));
+				page = new WikipediaPage(title, text);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return page;
+	}
 
 	public ArrayList<WikipediaPage> getPagesFromTitle(String page_title) {
 		ArrayList<WikipediaPage> pages = new ArrayList<WikipediaPage>();
@@ -127,6 +151,8 @@ public class DatabaseManager {
 	
 	public ArrayList<String> getPageTitlesFromPageIDs(int[] page_id) {
 		ArrayList<String> titles = new ArrayList<String>();
+		
+		if(page_id == null) return titles;
 		
 		for(int ids : page_id) {
 			titles.add(getPageFromPageID(ids).getTitle());

@@ -60,13 +60,12 @@ public class VectorProcessor {
 	
 	public ArrayList<TermFrequencyMap> getTFMap(String title, boolean noRedirections) {
 		ArrayList<TermFrequencyMap> termFrequencyList = new ArrayList<TermFrequencyMap>();
-		ArrayList<WikipediaPage> pages = databaseManager.getPagesFromTitle(title);
+		WikipediaPage page = databaseManager.getPageFromTitle(title);
 
-		for(WikipediaPage page : pages) {
-			ArrayList<String> analyzedDocument = keywordExtractor
-					.analyzeDocument(page.getText());
-			termFrequencyList.add(new TermFrequencyMap(page.getTitle().replaceAll("_", " "),analyzedDocument));
-		}		
+		ArrayList<String> analyzedDocument = keywordExtractor
+				.analyzeDocument(page.getText());
+		termFrequencyList.add(new TermFrequencyMap(page.getTitle().replaceAll("_", " "),analyzedDocument));
+
 		return termFrequencyList;
 	}
 	

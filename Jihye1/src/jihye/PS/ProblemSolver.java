@@ -32,12 +32,16 @@ public class ProblemSolver {
 	}
 
 	public ResultData solve(ProblemData problemData) {
-
+		
 		maxSimilarityChoiceTFList = new ArrayList<TermFrequencyMap>();
 
 		// get problem tf
 		ArrayList<String> problemMorph = keywordExtractor
 				.analyzeDocument(problemData.problem);
+		
+		if(problemMorph == null || problemMorph.size() == 0)
+			return null;
+		
 		problemTF = new TermFrequencyMap("%problem%", problemMorph);
 		System.out.println(problemTF.toString());
 
@@ -50,7 +54,7 @@ public class ProblemSolver {
 			//포스팅을 찾아온다.
 			noChoices = true;
 			int[] postings;
-			postings = indexProcessor.getMergedPostings(problemMorph, (int)(problemMorph.size()));
+			postings = indexProcessor.getMergedPostings(problemMorph, (int)(problemMorph.size() * 0.7));
 			problemData.choices = databaseManager.getPageTitlesFromPageIDs(postings);
 		}
 

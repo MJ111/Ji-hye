@@ -8,8 +8,8 @@ import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
 import kr.co.shineware.util.common.model.Pair;
 
 public class KeywordExtrator {
-	private List<String> morphTag = Arrays.asList("NNG", "NNP");
-
+	private List<String> morphTag = Arrays.asList("NNG", "NNP", "NR", "SN", "VV", "VA", "VX", "XR", "NF", "NV", "XPN");
+	private List<String> verbTag = Arrays.asList("VV", "VA", "VX");
 	private Komoran komoran;
 
 	public ArrayList<String> analyzeDocument(String document) {
@@ -20,8 +20,14 @@ public class KeywordExtrator {
 		List<List<Pair<String, String>>> result = komoran.analyze(document);
 		for (List<Pair<String, String>> eojeolResult : result) {
 			for (Pair<String, String> wordMorph : eojeolResult) {
-				if (morphTag.contains(wordMorph.getSecond()))
+				if (morphTag.contains(wordMorph.getSecond())){
+					if(verbTag.contains(wordMorph.getSecond())) {
+						morphArrayList.add(wordMorph.getFirst() + "다");
+					} else {
+						morphArrayList.add(wordMorph.getFirst());
+					}
 					morphArrayList.add(wordMorph.getFirst());
+				}
 			}
 		}
 		return morphArrayList;
