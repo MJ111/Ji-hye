@@ -11,11 +11,11 @@ import jihye.TTS.TextToSpeech;
 
 public class UserInterface {
 	private MainFrame mainFrame;
-	private ChoiceResultFrameWithGraph resultFrameWithhGraph;
+	private ChoiceResultFrameWithGraph resultFrameWithGraph;
 	private ChoiceResultFrameWithKeywords resultFrameWithKeywords;
 	private NoChoiceResultFrame noChoiceResultFrame;
 	private JihyeController jihyeController;
-	private String answerInformationString;
+	private String answerText;
 
 	public UserInterface(JihyeController jc) {
 		jihyeController = jc;
@@ -43,8 +43,8 @@ public class UserInterface {
 
 	public void initChoiceResultScreens(ResultData resultData) {
 		mainFrame.setVisible(false);
-		resultFrameWithhGraph = new ChoiceResultFrameWithGraph(this, resultData);
-		resultFrameWithhGraph.setVisible(true);
+		resultFrameWithGraph = new ChoiceResultFrameWithGraph(this, resultData);
+		resultFrameWithGraph.setVisible(true);
 		resultFrameWithKeywords = new ChoiceResultFrameWithKeywords(this, resultData);
 		setAnswerString(resultData);
 		readAnswerString();
@@ -71,12 +71,12 @@ public class UserInterface {
 	}
 
 	public void showResultFrameWithGraph() {
-		resultFrameWithhGraph.setVisible(false);
+		resultFrameWithGraph.setVisible(false);
 		resultFrameWithKeywords.setVisible(true);
 	}
 
 	public void closeResultFrameWithKeywords() {
-		resultFrameWithhGraph.setVisible(true);
+		resultFrameWithGraph.setVisible(true);
 	}
 
 	public void showMainFrame() {
@@ -84,35 +84,33 @@ public class UserInterface {
 	}
 
 	public void goMainFrame() {
-		resultFrameWithhGraph.dispose();
+		resultFrameWithGraph.dispose();
 		resultFrameWithKeywords.dispose();
 		
 		mainFrame.setVisible(true);
 	}
 
 	public void setAnswerString(ResultData resultData) {
-		answerInformationString = "";
+		answerText = "";
 
 		switch (resultData.getAnswer()) {
 		case 1:
-			answerInformationString = "정답은 일번  " + resultData.choices.get(0) + "입니다";
+			answerText = "정답은 일번  " + resultData.choices.get(0) + "입니다";
 			break;
 		case 2:
-			answerInformationString = "정답은 이번  " + resultData.choices.get(1) + "입니다";
+			answerText = "정답은 이번  " + resultData.choices.get(1) + "입니다";
 			break;
 		case 3:
-			answerInformationString = "정답은 삼번  " + resultData.choices.get(2) + "입니다";
+			answerText = "정답은 삼번  " + resultData.choices.get(2) + "입니다";
 			break;
 		case 4:
-			answerInformationString = "정답은 사번  " + resultData.choices.get(3) + "입니다";
-			break;
+			answerText = "정답은 사번  " + resultData.choices.get(3) + "입니다";
 		}
 	}
 
 	public void readAnswerString() {
 		TextToSpeech textToSpeech = new TextToSpeech();
-		textToSpeech.setText(answerInformationString);
-		System.out.println(answerInformationString);
+		textToSpeech.setText(answerText);
 		textToSpeech.start();
 	}
 
