@@ -14,10 +14,10 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-public class IndexManager {
+public class IndexProcessor {
 	Map<String, int[]> indices = null;
 	
-	public IndexManager(String indexPath) throws Exception{
+	public IndexProcessor(String indexPath) throws Exception{
 		loadIndex(indexPath);
 	}
 	

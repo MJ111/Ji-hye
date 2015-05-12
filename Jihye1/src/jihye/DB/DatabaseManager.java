@@ -125,6 +125,16 @@ public class DatabaseManager {
 		return pages;
 	}
 	
+	public ArrayList<String> getPageTitlesFromPageIDs(int[] page_id) {
+		ArrayList<String> titles = new ArrayList<String>();
+		
+		for(int ids : page_id) {
+			titles.add(getPageFromPageID(ids).getTitle());
+		}
+		
+		return titles;
+	}
+	
 	public WikipediaPage getPageFromPageID(int page_id) {
 		int page_latest = 0;
 		String page_title = null;

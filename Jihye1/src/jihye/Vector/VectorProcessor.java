@@ -11,8 +11,8 @@ public class VectorProcessor {
 	DatabaseManager databaseManager;
 	KeywordExtrator keywordExtractor;
 
-	public VectorProcessor(KeywordExtrator keywordExtractor) {
-		this.databaseManager = new DatabaseManager();
+	public VectorProcessor(KeywordExtrator keywordExtractor, DatabaseManager databaseManager) {
+		this.databaseManager = databaseManager;
 		this.keywordExtractor = keywordExtractor;
 	}
 
@@ -56,5 +56,25 @@ public class VectorProcessor {
 		pages.clear();
 
 		return termFrequencyList;
+	}
+	
+	public ArrayList<TermFrequencyMap> getTFMap(String title, boolean noRedirections) {
+		ArrayList<TermFrequencyMap> termFrequencyList = new ArrayList<TermFrequencyMap>();
+		ArrayList<WikipediaPage> pages = databaseManager.getPagesFromTitle(title);
+
+		for(WikipediaPage page : pages) {
+			ArrayList<String> analyzedDocument = keywordExtractor
+					.analyzeDocument(page.getText());
+			termFrequencyList.add(new TermFrequencyMap(page.getTitle().replaceAll("_", " "),analyzedDocument));
+		}		
+		return termFrequencyList;
+	}
+	
+	public TermFrequencyMap getTFMap(int page_id) {
+		WikipediaPage wp = databaseManager.getPageFromPageID(page_id);
+
+		ArrayList<String> analyzedDocument = keywordExtractor
+				.analyzeDocument(wp.getText());
+		return new TermFrequencyMap(wp.getTitle().replaceAll("_", " "),analyzedDocument);
 	}
 }

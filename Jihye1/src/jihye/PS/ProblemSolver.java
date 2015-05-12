@@ -2,6 +2,8 @@ package jihye.PS;
 
 import java.util.ArrayList;
 
+import jihye.DB.DatabaseManager;
+import jihye.DB.IndexProcessor;
 import jihye.NLP.KeywordExtrator;
 import jihye.Vector.Dictionary;
 import jihye.Vector.SimilarityResult;
@@ -13,12 +15,20 @@ public class ProblemSolver {
 
 	VectorProcessor vectorProcessor;
 	KeywordExtrator keywordExtractor;
+	IndexProcessor indexProcessor;
+	DatabaseManager databaseManager;
 	public TermFrequencyMap problemTF;
 	public ArrayList<TermFrequencyMap> maxSimilarityChoiceTFList;
 
 	public ProblemSolver() {
 		keywordExtractor = new KeywordExtrator();
-		vectorProcessor = new VectorProcessor(keywordExtractor);
+		databaseManager = new DatabaseManager();
+		vectorProcessor = new VectorProcessor(keywordExtractor, databaseManager);
+		try {
+			indexProcessor = new IndexProcessor("D:/WikiData");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public ResultData solve(ProblemData problemData) {
@@ -34,14 +44,25 @@ public class ProblemSolver {
 		Dictionary dictionary = new Dictionary();
 		ResultData resultData = new ResultData(problemTF.toString());
 		
+		boolean noChoices = false;
+		//주관식 문제
 		if(!problemData.hasChoice()) {
-			
+			//포스팅을 찾아온다.
+			noChoices = true;
+			int[] postings;
+			postings = indexProcessor.getMergedPostings(problemMorph, (int)(problemMorph.size()));
+			problemData.choices = databaseManager.getPageTitlesFromPageIDs(postings);
 		}
 
 		// get choice tf
 		for (String choice : problemData.choices) {
 			// 보기에 like되는 문서들의 TFMap
-			ArrayList<TermFrequencyMap> choiceTFList = vectorProcessor.getTFMap(choice);
+			ArrayList<TermFrequencyMap> choiceTFList =  null;
+			if(noChoices) {
+				choiceTFList = vectorProcessor.getTFMap(choice, true);
+			}else {
+				choiceTFList = vectorProcessor.getTFMap(choice);	
+			}
 
 			// 일치되는 문서가 없으면 maxSimilarityChoiceTFList에 빈 TFMap 넣음
 			if (choiceTFList.size() == 0) {
