@@ -26,7 +26,6 @@ public class KeywordExtrator {
 					} else {
 						morphArrayList.add(wordMorph.getFirst());
 					}
-					morphArrayList.add(wordMorph.getFirst());
 				}
 			}
 		}
