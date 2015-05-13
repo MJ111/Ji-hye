@@ -90,13 +90,13 @@ public class NoChoiceTestProblemsSolver {
 	}
 	
 	public static void main(String[] args) {
-		TestProblemsSolver testProblemsSolver = new TestProblemsSolver();
+		NoChoiceTestProblemsSolver noChoiceTestProblemsSolver = new NoChoiceTestProblemsSolver();
 		
 		try {
 			long startTime = System.currentTimeMillis();
 			
-			String fileString = testProblemsSolver.readFile();
-			testProblemsSolver.solveProblems(fileString);
+			String fileString = noChoiceTestProblemsSolver.readFile();
+			noChoiceTestProblemsSolver.solveProblems(fileString);
 			
 			long endTime = System.currentTimeMillis();
 
