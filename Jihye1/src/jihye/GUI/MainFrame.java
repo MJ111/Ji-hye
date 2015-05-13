@@ -335,12 +335,12 @@ public class MainFrame extends javax.swing.JFrame {
 		ProblemData problemData = new ProblemData(problemTextArea.getText(),
 				choice1TextField.getText(), choice2TextField.getText(),
 				choice3TextField.getText(), choice4TextField.getText());
-		ui.requestSolveChoiceProblem(problemData);
+		ui.requestSolveProblem(problemData);
 	}
 	
 	private void solveNoChoiceProblem(final UserInterface ui) {
 		ProblemData problemData = new ProblemData(problemTextArea.getText());
-		ui.requestSolveNoChoiceProblem(problemData);
+		ui.requestSolveProblem(problemData);
 	}
 
 	// Variables declaration

@@ -19,23 +19,23 @@ public class TextToSpeech extends Thread {
 
 	public void setText(String text) {
 		this.readText = text.replace("_", " ");
-		;
-		try {
-			sound = audio.getAudio(readText, Language.KOREAN);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+//		try {
+//			sound = audio.getAudio(readText, Language.KOREAN);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	public void readText() {
-		try {
-			sound = audio.getAudio(readText, Language.KOREAN);
-			audio.play(sound);
-		} catch (JavaLayerException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {			
+//			sound = audio.getAudio(readText, Language.KOREAN);
+//			audio.play(sound);
+//		} catch (JavaLayerException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	public void readText(String text) {

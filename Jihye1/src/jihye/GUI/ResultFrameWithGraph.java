@@ -14,12 +14,14 @@ import javax.swing.BorderFactory;
 import jihye.PS.ResultData;
 
 @SuppressWarnings("serial")
-public class ChoiceResultFrameWithGraph extends javax.swing.JFrame {
+public class ResultFrameWithGraph extends javax.swing.JFrame {
 	private ResultData resultData;
 	private Point mouseDownCompCoords;
+	private boolean choiceProblem;
 
-	public ChoiceResultFrameWithGraph(UserInterface ui, ResultData resultData) {
+	public ResultFrameWithGraph(UserInterface ui, ResultData resultData, boolean hasChoice) {
 		this.resultData = resultData;
+		this.choiceProblem = hasChoice;
 		initComponents(ui);
 	}
 
@@ -164,8 +166,13 @@ public class ChoiceResultFrameWithGraph extends javax.swing.JFrame {
 	
 	private void setAnswerLabel() {
 		int answer = resultData.getAnswer();
-		String resultString = resultData.choices.get(answer - 1);
-		resultJLabel.setText("정답은 " + answer + "번 " + resultString + "입니다");
+		if (choiceProblem) {
+			String resultString = resultData.choices.get(answer - 1);
+			resultJLabel.setText("정답은 " + answer + "번 " + resultString + "입니다");
+		} else {
+			String resultString = resultData.choices.get(answer - 1);
+			resultJLabel.setText("정답은 " + resultString + "입니다.");
+		}
 	}
 	
 	private void setMouseListener() {

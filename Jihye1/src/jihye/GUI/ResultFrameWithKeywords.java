@@ -14,13 +14,13 @@ import javax.swing.JTextArea;
 
 import jihye.PS.ResultData;
 
-public class ChoiceResultFrameWithKeywords extends javax.swing.JFrame {
+public class ResultFrameWithKeywords extends javax.swing.JFrame {
 
 	private ResultData resultData;
 
 	private Point mouseDownCompCoords;
 
-	public ChoiceResultFrameWithKeywords(UserInterface ui, ResultData resultData) {
+	public ResultFrameWithKeywords(UserInterface ui, ResultData resultData) {
 		this.resultData = resultData;
 		initComponents(ui);
 	}
@@ -102,8 +102,8 @@ public class ChoiceResultFrameWithKeywords extends javax.swing.JFrame {
 		// .setBackground(new java.awt.Color(231, 233, 230));
 
 		// choice1JPanel.setBackground(new java.awt.Color(231, 233, 230));
-
-		choice1JLabel.setText(resultData.matchKeywords.get(0));
+		if(resultData.matchKeywords != null && resultData.matchKeywords.size() != 0)
+			choice1JLabel.setText(resultData.matchKeywords.get(0));
 
 		javax.swing.GroupLayout choice1JPanelLayout = new javax.swing.GroupLayout(
 				choice1JPanel);
@@ -123,8 +123,8 @@ public class ChoiceResultFrameWithKeywords extends javax.swing.JFrame {
 				choice1JPanel);
 
 		// choice2JPanel.setBackground(new java.awt.Color(231, 233, 230));
-
-		choice2JLabel.setText(resultData.matchKeywords.get(1));
+		if(resultData.matchKeywords != null && resultData.matchKeywords.size() != 0)
+			choice2JLabel.setText(resultData.matchKeywords.get(1));
 
 		javax.swing.GroupLayout choice2JPanelLayout = new javax.swing.GroupLayout(
 				choice2JPanel);
@@ -162,8 +162,8 @@ public class ChoiceResultFrameWithKeywords extends javax.swing.JFrame {
 				choice2JPanel);
 
 		// choice3JPanel.setBackground(new java.awt.Color(231, 233, 230));
-
-		choice3JLabel.setText(resultData.matchKeywords.get(2));
+		if(resultData.matchKeywords != null && resultData.matchKeywords.size() != 0)
+			choice3JLabel.setText(resultData.matchKeywords.get(2));
 
 		javax.swing.GroupLayout choice3JPanelLayout = new javax.swing.GroupLayout(
 				choice3JPanel);
@@ -183,8 +183,8 @@ public class ChoiceResultFrameWithKeywords extends javax.swing.JFrame {
 				choice3JPanel);
 
 		// choice4JPanel.setBackground(new java.awt.Color(231, 233, 230));
-
-		choice4JLabel.setText(resultData.matchKeywords.get(3));
+		if(resultData.matchKeywords != null && resultData.matchKeywords.size() != 0)
+			choice4JLabel.setText(resultData.matchKeywords.get(3));
 
 		javax.swing.GroupLayout choice4JPanelLayout = new javax.swing.GroupLayout(
 				choice4JPanel);

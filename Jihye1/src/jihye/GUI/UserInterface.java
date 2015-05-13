@@ -11,9 +11,8 @@ import jihye.TTS.TextToSpeech;
 
 public class UserInterface {
 	private MainFrame mainFrame;
-	private ChoiceResultFrameWithGraph resultFrameWithGraph;
-	private ChoiceResultFrameWithKeywords resultFrameWithKeywords;
-	private NoChoiceResultFrame noChoiceResultFrame;
+	private ResultFrameWithGraph resultFrameWithGraph;
+	private ResultFrameWithKeywords resultFrameWithKeywords;
 	private JihyeController jihyeController;
 	private String answerText;
 
@@ -41,33 +40,19 @@ public class UserInterface {
 		mainFrame = new MainFrame(this);
 	}
 
-	public void initChoiceResultScreens(ResultData resultData) {
+	public void initResultScreen(ResultData resultData, boolean hasChoice) {
 		mainFrame.setVisible(false);
-		resultFrameWithGraph = new ChoiceResultFrameWithGraph(this, resultData);
+		resultFrameWithGraph = new ResultFrameWithGraph(this, resultData, hasChoice);
 		resultFrameWithGraph.setVisible(true);
-		resultFrameWithKeywords = new ChoiceResultFrameWithKeywords(this, resultData);
-		setAnswerString(resultData);
-		readAnswerString();
-	}
-	
-	public void initNoChoiceResultScreens(ResultData resultData) {
-		mainFrame.setVisible(false);
-		noChoiceResultFrame = new NoChoiceResultFrame(this, resultData);
-		noChoiceResultFrame.setVisible(true);
-		setAnswerString(resultData);
+		resultFrameWithKeywords = new ResultFrameWithKeywords(this, resultData);
+		setAnswerString(resultData, hasChoice);
 		readAnswerString();
 	}
 
-	public void requestSolveChoiceProblem(ProblemData problemData) {
+	public void requestSolveProblem(ProblemData problemData) {
 		System.out.println("Solve problem");
 		ResultData resultData = jihyeController.solve(problemData);
-		initChoiceResultScreens(resultData);
-	}
-	
-	public void requestSolveNoChoiceProblem(ProblemData problemData) {
-		System.out.println("Solve no choice problem");
-		ResultData resultData = jihyeController.solve(problemData);	
-		initNoChoiceResultScreens(resultData);
+		initResultScreen(resultData, problemData.hasChoice());
 	}
 
 	public void showResultFrameWithGraph() {
@@ -90,21 +75,24 @@ public class UserInterface {
 		mainFrame.setVisible(true);
 	}
 
-	public void setAnswerString(ResultData resultData) {
+	public void setAnswerString(ResultData resultData, boolean hasChoice) {
 		answerText = "";
-
-		switch (resultData.getAnswer()) {
-		case 1:
-			answerText = "정답은 일번  " + resultData.choices.get(0) + "입니다";
-			break;
-		case 2:
-			answerText = "정답은 이번  " + resultData.choices.get(1) + "입니다";
-			break;
-		case 3:
-			answerText = "정답은 삼번  " + resultData.choices.get(2) + "입니다";
-			break;
-		case 4:
-			answerText = "정답은 사번  " + resultData.choices.get(3) + "입니다";
+		if (hasChoice) {
+			switch (resultData.getAnswer()) {
+			case 1:
+				answerText = "정답은 일번  " + resultData.choices.get(0) + "입니다";
+				break;
+			case 2:
+				answerText = "정답은 이번  " + resultData.choices.get(1) + "입니다";
+				break;
+			case 3:
+				answerText = "정답은 삼번  " + resultData.choices.get(2) + "입니다";
+				break;
+			case 4:
+				answerText = "정답은 사번  " + resultData.choices.get(3) + "입니다";
+			}
+		} else {
+			answerText = "정답은 " + resultData.choices.get(resultData.getAnswer()) + " 입니다";
 		}
 	}
 
