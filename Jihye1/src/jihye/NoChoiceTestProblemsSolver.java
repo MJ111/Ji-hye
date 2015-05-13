@@ -40,8 +40,8 @@ public class NoChoiceTestProblemsSolver {
 		try { 
 			BufferedWriter out = new BufferedWriter(new FileWriter("noChoiceSolveData.txt"));
 	
-			String[] problems = fileString.split("\r\n");
-	        
+			String[] problems = fileString.split("\n");
+			
 			int rightAnswerNum = 0;
 	        int count = 0;
 	        for(int index = 0; index < problems.length; index+=3) {

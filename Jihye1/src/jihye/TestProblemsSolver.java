@@ -41,7 +41,7 @@ public class TestProblemsSolver {
 		try { 
 			BufferedWriter out = new BufferedWriter(new FileWriter("solveData.txt"));
 	
-			String[] problemsString = fileString.split("\r\n");
+			String[] problemsString = fileString.split("\n");
 	        
 			int rightAnswerNum = 0;
 	        int count = 0;
