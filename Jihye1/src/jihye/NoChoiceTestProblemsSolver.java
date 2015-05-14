@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import jihye.PS.ProblemData;
 import jihye.PS.ProblemSolver;
@@ -17,48 +18,43 @@ public class NoChoiceTestProblemsSolver {
 		problemSolver = new ProblemSolver();
 	}
 	
-	public String readFile() throws IOException {
-		String fileString = new String();
+	public ArrayList<String> readFile() throws IOException {
+		ArrayList<String> fileString = new ArrayList<String>();
 		BufferedReader br = new BufferedReader(new FileReader("./resources/problems.txt"));
 	    try {
-	        StringBuilder sb = new StringBuilder();
 	        String line = br.readLine();
 
-	        while (line != null) {
-	            sb.append(line);
-	            sb.append(System.lineSeparator());
+	        while (line != null) {	  
+	        	fileString.add(line);
 	            line = br.readLine();
 	        }
-	        fileString = sb.toString();
 	    } finally {
 	        br.close();
 	    }
 	    return fileString;
 	}
 	
-	public void solveProblems(String fileString) {
+	public void solveProblems(ArrayList<String> fileString) {
 		try { 
 			BufferedWriter out = new BufferedWriter(new FileWriter("noChoiceSolveData.txt"));
-	
-			String[] problems = fileString.split("\n");
 			
 			int rightAnswerNum = 0;
 	        int count = 0;
-	        for(int index = 0; index < problems.length; index+=3) {
-	        	String problem = problems[index];
+	        for(int index = 0; index < fileString.size(); index+=3) {
+	        	String problem = fileString.get(index);
 	        	if (!problem.contains("누구입니까?")) {
 	        		continue;
 	        	}
 	        	int rightAnswer = 0;
 	        	try {
-	        		rightAnswer = Integer.parseInt(problems[index+2]);
+	        		rightAnswer = Integer.parseInt(fileString.get(index+2));
 	        	} catch (NumberFormatException e) {
 	        		e.printStackTrace();
 	        		continue;
 	        	}	        	
 	        	
-	        	ResultData resultData = problemSolver.solve(new ProblemData(problems[index]));
-	        	String[] choices = problems[index+1].split(",");
+	        	ResultData resultData = problemSolver.solve(new ProblemData(fileString.get(index)));
+	        	String[] choices = fileString.get(index+1).split(",");
 	        	String rightAnswerString = choices[rightAnswer-1];
 	        	String jihyeAnswer = resultData.choices.get(resultData.getAnswer()-1);
 	        	if (rightAnswerString.equals(jihyeAnswer)) {
@@ -95,7 +91,7 @@ public class NoChoiceTestProblemsSolver {
 		try {
 			long startTime = System.currentTimeMillis();
 			
-			String fileString = noChoiceTestProblemsSolver.readFile();
+			ArrayList<String> fileString = noChoiceTestProblemsSolver.readFile();
 			noChoiceTestProblemsSolver.solveProblems(fileString);
 			
 			long endTime = System.currentTimeMillis();
