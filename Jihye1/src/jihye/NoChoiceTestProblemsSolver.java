@@ -56,14 +56,16 @@ public class NoChoiceTestProblemsSolver {
 	        	ResultData resultData = problemSolver.solve(new ProblemData(fileString.get(index)));
 	        	String[] choices = fileString.get(index+1).split(",");
 	        	String rightAnswerString = choices[rightAnswer-1];
-	        	String jihyeAnswer = resultData.choices.get(resultData.getAnswer()-1);
+	        	String jihyeAnswer = "";
+	        	if(resultData.choices != null && resultData.choices.size() > 0 )
+	        		jihyeAnswer = resultData.choices.get(resultData.getAnswer()-1);
 	        	if (rightAnswerString.equals(jihyeAnswer)) {
 	        		rightAnswerNum++;
 	        	} else {     		
 	        		out.write(problemSolver.problemTF.toString());
 	        		out.newLine();
 
-	        		for (int index1 = 0; index1 < 4; index1++) {
+	        		for (int index1 = 0; index1 < resultData.choices.size(); index1++) {
 	        			out.write(resultData.choices.get(index1) + ": " + resultData.similiarty.get(index1));
 	        			out.newLine();
 	        		}
