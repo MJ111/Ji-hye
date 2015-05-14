@@ -1,4 +1,4 @@
-package jihye;
+package jihye.tester;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -100,7 +100,6 @@ public class NoChoiceTestProblemsSolver {
 
 			System.out.println( "실행 시간 : " + ( endTime - startTime )/1000.0 );
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
