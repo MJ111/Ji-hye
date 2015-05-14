@@ -126,12 +126,14 @@ public class ProblemSolver {
 			resultMap.put(resultData.similiarty.get(index), resultData.choices.get(index));
 		}
 		
-		int resultDataSize = resultData.choices.size();
-		int choiceSize = resultDataSize < 4 ? resultDataSize : 4;
 		
 		resultData.clear();
 		Set<Double> set = resultMap.keySet();
         Object []resultMapKeys = set.toArray();
+        
+        int resultDataSize = resultMapKeys.length;
+        int choiceSize = resultDataSize < 4 ? resultDataSize : 4;
+        
         for(int i = 0; i < choiceSize; i++) {
         	Double key = (Double)resultMapKeys[i];
             
