@@ -11,10 +11,12 @@ public class KeywordExtrator {
 	private List<String> morphTag = Arrays.asList("NNG", "NNP", "NR", "SN", "VV", "VA", "VX", "XR", "NF", "NV", "XPN");
 	private List<String> verbTag = Arrays.asList("VV", "VA", "VX");
 	private Komoran komoran;
+	
+	public KeywordExtrator() {
+		komoran = new Komoran("./resources/models-light");
+	}
 
 	public ArrayList<String> analyzeDocument(String document) {
-		komoran = new Komoran("./resources/models-light");
-
 		ArrayList<String> morphArrayList = new ArrayList<String>();
 
 		List<List<Pair<String, String>>> result = komoran.analyze(document);
