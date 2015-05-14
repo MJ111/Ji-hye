@@ -43,7 +43,7 @@ public class ResultData {
 		
 		double max = -2.0f;
 		int answer = 0;
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < similiarty.size() ; i++) {
 			if (similiarty.get(i) > max) {
 				max = similiarty.get(i);
 				answer = i;
