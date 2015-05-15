@@ -90,7 +90,7 @@ public class IndexProcessor {
 		}	
 		
 		int documentCount = (int) (maxCounter * propotion);
-		System.out.println("Get : " + documentCount);
+		System.out.println("Finding : Doc > " + documentCount);
 		
 		int postingCounter = 0;
 		int[] ret = null;
@@ -112,7 +112,7 @@ public class IndexProcessor {
 			}
 		}
 		
-		System.out.println("Total : " + postingCounter);
+		System.out.println("Fount Total Doc : " + postingCounter);
 		
 		return ret;
 	}
