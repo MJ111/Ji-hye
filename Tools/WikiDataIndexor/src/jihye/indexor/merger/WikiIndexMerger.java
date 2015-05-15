@@ -50,7 +50,7 @@ public class WikiIndexMerger {
 		Map<String, Integer[]> ret = new TreeMap<String, Integer[]>();
 		//Make files
 		File[] files = Utility.getInstance().createFiles(dictionaryPath, 1, Utility.FILE_TYPE_INDEX);
-		System.out.println("Found " + matchingFiles.length + " to be merged");
+		Utility.getInstance().log(this, "Found " + matchingFiles.length + " to be merged");
 		
 		for(File f : matchingFiles) {
 			try {
@@ -116,7 +116,7 @@ public class WikiIndexMerger {
 		
 		File[] f = Utility.getInstance().getFiles(dictionaryPath, "jhdindex");
 		if(f.length != 0) {
-			System.out.println("Load Data From :" + f[0]);
+			Utility.getInstance().log(this, "Load Data From :" + f[0]);
 			try {
 				FileInputStream fis = new FileInputStream(f[0]);
 				ObjectInputStream ois = new ObjectInputStream(fis);
@@ -127,7 +127,7 @@ public class WikiIndexMerger {
 				e.printStackTrace();
 			}
 		}else {
-			System.out.println("Index of Index Data Not Found : " + dictionaryPath);
+			Utility.getInstance().log(this, "Index of Index Data Not Found : " + dictionaryPath);
 		}
 		iNumOfIndex = ret.size() / seperate + 1;
 		return ret;		
@@ -142,7 +142,7 @@ public class WikiIndexMerger {
 		SortedMap<String, Integer> Index = new TreeMap<String, Integer>();
 		
 		for (File f : matchingFiles) {
-			System.out.println("Merging : " + f);
+			Utility.getInstance().log(this, "Merging : " + f);
 			
 			try {				
 				FileReader fr = new FileReader(f);

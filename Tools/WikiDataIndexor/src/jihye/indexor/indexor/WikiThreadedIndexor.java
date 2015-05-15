@@ -5,6 +5,7 @@ import java.util.concurrent.Callable;
 
 import jihye.indexor.ExtractedWikiData;
 import jihye.indexor.WikiData;
+import jihye.indexor.util.Utility;
 import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
 import kr.co.shineware.util.common.model.Pair;
 
@@ -25,9 +26,7 @@ public class WikiThreadedIndexor implements Callable<ExtractedWikiData>{
 
 	@Override
 	public ExtractedWikiData call() throws Exception {
-		long id;
-		
-		
+		long id;		
 		
 		try {
 			id = Long.parseLong(wikiData.getDocumentID());
@@ -51,8 +50,7 @@ public class WikiThreadedIndexor implements Callable<ExtractedWikiData>{
 				}
 			}
 		} catch (Exception e) {
-			System.out.print(e);
-			System.out.println("FAULT:" + wikiData.getTitle());
+			Utility.getInstance().log(this, "PARSING FAILED : " + wikiData.getTitle());
 		}
 		
 		return extractedData;

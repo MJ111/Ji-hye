@@ -4,6 +4,14 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
+import jihye.indexor.*;
+import jihye.indexor.importer.WikiDatabaseManager;
+import jihye.indexor.importer.WikiIndexDataManager;
+import jihye.indexor.indexor.WikiIndexor;
+import jihye.indexor.indexor.WikiThreadedIndexor;
+import jihye.indexor.merger.WikiIndexMerger;
+import jihye.indexor.parser.WikiParser;
+
 public class Utility {
 	private static Utility fileManager = null;
 	public static final int ERROR_DEFAULT = 0;
@@ -51,11 +59,41 @@ public class Utility {
 		return files;
 	}
 	
-	public void log(String message) {
+	public void log(Object sender , String message) {
+		log(sender, message, new Object[0]);		
+	}
+	
+	public void log(Object sender, String format, Object... args) {
+		String senderName = "";
+		
+		if(sender instanceof WikiDatabaseManager ) {
+			senderName = "[DBM]";
+		}
+		if(sender instanceof WikiIndexDataManager) {
+			senderName = "[DM]";
+		}else if(sender instanceof WikiIndexor) {
+			senderName = "[WI]";
+		}else if(sender instanceof WikiThreadedIndexor) {
+			senderName = "[WTI]";
+		}else if(sender instanceof WikiIndexMerger) {
+			senderName = "[WM]";
+		}else if(sender instanceof WikiParser) {
+			senderName = "[WP]";
+		}else if(sender instanceof Utility) {
+			senderName = "[UT]";
+		}else {
+			senderName = "[NaN]";
+		}
+		
+		log(senderName + format, args);
+	}
+	
+	
+	private void log(String message) {
 		System.out.println(message);
 	}
 	
-	public void log (String format, Object... args) {
+	private void log (String format, Object... args) {
 		System.out.println(String.format(format, args));
 	}
 	

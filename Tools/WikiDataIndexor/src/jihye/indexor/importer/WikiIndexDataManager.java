@@ -7,6 +7,8 @@ import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.SortedSet;
 
+import jihye.indexor.util.Utility;
+
 
 public class WikiIndexDataManager {
 	private File[] matchingFiles;
@@ -22,7 +24,7 @@ public class WikiIndexDataManager {
 		    }
 		});
 		
-		if(f.length() == 0) throw new IOException("File not found exceptioin");	
+		if(f.length() == 0) throw Utility.getInstance().makeException(Utility.ERROR_FILE, "파일 불러오기 실패");
 		else iFileIndex = 0;
 	}
 	

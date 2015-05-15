@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.SortedSet;
 
+import jihye.indexor.util.Utility;
+
 
 public class WikiDatabaseManager {
 	private WikiIndexDataManager widm;
@@ -66,9 +68,8 @@ public class WikiDatabaseManager {
 				}
 			}			
 		}
-		
-		System.out.println("Total " + termMap.size() + " words");
-		System.out.println("Total " + iPostingCounter + " postings");
+		Utility.getInstance().log(this, "Total " + termMap.size() + " words");
+		Utility.getInstance().log(this, "Total " + iPostingCounter + " postings");
 	}
 	
 	private void sendQuery() {
@@ -84,6 +85,6 @@ public class WikiDatabaseManager {
 			return;
 		}
 		
-		System.out.println("Query OK, " + iTotalQueryCounter +" rows affected");
+		Utility.getInstance().log(this, "Query OK, " + iTotalQueryCounter +" rows affected");
 	}
 }

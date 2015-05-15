@@ -44,7 +44,7 @@ public class WikiIndexor {
 			komorans.add(k);
 		}
 		
-		System.out.println("Indexor : Threads are ready");
+		Utility.getInstance().log(this, "Total " + NUM_THREADS + " threads are ready");
 	}
 	
 	public void startIndexing() throws Exception{
