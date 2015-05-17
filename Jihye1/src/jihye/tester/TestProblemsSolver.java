@@ -20,7 +20,7 @@ public class TestProblemsSolver {
 	
 	public String readFile() throws IOException {
 		String fileString = new String();
-		BufferedReader br = new BufferedReader(new FileReader("./resources/problems.txt"));
+		BufferedReader br = new BufferedReader(new FileReader("./resources/choice_problems.txt"));
 	    try {
 	        StringBuilder sb = new StringBuilder();
 	        String line = br.readLine();
