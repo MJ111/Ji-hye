@@ -122,10 +122,9 @@ public class ProblemSolver {
 		
 		for (int index=0; index<resultData.choices.size(); index++) {
 			if (resultData.similiarty.get(index).isNaN()) continue;
-			
+		
 			resultMap.put(resultData.similiarty.get(index), resultData.choices.get(index));
 		}
-		
 		
 		resultData.clear();
 		Set<Double> set = resultMap.keySet();
@@ -135,12 +134,7 @@ public class ProblemSolver {
         int choiceSize = resultDataSize < 4 ? resultDataSize : 4;
         
         for(int i = 0; i < choiceSize; i++) {
-        	Double key = (Double)resultMapKeys[i];
-            
-            System.out.print(key);
-            System.out.print(" - ");
-            System.out.println((String)resultMap.get(key));
-            
+        	Double key = (Double)resultMapKeys[i];            
             resultData.add((String)resultMap.get(key), key);
         }
 	}
