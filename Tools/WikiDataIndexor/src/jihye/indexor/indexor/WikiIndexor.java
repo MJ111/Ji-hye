@@ -10,14 +10,17 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import javafx.util.Pair;
 import jihye.indexor.parser.WikiData;
 import jihye.indexor.util.Utility;
 import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
@@ -51,7 +54,7 @@ public class WikiIndexor {
 			Vector<WikiData> wikiDatas = getWikiDataVector(file);
 			ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREADS);
 			Vector<Future<ExtractedWikiData>> arrFutures = new Vector<Future<ExtractedWikiData>>();
-			HashMap<String, SortedSet<Long>> map = new HashMap<String, SortedSet<Long>>();
+			Map<String, ArrayList<Pair<Integer, Float>>> map = new HashMap<String, ArrayList<Pair<Integer,Float>>>();
 			
 			while(true) {				
 				//만약 더이상 처리할 데이터가 없고, 현재 실행중인 쓰레드가 없을경우 종료한다.
@@ -73,24 +76,28 @@ public class WikiIndexor {
 					} else {		
 						//만약 완료된 쓰레드를 찾으면, ArrayList 와 HashMap을 조인시킨 후, Komoran 과 Thread 를 Pool 에 집어넣는다.			
 						ExtractedWikiData ewd = future.get();
-						long documentID = future.get().getDocumentID(); //Document ID of current Thread processing
+						int documentID = (int)ewd.getDocumentID(); //Document ID of current Thread processing
 						
-						for(String key : ewd) {
-							SortedSet<Long> arrHashMapValue = map.get(key);
-							if(arrHashMapValue == null) {
-								SortedSet<Long> newValue = new TreeSet<Long>();
-								newValue.add(documentID);
-								map.put(key, newValue);
-							} else {
-								arrHashMapValue.add(documentID);
+						float[] tf = ewd.getTermFrequency();
+						for(int i = 0; i < ewd.size(); i++) {
+							String term = ewd.get(i);
+							ArrayList<Pair<Integer,Float>> arrPostings = map.get(term);
+							if(arrPostings == null) {
+								ArrayList<Pair<Integer,Float>> newValue = new ArrayList<Pair<Integer,Float>>();
+								newValue.add(new Pair<Integer, Float>(documentID, tf[i]));
+								map.put(term, newValue);
+							}else {
+								arrPostings.add(new Pair<Integer, Float>(documentID, tf[i]));
 							}
-						}						
+						}
+						ewd.clear();
 						komorans.add(future.get().getKomoran()); //Komoran 반환
 						it.remove(); //Thread 반환						
 					}
 				}
 			}			
-			saveIndexedWikiData(map, file);			
+			//saveIndexedWikiData(map, file);
+			System.out.println("test");
 		}
 	}
 	

@@ -38,7 +38,17 @@ public class ExtractedWikiData extends ArrayList<String> {
 		return komoran;
 	}
 	
-	public void calculateTermFrequency() {
+	public float[] getTermFrequency() {
+		float[] ret = new float[this.size()];
 		
+		for(int i = 0; i < wordCount.size(); i++) {
+			if(wordCount.get(i) == 0) {
+				ret[i] = 0;
+			}else {
+				ret[i] = (float) (1 + Math.log(wordCount.get(i)));
+			}
+		}
+		
+		return ret;
 	}
 }
