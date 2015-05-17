@@ -4,25 +4,26 @@ import java.util.SortedSet;
 
 import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
 
-public class ExtractedWikiData extends ArrayList<String> {
+public class ExtractedWikiData {
 	private ArrayList<Integer> wordCount;
-	private static final long serialVersionUID = 1L;
+	private ArrayList<String> terms;
 	private long documentID;
 	private Komoran komoran;
 	
 	public ExtractedWikiData(long documentID, Komoran komoran) {
-		super();
 		wordCount = new ArrayList<Integer>();
+		terms = new ArrayList<String>();
 		this.documentID = documentID;
 		this.komoran = komoran;
 	}
 	
-	public @Override boolean add(String term) {
-		int indexOfTerm = indexOf(term);
+	
+	public boolean add(String term) {
+		int indexOfTerm = terms.indexOf(term);
 		
 		if(indexOfTerm == -1) {
-			this.add(term);
-			return wordCount.add(indexOfTerm);
+			terms.add(term);
+			return wordCount.add(1);
 		}else {
 			int count = wordCount.get(indexOfTerm);
 			wordCount.set(indexOfTerm, count+1);
@@ -39,7 +40,7 @@ public class ExtractedWikiData extends ArrayList<String> {
 	}
 	
 	public float[] getTermFrequency() {
-		float[] ret = new float[this.size()];
+		float[] ret = new float[terms.size()];
 		
 		for(int i = 0; i < wordCount.size(); i++) {
 			if(wordCount.get(i) == 0) {
@@ -50,5 +51,18 @@ public class ExtractedWikiData extends ArrayList<String> {
 		}
 		
 		return ret;
+	}
+	
+	public int size() {
+		return terms.size();
+	}
+	
+	public String get(int index) {
+		return terms.get(index);
+	}
+	
+	public void clear() {
+		wordCount.clear();
+		terms.clear();
 	}
 }
