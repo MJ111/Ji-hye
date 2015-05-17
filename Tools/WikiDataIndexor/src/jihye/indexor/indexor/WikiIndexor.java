@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -25,15 +26,21 @@ import jihye.indexor.parser.WikiData;
 import jihye.indexor.util.Utility;
 import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
 
+class PairComparator implements Comparator<Pair<Integer, Float>> {
+
+	@Override
+	public int compare(Pair<Integer, Float> o1, Pair<Integer, Float> o2) {
+		return Integer.compare(o1.getKey(), o2.getKey());
+	}
+	
+}
 
 public class WikiIndexor {
-	private String directory;
 	private File[] matchingFiles;
 	private int NUM_THREADS;
 	private ArrayList<Komoran> komorans;
 	
 	public WikiIndexor(String directoryPath, int Threads) throws Exception {
-		this.directory = directoryPath;
 		this.NUM_THREADS = Threads;				
 		
 		matchingFiles = Utility.getInstance().getFiles(directoryPath, "jhd");		
@@ -95,24 +102,27 @@ public class WikiIndexor {
 						it.remove(); //Thread 반환						
 					}
 				}
-			}			
-			//saveIndexedWikiData(map, file);
-			System.out.println("test");
+			}
+			executorService.shutdown();
+			saveIndexedWikiData(map, file);
+			wikiDatas.clear();
+			map.clear();
 		}
 	}
 	
-	private void saveIndexedWikiData(HashMap<String, SortedSet<Long>> data, File currentFile) throws Exception {		
+	private void saveIndexedWikiData(Map<String, ArrayList<Pair<Integer, Float>>> data, File currentFile) throws Exception {		
 		File file = new File(currentFile.getAbsolutePath() +"ex");
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
-			Set<String> dic = data.keySet();
 			
+			Set<String> dic = data.keySet();			
 			for(String term : dic) {
-				String write = term +",";
-				SortedSet<Long> postings = data.get(term);
-				for(Long posting : postings) {
-					write += posting.toString() +",";
+				String write = term +",0.0,";
+				ArrayList<Pair<Integer,Float>> postings = data.get(term);
+				postings.sort(new PairComparator());
+				for(Pair<Integer, Float> posting : postings) {
+					write += posting.getKey() +"," + posting.getValue() +",";
 				}
 				write += "\n";
 				bos.write(write.getBytes());
