@@ -3,8 +3,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import jihye.indexor.ExtractedWikiData;
-import jihye.indexor.WikiData;
+import jihye.indexor.parser.WikiData;
 import jihye.indexor.util.Utility;
 import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
 import kr.co.shineware.util.common.model.Pair;

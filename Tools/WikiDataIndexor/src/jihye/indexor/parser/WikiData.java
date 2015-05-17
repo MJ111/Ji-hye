@@ -1,4 +1,4 @@
-﻿package jihye.indexor;
+﻿package jihye.indexor.parser;
 
 import java.io.Serializable;
 

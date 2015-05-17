@@ -18,8 +18,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import jihye.indexor.ExtractedWikiData;
-import jihye.indexor.WikiData;
+import jihye.indexor.parser.WikiData;
 import jihye.indexor.util.Utility;
 import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
 
