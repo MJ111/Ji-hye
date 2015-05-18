@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 import jihye.indexor.indexor.WikiIndexor;
 import jihye.indexor.indexor.WikiThreadedIndexor;
 import jihye.indexor.merger.WikiIndexMerger;
@@ -87,6 +89,10 @@ public class Utility {
 	
 	private void log (String format, Object... args) {
 		System.out.println(String.format(format, args));
+	}
+	
+	public int showMessageDialog(String message) {
+		return JOptionPane.showConfirmDialog(null, message);
 	}
 	
 	public Exception makeException(int TYPE, String message) {

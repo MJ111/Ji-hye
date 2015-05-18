@@ -10,8 +10,11 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+
 import org.apache.commons.lang3.ArrayUtils;
 
+import jihye.indexor.util.Pair;
+import jihye.indexor.util.PairComparator;
 import jihye.indexor.util.Utility;
 
 
@@ -24,14 +27,15 @@ public class WikiIndexMerger {
 	}
 	
 	public void startMerge(int seperate) {
-		merge();
+		merge(seperate);
 	}
 	
-	private void merge() {
-		Map<String, Integer[]> ret = new TreeMap<String, Integer[]>();
+	private void merge(int seperate) {
+		Map<String, ArrayList<Pair<Integer, Float>>> ret = new TreeMap<String, ArrayList<Pair<Integer,Float>>>();
 		//Make files
 		File[] files = Utility.getInstance().createFiles(dictionaryPath, 1, Utility.FILE_TYPE_INDEX);
 		Utility.getInstance().log(this, "Found " + matchingFiles.length + " to be merged");
+		int termCounter = 0;
 		
 		for(File f : matchingFiles) {
 			try {
@@ -43,19 +47,27 @@ public class WikiIndexMerger {
 					String lines[] = line.split(",");
 					
 					String term = lines[0];
-					ArrayList<Integer> postings = new ArrayList<Integer>();
-					for(int i = 1; i < lines.length; i++) {
-						postings.add(Integer.parseInt(lines[i]));
+					float idf = Float.parseFloat(lines[1]);
+					//Pair<Integer,Float>[] postings;
+					ArrayList<Pair<Integer,Float>> postings = new ArrayList<Pair<Integer,Float>>();
+					for(int i = 2; i < lines.length; i=i+2) {
+						try {
+							int a = Integer.parseInt(lines[i]);
+							float b = Float.parseFloat(lines[i+1]);
+							postings.add(new Pair<Integer,Float>(a, b));
+						} catch (Exception e) {
+							Utility.getInstance().log(this, f.toString());
+							Utility.getInstance().log(this, line);
+							e.printStackTrace();
+						}
 					}
 					
 					if(ret.containsKey(term)) {
-						Integer a[] = ret.get(term);
-						Integer b[] = postings.toArray(new Integer[postings.size()]);
-						Integer[] merged = ArrayUtils.addAll(a, b);
-						ret.put(term, merged);
+						ArrayList<Pair<Integer,Float>> a = ret.get(term);
+						a.addAll(postings);
 						//Arrays.
 					}else {
-						ret.put(term, postings.toArray(new Integer[postings.size()]));
+						ret.put(term, postings);
 					}
 				}
 				br.close();
@@ -77,11 +89,11 @@ public class WikiIndexMerger {
 			Set<String> keys = ret.keySet();
 			for(String key : keys){
 				bw.write(key +",");
-				Integer[] postings = ret.get(key);
-				Arrays.sort(postings, new Comp());
+				ArrayList<Pair<Integer,Float>> postings = ret.get(key);
+				postings.sort(new PairComparator());
 				
-				for(Integer posting : postings) {
-					bw.write(posting.toString() + ",");
+				for(Pair<Integer,Float> posting : postings) {
+					bw.write(posting.getFirst()+ "," + posting.getSecond() + ",");
 				}				
 				bw.write("\n");
 			}			
