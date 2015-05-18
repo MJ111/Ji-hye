@@ -34,7 +34,7 @@ public class WikiParser {
 		File [] files = Utility.getInstance().getFiles(wikiDumpPath, "xml");
 		if(files.length == 0) throw new IOException("위키 데이터를 찾을 수 없습니다! (경로확인요)");
 		else if(files.length != 1) throw new IOException("xml 파일이 여러개입니다. (1개만 놓아두세요)");
-		System.out.println("Using Dump : " + files[0].getPath());
+		Utility.getInstance().log(this, "Using Dump : " + files[0].getPath());
 		return files[0];
 	}
 		
@@ -77,7 +77,7 @@ public class WikiParser {
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
-						System.out.println("Processed Dump : " + pageCounter);
+						Utility.getInstance().log(this, "Processed Dump : " + pageCounter);
 					}
 
 				}
@@ -105,7 +105,7 @@ public class WikiParser {
 		}
 		
 		lnEndTime = System.currentTimeMillis();
-		System.out.println("WikiData 생성 시간 : " + (lnEndTime - lnStartTime) / 1000);
+		Utility.getInstance().log(this, "WikiData 생성 시간 : " + (lnEndTime - lnStartTime) / 1000);
 	}	
 	
 	private String deleteEscape(String Text) {

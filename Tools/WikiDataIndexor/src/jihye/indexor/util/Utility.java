@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
-import jihye.indexor.*;
-import jihye.indexor.importer.WikiDatabaseManager;
-import jihye.indexor.importer.WikiIndexDataManager;
 import jihye.indexor.indexor.WikiIndexor;
 import jihye.indexor.indexor.WikiThreadedIndexor;
 import jihye.indexor.merger.WikiIndexMerger;
@@ -66,12 +63,7 @@ public class Utility {
 	public void log(Object sender, String format, Object... args) {
 		String senderName = "";
 		
-		if(sender instanceof WikiDatabaseManager ) {
-			senderName = "[DBM]";
-		}
-		if(sender instanceof WikiIndexDataManager) {
-			senderName = "[DM]";
-		}else if(sender instanceof WikiIndexor) {
+		if(sender instanceof WikiIndexor) {
 			senderName = "[WI]";
 		}else if(sender instanceof WikiThreadedIndexor) {
 			senderName = "[WTI]";
