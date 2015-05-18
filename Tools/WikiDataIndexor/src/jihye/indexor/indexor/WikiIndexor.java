@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,8 +22,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import javafx.util.Pair;
 import jihye.indexor.parser.WikiData;
+import jihye.indexor.util.Pair;
 import jihye.indexor.util.Utility;
 import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
 
@@ -30,9 +31,8 @@ class PairComparator implements Comparator<Pair<Integer, Float>> {
 
 	@Override
 	public int compare(Pair<Integer, Float> o1, Pair<Integer, Float> o2) {
-		return Integer.compare(o1.getKey(), o2.getKey());
-	}
-	
+		return Integer.compare(o1.getFirst(), o2.getFirst());
+	}	
 }
 
 public class WikiIndexor {
@@ -51,8 +51,7 @@ public class WikiIndexor {
 		for(int i = 0; i < NUM_THREADS; i++) {
 			Komoran k = new Komoran("./resources/models-light");
 			komorans.add(k);
-		}
-		
+		}		
 		Utility.getInstance().log(this, "Total " + NUM_THREADS + " threads are ready");
 	}
 	
@@ -120,9 +119,9 @@ public class WikiIndexor {
 			for(String term : dic) {
 				String write = term +",0.0,";
 				ArrayList<Pair<Integer,Float>> postings = data.get(term);
-				postings.sort(new PairComparator());
+				Collections.sort(postings, new PairComparator());
 				for(Pair<Integer, Float> posting : postings) {
-					write += posting.getKey() +"," + posting.getValue() +",";
+					write += posting.getFirst() +"," + posting.getSecond() +",";
 				}
 				write += "\n";
 				bos.write(write.getBytes());
