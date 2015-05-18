@@ -11,8 +11,8 @@ public class ExtractedWikiData {
 	private Komoran komoran;
 	
 	public ExtractedWikiData(long documentID, Komoran komoran) {
-		wordCount = new ArrayList<Integer>();
-		terms = new ArrayList<String>();
+		this.wordCount = new ArrayList<Integer>();
+		this.terms = new ArrayList<String>();
 		this.documentID = documentID;
 		this.komoran = komoran;
 	}
