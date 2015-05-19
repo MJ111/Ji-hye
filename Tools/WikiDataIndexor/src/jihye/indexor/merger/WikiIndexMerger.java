@@ -41,7 +41,7 @@ public class WikiIndexMerger {
 			try {
 				FileReader fr = new FileReader(f);
 				BufferedReader br = new BufferedReader(fr);
-				System.out.println(f);
+				Utility.getInstance().log(this, "Merging : " + f);				
 				
 				while(br.ready()) {
 					String line = br.readLine();
@@ -55,7 +55,7 @@ public class WikiIndexMerger {
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
-						System.out.println(line);
+						Utility.getInstance().log(this, line);
 					}
 					
 					if(tempRet.containsKey(term)) {
@@ -101,33 +101,5 @@ public class WikiIndexMerger {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
-		
-//		try {
-//			FileWriter fw = new FileWriter(files[0]);
-//			BufferedWriter bw = new BufferedWriter(fw);
-//			class Comp implements Comparator<Integer>{
-//				public int compare(Integer o1, Integer o2){ //compara 메소드를 오버라이드 
-//					return o1 < o2 ? -1 : (o1 == o2 ? 0 : 1); //위의 if 문을 조건삼항 연산자로 대체
-//				}
-//			}
-//			
-//			Set<String> keys = ret.keySet();
-//			for(String key : keys){
-//				bw.write(key +",");
-//				ArrayList<Pair<Integer,Float>> postings = ret.get(key);
-//				postings.sort(new PairComparator());
-//				
-//				for(Pair<Integer,Float> posting : postings) {
-//					bw.write(posting.getFirst()+ "," + posting.getSecond() + ",");
-//				}				
-//				bw.write("\n");
-//			}			
-//			bw.close();
-//			fw.close();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
 	}
 }
