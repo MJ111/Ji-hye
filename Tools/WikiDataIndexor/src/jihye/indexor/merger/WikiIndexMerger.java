@@ -30,44 +30,34 @@ public class WikiIndexMerger {
 		merge(seperate);
 	}
 	
-	private void merge(int seperate) {
-		Map<String, ArrayList<Pair<Integer, Float>>> ret = new TreeMap<String, ArrayList<Pair<Integer,Float>>>();
+	private void merge(int seperate) {		
+		//Map<String, ArrayList<Pair<Integer, Float>>> ret = new TreeMap<String, ArrayList<Pair<Integer,Float>>>();
 		//Make files
 		File[] files = Utility.getInstance().createFiles(dictionaryPath, 1, Utility.FILE_TYPE_INDEX);
 		Utility.getInstance().log(this, "Found " + matchingFiles.length + " to be merged");
-		int termCounter = 0;
+		Map<String, String> tempRet = new TreeMap<String, String>();
 		
 		for(File f : matchingFiles) {
 			try {
 				FileReader fr = new FileReader(f);
 				BufferedReader br = new BufferedReader(fr);
+				System.out.println(f);
 				
 				while(br.ready()) {
 					String line = br.readLine();
 					String lines[] = line.split(",");
 					
 					String term = lines[0];
-					float idf = Float.parseFloat(lines[1]);
-					//Pair<Integer,Float>[] postings;
-					ArrayList<Pair<Integer,Float>> postings = new ArrayList<Pair<Integer,Float>>();
+					String postings = "";
 					for(int i = 2; i < lines.length; i=i+2) {
-						try {
-							int a = Integer.parseInt(lines[i]);
-							float b = Float.parseFloat(lines[i+1]);
-							postings.add(new Pair<Integer,Float>(a, b));
-						} catch (Exception e) {
-							Utility.getInstance().log(this, f.toString());
-							Utility.getInstance().log(this, line);
-							e.printStackTrace();
-						}
+						postings += lines[i] + "," + lines[i+1] + ",";
 					}
 					
-					if(ret.containsKey(term)) {
-						ArrayList<Pair<Integer,Float>> a = ret.get(term);
-						a.addAll(postings);
-						//Arrays.
+					if(tempRet.containsKey(term)) {
+						String p = tempRet.get(term);
+						p += postings;
 					}else {
-						ret.put(term, postings);
+						tempRet.put(term, postings);
 					}
 				}
 				br.close();
@@ -80,27 +70,57 @@ public class WikiIndexMerger {
 		try {
 			FileWriter fw = new FileWriter(files[0]);
 			BufferedWriter bw = new BufferedWriter(fw);
-			class Comp implements Comparator<Integer>{
-				public int compare(Integer o1, Integer o2){ //compara 메소드를 오버라이드 
-					return o1 < o2 ? -1 : (o1 == o2 ? 0 : 1); //위의 if 문을 조건삼항 연산자로 대체
+			
+			Set<String> dictionary = tempRet.keySet();
+			for(String term : dictionary) {
+				String postings = tempRet.get(term);
+				String post[] = postings.split(",");
+				float idf = (float) Math.log(763541/(post.length/2));				
+				ArrayList<Pair<Integer, Float>> list = new ArrayList<Pair<Integer,Float>>();
+				for(int i = 0; i < post.length; i=i+2) {
+					list.add(new Pair<Integer, Float>(Integer.parseInt(post[i]), Float.parseFloat(post[i+1])));
 				}
+				list.sort(new PairComparator());
+				
+				bw.write(term+","+idf+",");
+				for(Pair<Integer, Float> p : list) {
+					bw.write(p.getFirst() +"," + p.getSecond() + ",");
+				}
+				bw.write("\n");
 			}
 			
-			Set<String> keys = ret.keySet();
-			for(String key : keys){
-				bw.write(key +",");
-				ArrayList<Pair<Integer,Float>> postings = ret.get(key);
-				postings.sort(new PairComparator());
-				
-				for(Pair<Integer,Float> posting : postings) {
-					bw.write(posting.getFirst()+ "," + posting.getSecond() + ",");
-				}				
-				bw.write("\n");
-			}			
 			bw.close();
 			fw.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		
+		
+//		try {
+//			FileWriter fw = new FileWriter(files[0]);
+//			BufferedWriter bw = new BufferedWriter(fw);
+//			class Comp implements Comparator<Integer>{
+//				public int compare(Integer o1, Integer o2){ //compara 메소드를 오버라이드 
+//					return o1 < o2 ? -1 : (o1 == o2 ? 0 : 1); //위의 if 문을 조건삼항 연산자로 대체
+//				}
+//			}
+//			
+//			Set<String> keys = ret.keySet();
+//			for(String key : keys){
+//				bw.write(key +",");
+//				ArrayList<Pair<Integer,Float>> postings = ret.get(key);
+//				postings.sort(new PairComparator());
+//				
+//				for(Pair<Integer,Float> posting : postings) {
+//					bw.write(posting.getFirst()+ "," + posting.getSecond() + ",");
+//				}				
+//				bw.write("\n");
+//			}			
+//			bw.close();
+//			fw.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 }
