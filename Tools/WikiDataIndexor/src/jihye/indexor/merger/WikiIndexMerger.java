@@ -49,13 +49,19 @@ public class WikiIndexMerger {
 					
 					String term = lines[0];
 					String postings = "";
-					for(int i = 2; i < lines.length; i=i+2) {
-						postings += lines[i] + "," + lines[i+1] + ",";
+					try {
+						for(int i = 2; i < lines.length; i=i+2) {
+							postings += lines[i] + "," + lines[i+1] + ",";
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						System.out.println(line);
 					}
 					
 					if(tempRet.containsKey(term)) {
 						String p = tempRet.get(term);
 						p += postings;
+						tempRet.put(term, p);
 					}else {
 						tempRet.put(term, postings);
 					}
@@ -87,6 +93,7 @@ public class WikiIndexMerger {
 					bw.write(p.getFirst() +"," + p.getSecond() + ",");
 				}
 				bw.write("\n");
+				list.clear();
 			}
 			
 			bw.close();
