@@ -92,7 +92,7 @@ public class WikiIndexMerger {
 				for(Pair<Integer, Float> p : list) {
 					bw.write(p.getFirst() +"," + p.getSecond() + ",");
 				}
-				bw.write("\n");
+				bw.newLine();
 				list.clear();
 			}
 			

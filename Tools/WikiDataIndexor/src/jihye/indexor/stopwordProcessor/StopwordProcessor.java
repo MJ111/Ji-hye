@@ -7,14 +7,18 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.stream.Stream;
 
 import jihye.indexor.util.Utility;
 
 public class StopwordProcessor {
 	private File[] indicesFiles;
+	float averageIDF;
 	public StopwordProcessor(String directoryPath) {		
 		indicesFiles = Utility.getInstance().getFiles(directoryPath, "jhidx");
-		System.out.println(getAverageIDF());
+		averageIDF = getAverageIDF();
+		Utility.getInstance().log(this, "IDF AVG : " + averageIDF);
+		this.deleteWords();
 	}
 	
 	public float getAverageIDF() {
@@ -25,24 +29,26 @@ public class StopwordProcessor {
 			for(File f : indicesFiles) {
 				FileReader fr = new FileReader(f);
 				BufferedReader br = new BufferedReader(fr);
-
+								
 				while(br.ready()) {
-					String str = br.readLine();
-					String[] postings = str.split(",");
-					terms++;
-					sum += Float.parseFloat(postings[1]);
+					String read = br.readLine();
+					String[] postings = read.split(",");				
+					
+					float idf = Float.parseFloat(postings[1]);
+					if(idf < 100 ){
+						terms++;
+						sum += idf;
+					}
 				}
 				br.close();
 				fr.close();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		
+		}		
 		return (sum/terms);
 	}
 	
-
 	public void deleteWords() {		
 		for(File f : indicesFiles) {
 			try {
@@ -57,14 +63,11 @@ public class StopwordProcessor {
 
 					String []term = string.split(",");
 					float idf = Float.parseFloat(term[1]);
-					System.out.println(term[0] + " : " + idf);
-					if(term[0].compareTo("가") >= 0 ){ 
-						System.out.println(string);
+					if(term[0].compareTo("가") >= 0 ){
 						bw.write(string);
 						bw.newLine();
 					}
 					else if(term[0].length()<8 &&Integer.parseInt(term[0]) < 10000){
-						System.out.println(string);
 						bw.write(string);
 						bw.newLine();
 					}
