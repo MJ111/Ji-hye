@@ -2,6 +2,7 @@
 import jihye.indexor.indexor.WikiIndexor;
 import jihye.indexor.merger.WikiIndexMerger;
 import jihye.indexor.parser.WikiParser;
+import jihye.indexor.stopwordProcessor.StopwordProcessor;
 
 public class Main {
 	private final static String WIKIDATA_PATH = "D:/WikiData";
@@ -29,9 +30,17 @@ public class Main {
 //		}
 		
 		//Merge part
+//		try {
+//			WikiIndexMerger wim = new WikiIndexMerger(WIKIDATA_PATH);
+//			wim.startMerge(NUM_INDEX_SPLIT);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+		
+		//Stopword Deleting part
 		try {
-			WikiIndexMerger wim = new WikiIndexMerger(WIKIDATA_PATH);
-			wim.startMerge(NUM_INDEX_SPLIT);
+			StopwordProcessor sp = new StopwordProcessor(WIKIDATA_PATH);
+			//sp.deleteWords();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
