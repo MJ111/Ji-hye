@@ -35,8 +35,8 @@ public class MainFrame extends javax.swing.JFrame {
 	/**
 	 * Creates new form frame1
 	 */
-	public MainFrame(UserInterface ui) {
-		noChoiceModeFlag = true;
+	public MainFrame(UserInterface ui, boolean hasChoice) {
+		noChoiceModeFlag = !hasChoice;
 		initComponents();
 		setButtonEventListeners(ui);
 	}
@@ -94,10 +94,7 @@ public class MainFrame extends javax.swing.JFrame {
 		setTextField(choice3TextField, hintFont, "3번");
 		setTextField(choice4TextField, hintFont, "4번");
 		
-		choice1TextField.setVisible(false);
-		choice2TextField.setVisible(false);
-		choice3TextField.setVisible(false);
-		choice4TextField.setVisible(false);
+		setChoiceBoxes(!noChoiceModeFlag);
 
 		problemJScrollPane.setViewportView(problemTextArea);
 		
@@ -175,6 +172,13 @@ public class MainFrame extends javax.swing.JFrame {
 		pack();
 
 		setLocationRelativeTo(null);
+	}
+	
+	private void setChoiceBoxes(boolean isShown) {
+			choice1TextField.setVisible(isShown);
+			choice2TextField.setVisible(isShown);
+			choice3TextField.setVisible(isShown);
+			choice4TextField.setVisible(isShown);	
 	}
 	
 	private void setMouseListener() {
@@ -270,15 +274,9 @@ public class MainFrame extends javax.swing.JFrame {
 	private void setButtonEventListeners(final UserInterface ui) {
 		noChoiceActionListener = new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				solveNoChoiceProblem(ui);
+				solveProblem(ui);
 			}
-		};
-		
-		choiceActionListener = new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				solveChoiceProblem(evt, ui);
-			}
-		};
+		};		
 		
 		closeBtn.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -330,17 +328,18 @@ public class MainFrame extends javax.swing.JFrame {
 		setTextField(choice3TextField, hintFont, "3번");
 		setTextField(choice4TextField, hintFont, "4번");
 	}
-
-	private void solveChoiceProblem(ActionEvent evt, final UserInterface ui) {
-		ProblemData problemData = new ProblemData(problemTextArea.getText(),
-				choice1TextField.getText(), choice2TextField.getText(),
-				choice3TextField.getText(), choice4TextField.getText());
-		ui.requestSolveProblem(problemData);
-	}
 	
-	private void solveNoChoiceProblem(final UserInterface ui) {
-		ProblemData problemData = new ProblemData(problemTextArea.getText());
-		ui.requestSolveProblem(problemData);
+	private void solveProblem(final UserInterface ui) {
+		if(noChoiceModeFlag) {
+			ProblemData problemData = new ProblemData(problemTextArea.getText());
+			ui.requestSolveProblem(problemData);
+		} else {
+			ProblemData problemData = new ProblemData(problemTextArea.getText(), 
+					choice1TextField.getText(), 
+					choice2TextField.getText(), 
+					choice3TextField.getText(), 
+					choice4TextField.getText());
+		}
 	}
 
 	// Variables declaration
