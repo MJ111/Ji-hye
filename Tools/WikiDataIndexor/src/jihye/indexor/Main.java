@@ -30,19 +30,19 @@ public class Main {
 //		}
 		
 		//Merge part
-//		try {
-//			WikiIndexMerger wim = new WikiIndexMerger(WIKIDATA_PATH);
-//			wim.startMerge(NUM_INDEX_SPLIT);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-		
-		//Stopword Deleting part
 		try {
-			StopwordProcessor sp = new StopwordProcessor(WIKIDATA_PATH);
-			//sp.deleteWords();
+			WikiIndexMerger wim = new WikiIndexMerger(WIKIDATA_PATH);
+			wim.startMerge(NUM_INDEX_SPLIT);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		//Stopword Deleting part
+//		try {
+//			StopwordProcessor sp = new StopwordProcessor(WIKIDATA_PATH);
+//			//sp.deleteWords();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 }
