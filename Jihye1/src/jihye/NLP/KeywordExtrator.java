@@ -18,8 +18,10 @@ public class KeywordExtrator {
 
 	public ArrayList<String> analyzeDocument(String document) {
 		ArrayList<String> morphArrayList = new ArrayList<String>();
-
+		
+		@SuppressWarnings("unchecked")
 		List<List<Pair<String, String>>> result = komoran.analyze(document);
+
 		for (List<Pair<String, String>> eojeolResult : result) {
 			for (Pair<String, String> wordMorph : eojeolResult) {
 				if (morphTag.contains(wordMorph.getSecond())){
@@ -32,5 +34,20 @@ public class KeywordExtrator {
 			}
 		}
 		return morphArrayList;
+	}
+	
+	public ArrayList<String> analyzeNNG(String document) {
+		ArrayList<String> NNGList = new ArrayList<>();
+
+		@SuppressWarnings("unchecked")
+		List<List<Pair<String, String>>> result = komoran.analyze(document);
+		for (List<Pair<String, String>> eojeolResult : result) {
+			for (Pair<String, String> wordMorph : eojeolResult) {
+				if (wordMorph.getSecond().equals("NNG")){
+					NNGList.add(wordMorph.getFirst());
+				}
+			}
+		}
+		return NNGList;
 	}
 }
