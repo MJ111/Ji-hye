@@ -46,17 +46,16 @@ public class WikiIndexMerger {
 				while(br.ready()) {
 					String line = br.readLine();
 					String lines[] = line.split(",");
+					if(lines.length % 2 != 0) {
+						//뭔가 잘못된?
+						continue;
+					}
 					
 					String term = lines[0];
 					String postings = "";
-					try {
-						for(int i = 2; i < lines.length; i=i+2) {
-							postings += lines[i] + "," + lines[i+1] + ",";
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-						Utility.getInstance().log(this, line);
-					}
+					for(int i = 2; i < lines.length; i=i+2) {
+						postings += lines[i] + "," + lines[i+1] + ",";
+					}				
 					
 					if(tempRet.containsKey(term)) {
 						String p = tempRet.get(term);
