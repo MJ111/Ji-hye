@@ -81,7 +81,7 @@ public class WikiIndexMerger {
 			for(String term : dictionary) {
 				String postings = tempRet.get(term);
 				String post[] = postings.split(",");
-				float idf = (float) Math.log(763541/(post.length/2));				
+				float idf = (float) Math.log10(763541/(post.length/2));				
 				ArrayList<Pair<Integer, Float>> list = new ArrayList<Pair<Integer,Float>>();
 				for(int i = 0; i < post.length; i=i+2) {
 					list.add(new Pair<Integer, Float>(Integer.parseInt(post[i]), Float.parseFloat(post[i+1]) * idf));

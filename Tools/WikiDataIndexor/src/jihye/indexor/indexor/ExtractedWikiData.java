@@ -46,7 +46,7 @@ public class ExtractedWikiData {
 			if(wordCount.get(i) == 0) {
 				ret[i] = 0;
 			}else {
-				ret[i] = (float) (1 + Math.log(wordCount.get(i)));
+				ret[i] = (float) (1 + Math.log10(wordCount.get(i)));
 			}
 		}
 		

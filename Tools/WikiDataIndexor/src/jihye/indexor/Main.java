@@ -12,22 +12,22 @@ public class Main {
 	
 	public static void main(String args[]) {
 		//Parse part
-//		try {
-//			WikiParser wp = new WikiParser(WIKIDATA_PATH);
-//			wp.startParse(NUM_SPLIT);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			System.exit(1);
-//		}
-//		
-//		//Indexing part
-//		try {
-//			WikiIndexor wi = new WikiIndexor(WIKIDATA_PATH, NUM_THREADS);
-//			wi.startIndexing();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			System.exit(1);
-//		}
+		try {
+			WikiParser wp = new WikiParser(WIKIDATA_PATH);
+			wp.startParse(NUM_SPLIT);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		//Indexing part
+		try {
+			WikiIndexor wi = new WikiIndexor(WIKIDATA_PATH, NUM_THREADS);
+			wi.startIndexing();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 		
 		//Merge part
 		try {

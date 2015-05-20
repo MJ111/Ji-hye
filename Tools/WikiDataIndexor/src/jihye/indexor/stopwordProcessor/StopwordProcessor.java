@@ -21,6 +21,10 @@ public class StopwordProcessor {
 		this.deleteWords();
 	}
 	
+	public int getIndexLength() {
+		return 0;
+	}
+	
 	public float getAverageIDF() {
 		float sum = 0.0f;
 		int terms = 0;
