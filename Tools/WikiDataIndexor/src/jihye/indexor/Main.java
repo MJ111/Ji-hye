@@ -20,7 +20,7 @@ public class Main {
 			System.exit(1);
 		}
 		
-		//Indexing part
+//		//Indexing part
 		try {
 			WikiIndexor wi = new WikiIndexor(WIKIDATA_PATH, NUM_THREADS);
 			wi.startIndexing();
@@ -38,11 +38,10 @@ public class Main {
 		}
 		
 		//Stopword Deleting part
-//		try {
-//			StopwordProcessor sp = new StopwordProcessor(WIKIDATA_PATH);
-//			//sp.deleteWords();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		try {
+			StopwordProcessor sp = new StopwordProcessor(WIKIDATA_PATH);				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
