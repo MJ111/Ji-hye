@@ -50,6 +50,8 @@ public class ResultFrameWithGraph extends javax.swing.JFrame {
 		}
 		font = font.deriveFont(Font.PLAIN, 20);
 
+		
+			
 		resultJLabel.setFont(font);
 		resultJLabel.setForeground(new Color(44, 57, 65));
 
@@ -156,7 +158,7 @@ public class ResultFrameWithGraph extends javax.swing.JFrame {
 								javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addGap(0, 0, Short.MAX_VALUE)));
 
-		setAnswerLabel();
+	
 		setButtonEventListeners(ui);
 		
 		pack();
@@ -164,16 +166,6 @@ public class ResultFrameWithGraph extends javax.swing.JFrame {
 		setLocationRelativeTo(null);
 	}
 	
-	private void setAnswerLabel() {
-		int answer = resultData.getAnswer();
-		if (choiceProblem) {
-			String resultString = resultData.choices.get(answer - 1);
-			resultJLabel.setText("정답은 " + answer + "번 " + resultString + "입니다");
-		} else {
-			String resultString = resultData.choices.get(answer - 1);
-			resultJLabel.setText("정답은 " + resultString + "입니다.");
-		}
-	}
 	
 	private void setMouseListener() {
 		addMouseListener(new MouseListener() {
@@ -210,7 +202,7 @@ public class ResultFrameWithGraph extends javax.swing.JFrame {
 	public void setButtonEventListeners(final UserInterface ui) {
 		backJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				ui.showMainFrame();
+				ui.showMainFrame(false);//인자넘겨주기위한 ... 
 				dispose();
 			}
 		});
