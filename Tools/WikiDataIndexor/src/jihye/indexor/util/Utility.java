@@ -6,10 +6,12 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import edu.jhu.nlp.wikipedia.PageCallbackHandler;
 import jihye.indexor.indexor.WikiIndexor;
 import jihye.indexor.indexor.WikiThreadedIndexor;
 import jihye.indexor.merger.WikiIndexMerger;
 import jihye.indexor.parser.WikiParser;
+import jihye.indexor.stopwordProcessor.StopwordProcessor;
 
 public class Utility {
 	private static Utility fileManager = null;
@@ -73,18 +75,16 @@ public class Utility {
 			senderName = "[WM]";
 		}else if(sender instanceof WikiParser) {
 			senderName = "[WP]";
-		}else if(sender instanceof Utility) {
+		}else if (sender instanceof PageCallbackHandler) {
+			senderName = "[WP]";
+		}else if(sender instanceof Utility) {		
 			senderName = "[UT]";
+		}else if(sender instanceof StopwordProcessor) {
+			senderName = "[SP]";
 		}else {
 			senderName = "[NaN]";
-		}
-		
+		}		
 		log(senderName + format, args);
-	}
-	
-	
-	private void log(String message) {
-		System.out.println(message);
 	}
 	
 	private void log (String format, Object... args) {

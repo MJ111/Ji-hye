@@ -46,17 +46,16 @@ public class WikiIndexMerger {
 				while(br.ready()) {
 					String line = br.readLine();
 					String lines[] = line.split(",");
+					if(lines.length % 2 != 0) {
+						//뭔가 잘못된?
+						continue;
+					}
 					
 					String term = lines[0];
 					String postings = "";
-					try {
-						for(int i = 2; i < lines.length; i=i+2) {
-							postings += lines[i] + "," + lines[i+1] + ",";
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-						Utility.getInstance().log(this, line);
-					}
+					for(int i = 2; i < lines.length; i=i+2) {
+						postings += lines[i] + "," + lines[i+1] + ",";
+					}				
 					
 					if(tempRet.containsKey(term)) {
 						String p = tempRet.get(term);
@@ -81,10 +80,10 @@ public class WikiIndexMerger {
 			for(String term : dictionary) {
 				String postings = tempRet.get(term);
 				String post[] = postings.split(",");
-				float idf = (float) Math.log(763541/(post.length/2));				
+				float idf = (float) Math.log10(763541/(post.length/2));				
 				ArrayList<Pair<Integer, Float>> list = new ArrayList<Pair<Integer,Float>>();
 				for(int i = 0; i < post.length; i=i+2) {
-					list.add(new Pair<Integer, Float>(Integer.parseInt(post[i]), Float.parseFloat(post[i+1])));
+					list.add(new Pair<Integer, Float>(Integer.parseInt(post[i]), Float.parseFloat(post[i+1]) * idf));
 				}
 				list.sort(new PairComparator());
 				
@@ -92,7 +91,7 @@ public class WikiIndexMerger {
 				for(Pair<Integer, Float> p : list) {
 					bw.write(p.getFirst() +"," + p.getSecond() + ",");
 				}
-				bw.write("\n");
+				bw.newLine();
 				list.clear();
 			}
 			
