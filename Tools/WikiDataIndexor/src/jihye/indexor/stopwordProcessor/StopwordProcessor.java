@@ -67,7 +67,7 @@ public class StopwordProcessor {
 		for(File f : indicesFiles) {
 			try {
 				FileReader fr = new FileReader(f);
-				FileWriter fw = new FileWriter(f+"d");
+				FileWriter fw = new FileWriter(directory +"/DeletedIndex" + ".jhidxd");
 				BufferedReader br = new BufferedReader(fr);
 				BufferedWriter bw = new BufferedWriter(fw);
 
@@ -75,10 +75,10 @@ public class StopwordProcessor {
 				while((string = br.readLine())!=null) {
 					string = br.readLine();
 					String []term = string.split(",");
-					float idf = Float.parseFloat(term[1]);
-					if(idf < avgIDF - 2) {
-						continue;
-					}
+					//float idf = Float.parseFloat(term[1]);
+//					if(idf < avgIDF - 2) {
+//						continue;
+//					}
 					if(term[0].compareTo("가") >= 0 ){
 						bw.write(string);
 						bw.newLine();

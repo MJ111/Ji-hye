@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -39,10 +40,10 @@ public class IndexProcessor {
 			
 			String term = seperated[0];
 			float idf = Float.parseFloat(seperated[1]);
-			int[] postings = new int[postingsSize];
-			float[] tfidfs = new float[postingsSize];
+			int[] postings = new int[postingsSize+1];
+			float[] tfidfs = new float[postingsSize+1];
 			
-			for(int i = 2; i < postingsSize; i=i+2) {
+			for(int i = 2; i < seperated.length; i=i+2) {
 				postings[i/2] = Integer.parseInt(seperated[i]);
 				tfidfs[i/2] = Float.parseFloat(seperated[i+1]);
 			}			
@@ -55,7 +56,7 @@ public class IndexProcessor {
 		fis.close();
 	}
 	
-	public int[] getMergedPostings(List<String> terms, float rate) {
+	public List<Pair<Integer, Float>> getMergedPostings(List<String> terms, float rate) {
 		List<Triple<Float, int[], float[]>> postings = new ArrayList<Triple<Float, int[],float[]>>();
 		
 		for(String term : terms) {
@@ -66,8 +67,23 @@ public class IndexProcessor {
 		return mergePostings(postings, rate);
 	}
 	
-	private int[] mergePostings(List<Triple<Float, int[], float[]>> postings, float propotion) {
-//		int [] merged = null;
+	private List<Pair<Integer, Float>> mergePostings(List<Triple<Float, int[], float[]>> postings, float propotion) {		
+		//IDF 가 proposition 보다 높은가?
+		float average = 0;		
+		for(Triple<Float, int[], float[]> posting : postings) {
+			average += posting.getLeft();
+		}
+		average /= postings.size();
+		
+		for(Iterator<Triple<Float,int[],float[]>> it = postings.iterator(); it.hasNext();) {
+			Triple<Float, int[], float[]> posting = it.next();
+			if(posting.getLeft() <= average * propotion) {
+				it.remove();
+			}
+		}		
+		
+		//Posting counting 이 propotion 보다 높은가?
+		int [] merged = null;
 //		for(int[] arr : postings) {
 //			merged = ArrayUtils.addAll(merged, arr);
 //		}

@@ -2,6 +2,7 @@ package jihye.PS;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -55,9 +56,9 @@ public class ProblemSolver {
 		if(!problemData.hasChoice()) {
 			// 포스팅을 찾아온다.
 			noChoices = true;
-			int[] postings;
+			List<Pair<Integer, Float>> postings;
 			postings = indexProcessor.getMergedPostings(problemMorph, 0.9f);
-			problemData.choices = databaseManager.getPageTitlesFromPageIDs(postings);
+			//problemData.choices = databaseManager.getPageTitlesFromPageIDs(postings);
 		}
 
 		// get choice tf
