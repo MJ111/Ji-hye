@@ -40,12 +40,12 @@ public class IndexProcessor {
 			
 			String term = seperated[0];
 			float idf = Float.parseFloat(seperated[1]);
-			int[] postings = new int[postingsSize+1];
-			float[] tfidfs = new float[postingsSize+1];
+			int[] postings = new int[postingsSize];
+			float[] tfidfs = new float[postingsSize];
 			
-			for(int i = 2; i < seperated.length; i=i+2) {
-				postings[i/2] = Integer.parseInt(seperated[i]);
-				tfidfs[i/2] = Float.parseFloat(seperated[i+1]);
+			for(int i = 0; i < seperated.length-2; i=i+2) {
+				postings[i/2] = Integer.parseInt(seperated[i+2]);
+				tfidfs[i/2] = Float.parseFloat(seperated[i+3]);
 			}			
 			
 			Triple<Float, int[], float[]> posting = new Triple<Float, int[], float[]>(idf, postings, tfidfs);
@@ -56,19 +56,30 @@ public class IndexProcessor {
 		fis.close();
 	}
 	
-	public List<Pair<Integer, Float>> getMergedPostings(List<String> terms, float rate) {
-		List<Triple<Float, int[], float[]>> postings = new ArrayList<Triple<Float, int[],float[]>>();
-		
-		for(String term : terms) {
-			if(indices.containsKey(term))
-				postings.add(indices.get(term));
-		}
-		
-		return mergePostings(postings, rate);
+	public Pair<List<String>, List<ExtractedDocument>> getDocumentsFromIndices(List<String> terms, float rate) {
+		return getMergedPostings(terms, rate);
 	}
 	
-	private List<Pair<Integer, Float>> mergePostings(List<Triple<Float, int[], float[]>> postings, float propotion) {		
-		//IDF 가 proposition 보다 높은가?
+	private Pair<List<String>, List<ExtractedDocument>> getMergedPostings(List<String> terms, float rate) {
+		List<Triple<Float, int[], float[]>> postings = new ArrayList<Triple<Float, int[],float[]>>();
+		List<String> dictionary = new ArrayList<String>();
+		
+		for(String term : terms) {
+			if(dictionary.contains(term)) {
+				continue;
+			}
+			else if(indices.containsKey(term)) {
+				dictionary.add(term);
+				postings.add(indices.get(term));
+			}
+		}
+		
+		return mergePostings(dictionary, postings, rate);
+	}
+
+	
+	private Pair<List<String>, List<ExtractedDocument>> mergePostings(List<String> dictionary ,List<Triple<Float, int[], float[]>> postings, float propotion) {		
+		//IDF 가 proposition 보다 높은가? (High - IDF)
 		float average = 0;		
 		for(Triple<Float, int[], float[]> posting : postings) {
 			average += posting.getLeft();
@@ -77,62 +88,72 @@ public class IndexProcessor {
 		
 		for(Iterator<Triple<Float,int[],float[]>> it = postings.iterator(); it.hasNext();) {
 			Triple<Float, int[], float[]> posting = it.next();
+			int index = postings.indexOf(posting);
 			if(posting.getLeft() <= average * propotion) {
 				it.remove();
+				dictionary.remove(index);
 			}
-		}		
+		}	
 		
 		//Posting counting 이 propotion 보다 높은가?
-		int [] merged = null;
-//		for(int[] arr : postings) {
-//			merged = ArrayUtils.addAll(merged, arr);
-//		}
-//		
-//		Arrays.sort(merged);	
-//		
-//		int counter = 1;
-//		int maxCounter = 0;
-//		int last = merged[0];
-//		
-//		for(int i = 1; i < merged.length; i++) {
-//			if(merged[i] == last) {
-//				counter++;				
-//			}else {
-//				last = merged[i];
-//				counter = 1;
-//			}
-//			
-//			if(counter > maxCounter) {
-//				maxCounter = counter;
-//			}
-//		}	
-//		
-//		int documentCount = (int) (maxCounter * propotion);
-//		System.out.println("Finding : Doc > " + documentCount);
-//		
-//		int postingCounter = 0;
-//		int[] ret = null;
-//		
-//		for(int i = 1; i < merged.length; i++) {
-//			if(merged[i] == last) {
-//				counter ++;
-//			} else {
-//				last = merged[i];
-//				counter = 1;
-//			}
-//			
-//			if(counter >= documentCount) {
-//				 postingCounter++;
-//				ret = ArrayUtils.add(ret, last);
-//				while(i+1 < merged.length && merged[i+1] == last) {
-//					i++;
-//				}
-//			}
-//		}
-//		
-//		System.out.println("Fount Total Doc : " + postingCounter);
-//		
-//		return ret;
+		int[] merged = null;
+		for(Iterator<Triple<Float, int[], float[]>> it = postings.iterator(); it.hasNext();) {
+			Triple<Float, int[], float[]> posting = it.next();
+			merged = ArrayUtils.addAll(merged, posting.getMiddle());
+		}
+		Arrays.sort(merged);
+		
+		//가장 많이 겹치는 문서의 개수를 가져온다.
+		int counter = 1;
+		int maxCounter = 0;
+		int last = merged[0];		
+		for(int i = 1; i < merged.length; i++) {
+			if(merged[i] == last) {
+				counter++;				
+			}else {
+				last = merged[i];
+				counter = 1;
+			}			
+			if(counter > maxCounter) {
+				maxCounter = counter;
+			}
+		}	
+		
+		//가장 많이 겹치는 문서의 개수 * propotion
+		int documentCount = (int) (maxCounter * propotion);		
+		int postingCounter = 0;
+		int[] documents = null;
+		
+		for(int i = 1; i < merged.length; i++) {
+			if(merged[i] == last) {
+				counter ++;
+			} else {
+				last = merged[i];
+				counter = 1;
+			}
+			
+			if(counter >= documentCount) {
+				 postingCounter++;
+				documents = ArrayUtils.add(documents, last);
+				while(i+1 < merged.length && merged[i+1] == last) {
+					i++;
+				}
+			}
+		}
+		
+		for(int document : documents) {
+			ExtractedDocument ed = new ExtractedDocument();
+			for(int i = 0; i < postings.size(); i++) {
+				Triple<Float, int[], float[]> posting = postings.get(i);
+				int indexOfPosting = ArrayUtils.indexOf(posting.getMiddle(), document);
+				if(indexOfPosting == -1) {
+					continue;
+				}else {
+					
+				}
+			}
+		}
+		
 		return null;
 	}
 }
