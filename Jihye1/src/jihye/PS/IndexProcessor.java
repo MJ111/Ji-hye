@@ -79,7 +79,7 @@ public class IndexProcessor {
 
 	
 	private Pair<List<String>, List<ExtractedDocument>> mergePostings(List<String> dictionary ,List<Triple<Float, int[], float[]>> postings, float propotion) {		
-		//IDF 가 proposition 보다 높은가? (High - IDF)
+		//IDF 가 proposition * 평균 보다 높은가? (High - IDF)
 		float average = 0;		
 		for(Triple<Float, int[], float[]> posting : postings) {
 			average += posting.getLeft();
@@ -93,7 +93,7 @@ public class IndexProcessor {
 				it.remove();
 				dictionary.remove(index);
 			}
-		}	
+		}
 		
 		//Posting counting 이 propotion 보다 높은가?
 		int[] merged = null;
@@ -141,19 +141,21 @@ public class IndexProcessor {
 			}
 		}
 		
+		// 돌려줄 ExtractedDocument 를 만듭시다
+		List<ExtractedDocument> ret = new ArrayList<ExtractedDocument>();
 		for(int document : documents) {
-			ExtractedDocument ed = new ExtractedDocument();
-			for(int i = 0; i < postings.size(); i++) {
-				Triple<Float, int[], float[]> posting = postings.get(i);
+			ExtractedDocument ed = new ExtractedDocument(document);
+			for(String term : dictionary) {
+				Triple<Float,int[], float[]> posting = indices.get(term);
 				int indexOfPosting = ArrayUtils.indexOf(posting.getMiddle(), document);
 				if(indexOfPosting == -1) {
 					continue;
 				}else {
-					
+					ed.add(term, posting.getRight()[indexOfPosting]);
 				}
 			}
 		}
 		
-		return null;
+		return new Pair<List<String>, List<ExtractedDocument>>(dictionary, ret);
 	}
 }
