@@ -27,9 +27,10 @@ public class ProblemSolver {
 		databaseManager = new DatabaseManager();
 		vectorProcessor = new VectorProcessor(keywordExtractor, databaseManager);
 		try {
-			indexProcessor = new IndexProcessor("./JihyeIndices00Delete.jhidx");
+			indexProcessor = new IndexProcessor("D:/WikiData/DeletedIndex.jhidxd");
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
