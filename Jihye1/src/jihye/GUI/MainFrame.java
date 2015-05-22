@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +20,7 @@ import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.text.JTextComponent;
@@ -28,18 +31,23 @@ import jihye.PS.ProblemData;
 public class MainFrame extends javax.swing.JFrame {
 	private Point mouseDownCompCoords = null;
 	private Font hintFont;
-	private Boolean noChoiceModeFlag;
+	private Boolean noChoiceModeFlag = null;
 	private ActionListener noChoiceActionListener;
 	private ActionListener choiceActionListener;
+	
+	private Image mainImage;
 
 	/**
 	 * Creates new form frame1
 	 */
-	public MainFrame(UserInterface ui, boolean hasChoice) {
-		noChoiceModeFlag = !hasChoice;
+	// 모드 인자 넘겨 받아 표시  
+	public MainFrame(UserInterface ui, boolean noChoiceModeFlagInput) {
+		noChoiceModeFlag = noChoiceModeFlagInput;
 		initComponents();
 		setButtonEventListeners(ui);
 	}
+
+
 	
 	private void initComponents() {
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -56,13 +64,17 @@ public class MainFrame extends javax.swing.JFrame {
 		choice3TextField = new javax.swing.JTextField();
 		choice4TextField = new javax.swing.JTextField();
 		btnJPanel = new javax.swing.JPanel();
-//		closeBtn = new ImageButton("close.png");
-//		solveBtn = new ImageButton("jihye.png");
-//		refreshBtn = new ImageButton("refresh.png");
-		closeBtn = new Button("Close");
-		solveBtn = new Button("Solve");
-		refreshBtn = new Button("Refresh");
-		changeModeButton = new Button("Change mode");
+		closeBtn = new ImageButton("close.png");
+		solveBtn = new ImageButton("jihye.png");
+		refreshBtn = new ImageButton("refresh.png");
+		changeModeButton = new ImageButton("changemode.png");
+//		closeBtn = new Button("Close");
+//		solveBtn = new Button("Solve");
+//		refreshBtn = new Button("Refresh");
+//		changeModeButton = new Button("Change mode");
+	
+		
+		
 		
 		mainJPanel.setBackground(new Color(227, 227, 220));
 		mainJPanel.setBorder(BorderFactory.createLineBorder(new Color(220, 106,
@@ -88,15 +100,33 @@ public class MainFrame extends javax.swing.JFrame {
 		setProblemTextAreaTabAction();
 		setFocusAction(problemTextArea, "문제를 입력해주세요^^", font, 16);
 
+		
 		hintFont = font.deriveFont(Font.ITALIC, 14);
 		setTextField(choice1TextField, hintFont, "1번");
 		setTextField(choice2TextField, hintFont, "2번");
 		setTextField(choice3TextField, hintFont, "3번");
 		setTextField(choice4TextField, hintFont, "4번");
 		
-		setChoiceBoxes(!noChoiceModeFlag);
+		//  모드 확인 
+		if(noChoiceModeFlag){
+			choice1TextField.setVisible(true);
+			choice2TextField.setVisible(true);
+			choice3TextField.setVisible(true);
+			choice4TextField.setVisible(true);
+			noChoiceModeFlag = false;
+		}else{
+			choice1TextField.setVisible(false);
+			choice2TextField.setVisible(false);
+			choice3TextField.setVisible(false);
+			choice4TextField.setVisible(false);
+			noChoiceModeFlag = true;
+		}
+		
+		
 
 		problemJScrollPane.setViewportView(problemTextArea);
+		
+
 		
 		problemJPanel.setBackground(new Color(227, 227, 220));
 		problemJPanel.setLayout(new java.awt.GridLayout(1, 4, 30, 0));
@@ -147,13 +177,14 @@ public class MainFrame extends javax.swing.JFrame {
 								javax.swing.GroupLayout.PREFERRED_SIZE, 236,
 								javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addGap(30, 30, 30)
+						
 						.addComponent(problemJPanel,
 								javax.swing.GroupLayout.PREFERRED_SIZE,
 								javax.swing.GroupLayout.DEFAULT_SIZE,
 								javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addGap(30, 30, 30)
 						.addComponent(btnJPanel,
-								javax.swing.GroupLayout.PREFERRED_SIZE, 43,
+								javax.swing.GroupLayout.PREFERRED_SIZE, 28,
 								javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addGap(20, 20, 20)));
 
@@ -172,13 +203,6 @@ public class MainFrame extends javax.swing.JFrame {
 		pack();
 
 		setLocationRelativeTo(null);
-	}
-	
-	private void setChoiceBoxes(boolean isShown) {
-			choice1TextField.setVisible(isShown);
-			choice2TextField.setVisible(isShown);
-			choice3TextField.setVisible(isShown);
-			choice4TextField.setVisible(isShown);	
 	}
 	
 	private void setMouseListener() {
@@ -272,11 +296,26 @@ public class MainFrame extends javax.swing.JFrame {
 	}
 
 	private void setButtonEventListeners(final UserInterface ui) {
+		
+		if(!noChoiceModeFlag){
+			solveBtn.addActionListener(choiceActionListener);
+		}
+		else{
+			solveBtn.addActionListener(noChoiceActionListener);
+		}
+		//모드에 따른 버튼 액션 리스너 .. 위에서 boolean 값을 조정했으므로 반대로 .. 
+		
 		noChoiceActionListener = new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				solveProblem(ui);
+				solveNoChoiceProblem(ui);
 			}
-		};		
+		};
+		
+		choiceActionListener = new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				solveChoiceProblem(evt, ui);
+			}
+		};
 		
 		closeBtn.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -285,7 +324,7 @@ public class MainFrame extends javax.swing.JFrame {
 			}
 		});
 
-		solveBtn.addActionListener(noChoiceActionListener);
+		
 		
 		refreshBtn.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -328,36 +367,38 @@ public class MainFrame extends javax.swing.JFrame {
 		setTextField(choice3TextField, hintFont, "3번");
 		setTextField(choice4TextField, hintFont, "4번");
 	}
+
+	private void solveChoiceProblem(ActionEvent evt, final UserInterface ui) {
+		ProblemData problemData = new ProblemData(problemTextArea.getText(),
+				choice1TextField.getText(), choice2TextField.getText(),
+				choice3TextField.getText(), choice4TextField.getText());
+		ui.requestSolveProblem(problemData);
+	}
 	
-	private void solveProblem(final UserInterface ui) {
-		if(noChoiceModeFlag) {
-			ProblemData problemData = new ProblemData(problemTextArea.getText());
-			ui.requestSolveProblem(problemData);
-		} else {
-			ProblemData problemData = new ProblemData(problemTextArea.getText(), 
-					choice1TextField.getText(), 
-					choice2TextField.getText(), 
-					choice3TextField.getText(), 
-					choice4TextField.getText());
-		}
+	private void solveNoChoiceProblem(final UserInterface ui) {
+		ProblemData problemData = new ProblemData(problemTextArea.getText());
+		ui.requestSolveProblem(problemData);
 	}
 
+	
 	// Variables declaration
 	private javax.swing.JPanel btnJPanel;
 	private javax.swing.JTextField choice1TextField;
 	private javax.swing.JTextField choice2TextField;
 	private javax.swing.JTextField choice3TextField;
 	private javax.swing.JTextField choice4TextField;
-//	private ImageButton closeBtn;
+	private ImageButton closeBtn;
 	private javax.swing.JPanel mainJPanel;
 	private javax.swing.JPanel problemJPanel;
 	private javax.swing.JScrollPane problemJScrollPane;
 	private javax.swing.JTextArea problemTextArea;
-//	private ImageButton refreshBtn;
-//	private ImageButton solveBtn;
-	private Button closeBtn;
-	private Button refreshBtn;
-	private Button solveBtn;
-	private Button changeModeButton;
+	private ImageButton refreshBtn;
+	private ImageButton solveBtn;
+	private ImageButton changeModeButton;
+//	private Button closeBtn;
+//	private Button refreshBtn;
+//	private Button solveBtn;
+//	private Button changeModeButton;
 	// End of variables declaration
+	
 }
