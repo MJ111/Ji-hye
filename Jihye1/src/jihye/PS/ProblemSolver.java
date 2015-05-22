@@ -60,10 +60,12 @@ public class ProblemSolver {
 			postings = indexProcessor.getDocumentsFromIndices(problemMorph, 0.9f);
 			indexProcessor.comparePostingsWithProblem(postings, problemMorph);
 			
-//			ResultData rd = new ResultData(null);
-//			rd.add(choice, similarity);
-//			rd.
-			//problemData.choices = databaseManager.getPageTitlesFromPageIDs(postings);
+			ResultData rd = new ResultData(null);
+			for(ExtractedDocument ed : postings) {
+				//String title = databaseManager.getPageTitleFromPageID(ed.getDocumentID());
+				rd.add(String.valueOf(ed.getDocumentID()),(double)ed.getSimilarityWithProblem());
+			}
+			return rd;
 		}
 
 		// get choice tf
