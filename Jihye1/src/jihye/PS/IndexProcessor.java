@@ -11,7 +11,10 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.Vector;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -56,11 +59,11 @@ public class IndexProcessor {
 		fis.close();
 	}
 	
-	public Pair<List<String>, List<ExtractedDocument>> getDocumentsFromIndices(List<String> terms, float rate) {
+	public List<ExtractedDocument> getDocumentsFromIndices(List<String> terms, float rate) {
 		return getMergedPostings(terms, rate);
 	}
 	
-	private Pair<List<String>, List<ExtractedDocument>> getMergedPostings(List<String> terms, float rate) {
+	private List<ExtractedDocument> getMergedPostings(List<String> terms, float rate) {
 		List<Triple<Float, int[], float[]>> postings = new ArrayList<Triple<Float, int[],float[]>>();
 		List<String> dictionary = new ArrayList<String>();
 		
@@ -76,9 +79,8 @@ public class IndexProcessor {
 		
 		return mergePostings(dictionary, postings, rate);
 	}
-
 	
-	private Pair<List<String>, List<ExtractedDocument>> mergePostings(List<String> dictionary ,List<Triple<Float, int[], float[]>> postings, float propotion) {		
+	private List<ExtractedDocument> mergePostings(List<String> dictionary ,List<Triple<Float, int[], float[]>> postings, float propotion) {		
 		//IDF 가 proposition * 평균 보다 높은가? (High - IDF)
 		float average = 0;		
 		for(Triple<Float, int[], float[]> posting : postings) {
@@ -121,7 +123,6 @@ public class IndexProcessor {
 		
 		//가장 많이 겹치는 문서의 개수 * propotion
 		int documentCount = (int) (maxCounter * propotion);		
-		int postingCounter = 0;
 		int[] documents = null;
 		
 		for(int i = 1; i < merged.length; i++) {
@@ -133,7 +134,6 @@ public class IndexProcessor {
 			}
 			
 			if(counter >= documentCount) {
-				 postingCounter++;
 				documents = ArrayUtils.add(documents, last);
 				while(i+1 < merged.length && merged[i+1] == last) {
 					i++;
@@ -156,6 +156,18 @@ public class IndexProcessor {
 			}
 		}
 		
-		return new Pair<List<String>, List<ExtractedDocument>>(dictionary, ret);
+		return ret;
 	}
+
+	public void comparePostingsWithProblem(List<ExtractedDocument> postings, List<String> problemMorph) {
+		//Returns nothing, just sort.
+		Set<String> setProblemMoph = new TreeSet<String>();
+		setProblemMoph.addAll(problemMorph);
+		
+		for(ExtractedDocument posting : postings) {
+			//po
+		}
+		//Vector<>
+	}
+	
 }

@@ -56,8 +56,13 @@ public class ProblemSolver {
 		if(!problemData.hasChoice()) {
 			// 포스팅을 찾아온다.
 			noChoices = true;
-			Pair<List<String>, List<ExtractedDocument>> postings;
+			List<ExtractedDocument> postings;
 			postings = indexProcessor.getDocumentsFromIndices(problemMorph, 0.9f);
+			indexProcessor.comparePostingsWithProblem(postings, problemMorph);
+			
+//			ResultData rd = new ResultData(null);
+//			rd.add(choice, similarity);
+//			rd.
 			//problemData.choices = databaseManager.getPageTitlesFromPageIDs(postings);
 		}
 
