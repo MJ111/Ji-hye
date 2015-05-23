@@ -154,8 +154,8 @@ public class IndexProcessor {
 				}else {
 					ed.add(term, posting.getRight()[indexOfPosting]);
 				}
-				ret.add(ed);
 			}
+			ret.add(ed);
 		}
 		
 		return ret;

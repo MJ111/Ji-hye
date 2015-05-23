@@ -62,9 +62,10 @@ public class ProblemSolver {
 			
 			ResultData rd = new ResultData(null);
 			for(ExtractedDocument ed : postings) {
-				//String title = databaseManager.getPageTitleFromPageID(ed.getDocumentID());
-				rd.add(String.valueOf(ed.getDocumentID()),(double)ed.getSimilarityWithProblem());
+				String title = databaseManager.getPageTitleFromPageID(ed.getDocumentID());
+				rd.add(title,(double)ed.getSimilarityWithProblem());
 			}
+			postings.clear();
 			return rd;
 		}
 

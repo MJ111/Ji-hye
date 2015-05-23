@@ -100,7 +100,7 @@ public class DatabaseManager {
 	}
 	
 	public String getPageTitleFromPageID(int page_id) {
-		String title = null;
+		String title = "";
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery("select page_title from "
