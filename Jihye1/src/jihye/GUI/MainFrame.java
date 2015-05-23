@@ -46,8 +46,6 @@ public class MainFrame extends javax.swing.JFrame {
 		initComponents();
 		setButtonEventListeners(ui);
 	}
-
-
 	
 	private void initComponents() {
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -67,14 +65,7 @@ public class MainFrame extends javax.swing.JFrame {
 		closeBtn = new ImageButton("close.png");
 		solveBtn = new ImageButton("jihye.png");
 		refreshBtn = new ImageButton("refresh.png");
-		changeModeButton = new ImageButton("changemode.png");
-//		closeBtn = new Button("Close");
-//		solveBtn = new Button("Solve");
-//		refreshBtn = new Button("Refresh");
-//		changeModeButton = new Button("Change mode");
-	
-		
-		
+		changeModeButton = new ImageButton("changemode.png");	
 		
 		mainJPanel.setBackground(new Color(227, 227, 220));
 		mainJPanel.setBorder(BorderFactory.createLineBorder(new Color(220, 106,
@@ -100,33 +91,17 @@ public class MainFrame extends javax.swing.JFrame {
 		setProblemTextAreaTabAction();
 		setFocusAction(problemTextArea, "문제를 입력해주세요^^", font, 16);
 
-		
 		hintFont = font.deriveFont(Font.ITALIC, 14);
 		setTextField(choice1TextField, hintFont, "1번");
 		setTextField(choice2TextField, hintFont, "2번");
 		setTextField(choice3TextField, hintFont, "3번");
 		setTextField(choice4TextField, hintFont, "4번");
 		
+		
 		//  모드 확인 
-		if(noChoiceModeFlag){
-			choice1TextField.setVisible(true);
-			choice2TextField.setVisible(true);
-			choice3TextField.setVisible(true);
-			choice4TextField.setVisible(true);
-			noChoiceModeFlag = false;
-		}else{
-			choice1TextField.setVisible(false);
-			choice2TextField.setVisible(false);
-			choice3TextField.setVisible(false);
-			choice4TextField.setVisible(false);
-			noChoiceModeFlag = true;
-		}
-		
-		
+		setChoicesVisible(noChoiceModeFlag);	
 
 		problemJScrollPane.setViewportView(problemTextArea);
-		
-
 		
 		problemJPanel.setBackground(new Color(227, 227, 220));
 		problemJPanel.setLayout(new java.awt.GridLayout(1, 4, 30, 0));
@@ -264,6 +239,22 @@ public class MainFrame extends javax.swing.JFrame {
 			}
 		});
 	}
+	
+	private void setChoicesVisible(boolean visible) {
+		if(visible) {
+			choice1TextField.setVisible(true);
+			choice2TextField.setVisible(true);
+			choice3TextField.setVisible(true);
+			choice4TextField.setVisible(true);
+			noChoiceModeFlag = false;
+		} else {
+			choice1TextField.setVisible(false);
+			choice2TextField.setVisible(false);
+			choice3TextField.setVisible(false);
+			choice4TextField.setVisible(false);
+			noChoiceModeFlag = true;
+		}
+	}
 
 	private void setTextField(JTextField textField, Font hintFont,
 			String hintStr) {
@@ -335,27 +326,20 @@ public class MainFrame extends javax.swing.JFrame {
 		changeModeButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				if (noChoiceModeFlag) {
-					choice1TextField.setVisible(true);
-					choice2TextField.setVisible(true);
-					choice3TextField.setVisible(true);
-					choice4TextField.setVisible(true);
+					setChoicesVisible(true);
 					
 					solveBtn.removeActionListener(noChoiceActionListener);
 					solveBtn.addActionListener(choiceActionListener);
 					
 					noChoiceModeFlag = false;
 				} else {
-					choice1TextField.setVisible(false);
-					choice2TextField.setVisible(false);
-					choice3TextField.setVisible(false);
-					choice4TextField.setVisible(false);
+					setChoicesVisible(false);
 					
 					solveBtn.removeActionListener(choiceActionListener);
 					solveBtn.addActionListener(noChoiceActionListener);
 					
 					noChoiceModeFlag = true;
-				}
-				
+				}				
 			}
 		});
 	}
@@ -379,7 +363,6 @@ public class MainFrame extends javax.swing.JFrame {
 		ProblemData problemData = new ProblemData(problemTextArea.getText());
 		ui.requestSolveProblem(problemData);
 	}
-
 	
 	// Variables declaration
 	private javax.swing.JPanel btnJPanel;
@@ -394,11 +377,5 @@ public class MainFrame extends javax.swing.JFrame {
 	private javax.swing.JTextArea problemTextArea;
 	private ImageButton refreshBtn;
 	private ImageButton solveBtn;
-	private ImageButton changeModeButton;
-//	private Button closeBtn;
-//	private Button refreshBtn;
-//	private Button solveBtn;
-//	private Button changeModeButton;
-	// End of variables declaration
-	
+	private ImageButton changeModeButton;	
 }
