@@ -91,22 +91,24 @@ public class UserInterface {
 	}
 
 	public void setAnswerString(ResultData resultData, boolean hasChoice) {
-		answerText = "";
+		String newAnswerText = "";
+		
 		switch (resultData.getAnswer()) {
 		case 1:
-			answerText = "정답은 일번  " + resultData.choices.get(0) + "입니다";
-			break;
+			newAnswerText = "정답은 일번 ";
 		case 2:
-			answerText = "정답은 이번  " + resultData.choices.get(1) + "입니다";
-			break;
+			newAnswerText = "정답은 이번 ";
 		case 3:
-			answerText = "정답은 삼번  " + resultData.choices.get(2) + "입니다";
-			break;
+			newAnswerText = "정답은 삼번 ";
 		case 4:
-			answerText = "정답은 사번  " + resultData.choices.get(3) + "입니다";
+			newAnswerText = "정답은 사번 ";
 		default :
-			answerText = "정답은 " + resultData.choices.get(resultData.getAnswer() - 1) + " 입니다";
+			newAnswerText = "정답은 ";
 		}
+		
+		newAnswerText += resultData.getAnswerString() + " 입니다";
+		
+		this.answerText = newAnswerText;
 	}
 
 	public void readAnswerString() {

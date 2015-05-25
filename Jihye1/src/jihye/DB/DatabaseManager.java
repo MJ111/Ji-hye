@@ -16,29 +16,10 @@ public class DatabaseManager {
 			connection = DriverManager.getConnection(
 					"jdbc:mysql://knuwooseok.iptime.org", "cheolsu",
 					"NaturalIntelligence");
-			log("Database connected successfully");
+			System.out.println("[DATABASE]Connected Successfully");
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
-	}
-
-	public ArrayList<String> getDictionary() {
-		ArrayList<String> dictionary = new ArrayList<String>();
-		dictionary.add("don't read me");
-
-		try {
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery("select * from "
-					+ DATABASE_NAME + ".word_vectors;");
-
-			while (resultSet != null && resultSet.next()) {
-				dictionary.add(getStringFromBLOB(resultSet.getBlob(2)));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return dictionary;
 	}
 
 	public String getStringFromBLOB(Blob blob) {
@@ -67,8 +48,8 @@ public class DatabaseManager {
 				CurrentPageId = resultSet.getInt(1);
 
 			resultSet = statement.executeQuery("select rd_title from "
-					+ DATABASE_NAME + ".redirect where rd_from=" + CurrentPageId
-					+ ";");
+					+ DATABASE_NAME + ".redirect where rd_from="
+					+ CurrentPageId + ";");
 			if (resultSet != null && resultSet.next()) {
 				return getStringFromBLOB(resultSet.getBlob(1)).trim();
 			} else
@@ -98,27 +79,28 @@ public class DatabaseManager {
 			return false;
 		}
 	}
-	
+
 	public String getPageTitleFromPageID(int page_id) {
 		String title = "";
 		try {
 			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery("select page_title from "
-					+ DATABASE_NAME + ".page where page_id=" + page_id);
-			
-			if(resultSet != null & resultSet.next()) {
+			ResultSet resultSet = statement
+					.executeQuery("select page_title from " + DATABASE_NAME
+							+ ".page where page_id=" + page_id);
+
+			if (resultSet != null & resultSet.next()) {
 				title = resultSet.getString(1);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return title;
 	}
-	
+
 	public WikipediaPage getPageFromTitle(String page_title) {
 		WikipediaPage page = null;
-		
+
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement
@@ -138,7 +120,7 @@ public class DatabaseManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return page;
 	}
 
@@ -167,29 +149,19 @@ public class DatabaseManager {
 
 		return pages;
 	}
-	
-	public ArrayList<String> getPageTitlesFromPageIDs(int[] page_id) {
-		ArrayList<String> titles = new ArrayList<String>();
-		
-		if(page_id == null) return titles;
-		
-		for(int ids : page_id) {
-			titles.add(getPageFromPageID(ids).getTitle());
-		}
-		
-		return titles;
-	}
-	
+
 	public WikipediaPage getPageFromPageID(int page_id) {
 		int page_latest = 0;
 		String page_title = null;
 		String text = null;
 		try {
 			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery("select page_title, page_latest from "
-					+ DATABASE_NAME + ".page where page_id=" + page_id +";");
-			
-			if(resultSet != null && resultSet.next()) {
+			ResultSet resultSet = statement
+					.executeQuery("select page_title, page_latest from "
+							+ DATABASE_NAME + ".page where page_id=" + page_id
+							+ ";");
+
+			if (resultSet != null && resultSet.next()) {
 				page_title = resultSet.getString(1);
 				page_latest = resultSet.getInt(2);
 			}
@@ -198,11 +170,11 @@ public class DatabaseManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		text = getWikipediaTextFromOldID(page_latest);
-		
-		WikipediaPage wp = new WikipediaPage(page_title, text);		
-		
+
+		WikipediaPage wp = new WikipediaPage(page_title, text);
+
 		return wp;
 	}
 
@@ -220,9 +192,5 @@ public class DatabaseManager {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	private void log(String msg) {
-		System.out.println("[DATABASEMANAGER]" + msg);
 	}
 }

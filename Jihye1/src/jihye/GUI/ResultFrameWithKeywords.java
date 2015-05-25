@@ -102,8 +102,7 @@ public class ResultFrameWithKeywords extends javax.swing.JFrame {
 		// .setBackground(new java.awt.Color(231, 233, 230));
 
 		// choice1JPanel.setBackground(new java.awt.Color(231, 233, 230));
-		if(resultData.matchKeywords != null && resultData.matchKeywords.size() != 0)
-			choice1JLabel.setText(resultData.matchKeywords.get(0));
+		choice1JLabel.setText(resultData.getMatchKeyword(0));
 
 		javax.swing.GroupLayout choice1JPanelLayout = new javax.swing.GroupLayout(
 				choice1JPanel);
@@ -119,12 +118,10 @@ public class ResultFrameWithKeywords extends javax.swing.JFrame {
 						javax.swing.GroupLayout.DEFAULT_SIZE, 265,
 						Short.MAX_VALUE));
 
-		choiceKeywordJTabbedPane.addTab(resultData.choices.get(0),
-				choice1JPanel);
+		choiceKeywordJTabbedPane.addTab(resultData.getChoiceString(1), choice1JPanel);
 
 		// choice2JPanel.setBackground(new java.awt.Color(231, 233, 230));
-		if(resultData.matchKeywords != null && resultData.matchKeywords.size() != 0)
-			choice2JLabel.setText(resultData.matchKeywords.get(1));
+		choice2JLabel.setText(resultData.getMatchKeyword(1));
 
 		javax.swing.GroupLayout choice2JPanelLayout = new javax.swing.GroupLayout(
 				choice2JPanel);
@@ -158,12 +155,10 @@ public class ResultFrameWithKeywords extends javax.swing.JFrame {
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												265, Short.MAX_VALUE)));
 
-		choiceKeywordJTabbedPane.addTab(resultData.choices.get(1),
-				choice2JPanel);
+		choiceKeywordJTabbedPane.addTab(resultData.getChoiceString(2), choice2JPanel);
 
 		// choice3JPanel.setBackground(new java.awt.Color(231, 233, 230));
-		if(resultData.matchKeywords != null && resultData.matchKeywords.size() != 0)
-			choice3JLabel.setText(resultData.matchKeywords.get(2));
+		choice3JLabel.setText(resultData.getMatchKeyword(2));
 
 		javax.swing.GroupLayout choice3JPanelLayout = new javax.swing.GroupLayout(
 				choice3JPanel);
@@ -178,13 +173,11 @@ public class ResultFrameWithKeywords extends javax.swing.JFrame {
 				.addComponent(choice3JLabel,
 						javax.swing.GroupLayout.DEFAULT_SIZE, 265,
 						Short.MAX_VALUE));
-
-		choiceKeywordJTabbedPane.addTab(resultData.choices.get(2),
-				choice3JPanel);
+		
+		choiceKeywordJTabbedPane.addTab(resultData.getChoiceString(3), choice3JPanel);
 
 		// choice4JPanel.setBackground(new java.awt.Color(231, 233, 230));
-		if(resultData.matchKeywords != null && resultData.matchKeywords.size() != 0)
-			choice4JLabel.setText(resultData.matchKeywords.get(3));
+		choice4JLabel.setText(resultData.getMatchKeyword(3));
 
 		javax.swing.GroupLayout choice4JPanelLayout = new javax.swing.GroupLayout(
 				choice4JPanel);
@@ -199,9 +192,8 @@ public class ResultFrameWithKeywords extends javax.swing.JFrame {
 				.addComponent(choice4JLabel,
 						javax.swing.GroupLayout.DEFAULT_SIZE, 265,
 						Short.MAX_VALUE));
-
-		choiceKeywordJTabbedPane.addTab(resultData.choices.get(3),
-				choice4JPanel);
+		
+		choiceKeywordJTabbedPane.addTab(resultData.getChoiceString(4), choice4JPanel);
 
 		btnJPanel.setBackground(new java.awt.Color(227, 227, 220));
 		btnJPanel.setLayout(new java.awt.GridLayout(1, 3, 56, 0));
@@ -213,7 +205,7 @@ public class ResultFrameWithKeywords extends javax.swing.JFrame {
 		// problemKeywordJPanel.setBackground(new java.awt.Color(231, 233,
 		// 230));
 
-		problemKeywordJLabel.setText(resultData.analyzedProblem);
+		problemKeywordJLabel.setText(resultData.getAnalyzedProblem());
 
 		javax.swing.GroupLayout problemKeywordJPanelLayout = new javax.swing.GroupLayout(
 				problemKeywordJPanel);
@@ -395,10 +387,6 @@ public class ResultFrameWithKeywords extends javax.swing.JFrame {
 		}
 	}
 
-	private String getResultStr() {
-		return resultData.choices.get(resultData.getAnswer() - 1);
-	}
-
 	public void setButtonEventListeners(final UserInterface ui) {
 		backJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -415,7 +403,7 @@ public class ResultFrameWithKeywords extends javax.swing.JFrame {
 
 		wikiJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				String anwserString = getResultStr();
+				String anwserString = resultData.getAnswerString();
 				openUrl("http://ko.wikipedia.org/wiki/" + anwserString);
 			}
 		});

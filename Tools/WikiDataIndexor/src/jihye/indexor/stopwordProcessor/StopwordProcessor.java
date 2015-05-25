@@ -75,10 +75,10 @@ public class StopwordProcessor {
 				while((string = br.readLine())!=null) {
 					string = br.readLine();
 					String []term = string.split(",");
-					//float idf = Float.parseFloat(term[1]);
-//					if(idf < avgIDF - 2) {
-//						continue;
-//					}
+					float idf = Float.parseFloat(term[1]);
+					if(idf < avgIDF - 2.9) {
+						continue;
+					}
 					if(term[0].compareTo("가") >= 0 ){
 						bw.write(string);
 						bw.newLine();

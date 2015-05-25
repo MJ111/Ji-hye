@@ -3,7 +3,6 @@ package jihye.PS;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -15,13 +14,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
-
 import org.apache.commons.lang3.ArrayUtils;
 
-
 public class IndexProcessor {
-	Map<String, Triple<Float, int[], float[]>> indices = null;
+	private Map<String, Triple<Float, int[], float[]>> indices = null;
 	
 	public IndexProcessor(String indexPath) throws Exception{
 		loadIndex(indexPath);
@@ -104,7 +100,10 @@ public class IndexProcessor {
 			Triple<Float, int[], float[]> posting = it.next();
 			merged = ArrayUtils.addAll(merged, posting.getMiddle());
 		}
-		Arrays.sort(merged);
+		if(merged != null)
+			Arrays.sort(merged);
+		else
+			return new ArrayList<ExtractedDocument>();
 		
 		//가장 많이 겹치는 문서의 개수를 가져온다.
 		int counter = 1;
@@ -140,10 +139,11 @@ public class IndexProcessor {
 					i++;
 				}
 			}
-		}
+		}		
 		
 		// 돌려줄 ExtractedDocument 를 만듭시다
 		List<ExtractedDocument> ret = new ArrayList<ExtractedDocument>();
+		if(documents == null) return ret;
 		for(int document : documents) {
 			ExtractedDocument ed = new ExtractedDocument(document);
 			for(String term : dictionary) {

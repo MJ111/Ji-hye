@@ -70,6 +70,7 @@ public class TestProblemsSolver {
 	        		rightAnswerNum++;
 //	        		System.out.println("right answer");
 	        	} else {
+	        		if(resultData.getSimilarity(rightAnswer - 1) == 0)
 	        		if (resultData.similiarty.get(rightAnswer-1).isNaN()) {
 	        			noData++;
 	        		}
@@ -82,7 +83,7 @@ public class TestProblemsSolver {
 	        		}
 
 	        		for (int index1 = 0; index1 < 4; index1++) {
-	        			out.write(resultData.choices.get(index1) + ": " + resultData.similiarty.get(index1));
+	        			out.write(resultData.getChoiceString(index1) + ": " + resultData.getSimilarity(index1));
 	        			out.newLine();
 	        		}
 	        		out.write("wrong answer - rightAnswer : " + rightAnswer + " jihye : " + resultAnswer);

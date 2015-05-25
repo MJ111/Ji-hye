@@ -8,8 +8,8 @@ import jihye.NLP.KeywordExtrator;
 
 public class VectorProcessor {
 	// ArrayList<String> mDictionary;
-	DatabaseManager databaseManager;
-	KeywordExtrator keywordExtractor;
+	private DatabaseManager databaseManager;
+	private KeywordExtrator keywordExtractor;
 
 	public VectorProcessor(KeywordExtrator keywordExtractor, DatabaseManager databaseManager) {
 		this.databaseManager = databaseManager;

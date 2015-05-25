@@ -1,11 +1,12 @@
 package jihye.PS;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class ProblemData {
-	public String problem;
-	public List<String> choices;
+	private String problem;
+	private List<String> choices;
 	private boolean hasChoices;
 
 	public ProblemData(String problem) {
@@ -34,5 +35,17 @@ public class ProblemData {
 	
 	public boolean hasChoice() {
 		return this.hasChoices;
+	}
+	
+	public String getProblem() {
+		return this.problem;
+	}
+	
+	public Iterator<String> getChoiceIterator() {
+		if(choices != null) {
+			return choices.iterator();
+		}else {
+			return null;
+		}
 	}
 }

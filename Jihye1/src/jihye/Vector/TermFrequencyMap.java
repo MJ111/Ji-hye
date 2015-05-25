@@ -3,7 +3,7 @@ package jihye.Vector;
 import java.util.*;
 
 public class TermFrequencyMap {
-	HashMap<String, Integer> termFrequency;
+	private HashMap<String, Integer> termFrequency;
 	private int wordCount = 0;
 	private String name = "";
 
@@ -53,10 +53,11 @@ public class TermFrequencyMap {
 				matchedCount++;
 		}
 
-		if (count == 0)
+		if (count == 0) {
 			return 0;
-		else
+		} else {
 			return (double) matchedCount / (double) count;
+		}
 	}
 
 	// 추가 메소드

@@ -2,10 +2,15 @@ package jihye.GUI;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
 
 import javax.swing.JPanel;
 
+import jihye.PS.Pair;
 import jihye.PS.ResultData;
+import jihye.PS.Triple;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -43,17 +48,32 @@ public class SimilarlityGraph {
 	private CategoryDataset createDataset(ResultData resultData) {
 
 		DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();
-
-		for (int i = 0; i < resultData.choices.size(); i++) {
-			// 일치하는 데이터가 없을시 일치도가 음수(-2)로 넘어오는데 이를 예외처리함.
-			if (resultData.similiarty.get(i) >= 0) {
-				categoryDataset.addValue(resultData.similiarty.get(i), "",
-						resultData.choices.get(i));
+		
+		//Make new list of similarity
+		ArrayList<Pair<String, Double>> data = new ArrayList<Pair<String,Double>>();
+		for(Iterator<Triple<String, Double, String>> it = resultData.getIterator(); it != null && it.hasNext();) {
+			Triple<String, Double, String> datum = it.next();
+			Pair<String, Double> newDatum = new Pair<String, Double>(datum.getLeft(), datum.getMiddle());
+			data.add(newDatum);
+		}
+		
+		//sort similarities
+		data.sort(new Comparator<Pair<String, Double>>() {
+			@Override
+			public int compare(Pair<String, Double> o1, Pair<String, Double> o2) {
+				return Double.compare(o1.getSecond(), o2.getSecond());
 			}
-			else {
-				categoryDataset.addValue(0, "", resultData.choices.get(i));
+		});
+		
+		for(Iterator<Pair<String, Double>> it = data.iterator(); it != null && it.hasNext();) {
+			Pair<String, Double> datum = it.next();
+			if(datum.getSecond() >= 0) {
+				categoryDataset.addValue(datum.getSecond(), "", datum.getFirst());
+			} else {
+				categoryDataset.addValue(0, "", datum.getFirst());
 			}
 		}
+		
 		return categoryDataset;
 	}
 

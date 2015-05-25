@@ -2,6 +2,7 @@ package jihye.PS;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
@@ -41,7 +42,7 @@ public class ProblemSolver {
 
 		// get problem tf
 		ArrayList<String> problemMorph = keywordExtractor
-				.analyzeDocument(problemData.problem);
+				.analyzeDocument(problemData.getProblem());
 		
 		if(problemMorph == null || problemMorph.size() == 0)
 			return null;
@@ -70,7 +71,8 @@ public class ProblemSolver {
 		}
 
 		// get choice tf
-		for (String choice : problemData.choices) {
+		for(Iterator<String> it = problemData.getChoiceIterator(); it != null && it.hasNext();) {
+			String choice = it.next();
 			// 보기에 like되는 문서들의 TFMap
 			ArrayList<TermFrequencyMap> choiceTFList =  null;
 			if(noChoices) {
@@ -130,10 +132,9 @@ public class ProblemSolver {
 	private void newTop4ResultData(ResultData resultData) {
 		TreeMap<Double, String> resultMap = new TreeMap<Double, String>(new SimComp());
 		
-		for (int index=0; index<resultData.choices.size(); index++) {
-			if (resultData.similiarty.get(index).isNaN()) continue;
-		
-			resultMap.put(resultData.similiarty.get(index), resultData.choices.get(index));
+		for(Iterator<Triple<String, Double, String>> it = resultData.getIterator(); it != null && it.hasNext();) {
+			Triple<String, Double, String> val = it.next();
+			resultMap.put(val.getMiddle(), val.getLeft());
 		}
 		
 		resultData.clear();
@@ -151,8 +152,7 @@ public class ProblemSolver {
 }
 
 
-class SimComp implements Comparator<Double>{
-	 
+class SimComp implements Comparator<Double>{	 
     @Override
     public int compare(Double d1, Double d2) {
         return d1 > d2 ? -1 : d1 == d2 ? 0 : 1;

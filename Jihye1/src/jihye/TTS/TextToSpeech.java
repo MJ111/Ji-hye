@@ -27,7 +27,7 @@ public class TextToSpeech extends Thread {
 //		}
 	}
 
-	public void readText() {
+	private void readText() {
 //		try {			
 //			sound = audio.getAudio(readText, Language.KOREAN);
 //			audio.play(sound);
@@ -36,17 +36,6 @@ public class TextToSpeech extends Thread {
 //		} catch (IOException e) {
 //			e.printStackTrace();
 //		}
-	}
-
-	public void readText(String text) {
-		try {
-			sound = audio.getAudio(text, Language.KOREAN);
-			audio.play(sound);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		} catch (JavaLayerException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 package jihye.Vector;
 
 public class DictionaryElement {
-	int index;
-	int documentFrequency;
+	public int index;
+	public int documentFrequency;
 
 	public DictionaryElement(int index, int documentFrequency) {
 		this.index = index;
