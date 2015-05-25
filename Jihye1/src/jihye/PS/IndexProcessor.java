@@ -181,9 +181,6 @@ public class IndexProcessor {
 				return Float.compare(o1.getSimilarityWithProblem(), o2.getSimilarityWithProblem());
 			}
 		});
-		
-		System.out.println("something");
-		//Vector<>
 	}
 	
 }

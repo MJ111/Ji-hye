@@ -61,18 +61,20 @@ public class SimilarlityGraph {
 		data.sort(new Comparator<Pair<String, Double>>() {
 			@Override
 			public int compare(Pair<String, Double> o1, Pair<String, Double> o2) {
-				return Double.compare(o1.getSecond(), o2.getSecond());
+				return o1.getSecond() == o2.getSecond() ? 0 : o1.getSecond() < o2.getSecond() ? 1 : -1;
 			}
 		});
 		
-		for(Iterator<Pair<String, Double>> it = data.iterator(); it != null && it.hasNext();) {
-			Pair<String, Double> datum = it.next();
+		for(int i = 0; i < data.size() && i < 4; i++) {
+			Pair<String, Double> datum = data.get(i);
 			if(datum.getSecond() >= 0) {
 				categoryDataset.addValue(datum.getSecond(), "", datum.getFirst());
 			} else {
 				categoryDataset.addValue(0, "", datum.getFirst());
 			}
 		}
+		
+		data.clear();
 		
 		return categoryDataset;
 	}
