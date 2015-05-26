@@ -2,6 +2,7 @@ package jihye.PS;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -27,9 +28,10 @@ public class ProblemSolver {
 		databaseManager = new DatabaseManager();
 		vectorProcessor = new VectorProcessor(keywordExtractor, databaseManager);
 		try {
-			indexProcessor = new IndexProcessor("./JihyeIndices00Delete.jhidx");
+			indexProcessor = new IndexProcessor("D:/WikiData/DeletedIndex.jhidxd");
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
@@ -54,9 +56,16 @@ public class ProblemSolver {
 		if(!problemData.hasChoice()) {
 			// 포스팅을 찾아온다.
 			noChoices = true;
-			int[] postings;
-			postings = indexProcessor.getMergedPostings(problemMorph, 0.9f);
-			problemData.choices = databaseManager.getPageTitlesFromPageIDs(postings);
+			List<ExtractedDocument> postings;
+			postings = indexProcessor.getDocumentsFromIndices(problemMorph, 0.9f);
+			indexProcessor.comparePostingsWithProblem(postings, problemMorph);
+			
+			ResultData rd = new ResultData(null);
+			for(ExtractedDocument ed : postings) {
+				//String title = databaseManager.getPageTitleFromPageID(ed.getDocumentID());
+				rd.add(String.valueOf(ed.getDocumentID()),(double)ed.getSimilarityWithProblem());
+			}
+			return rd;
 		}
 
 		// get choice tf

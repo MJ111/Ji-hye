@@ -1,5 +1,7 @@
 package jihye.GUI;
 
+import java.io.IOException;
+
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.ColorUIResource;
@@ -15,6 +17,10 @@ public class UserInterface {
 	private ResultFrameWithKeywords resultFrameWithKeywords;
 	private JihyeController jihyeController;
 	private String answerText;
+	
+	private MainChoice mainchoice;
+	
+	
 
 	public UserInterface(JihyeController jc) {
 		jihyeController = jc;
@@ -37,7 +43,10 @@ public class UserInterface {
 			}
 		}
 
-		mainFrame = new MainFrame(this);
+//		mainFrame = new MainFrame(this, true); 주석 처리 ..
+		mainchoice = new MainChoice(this);
+		
+		
 	}
 
 	public void initResultScreen(ResultData resultData, boolean hasChoice) {
@@ -64,9 +73,17 @@ public class UserInterface {
 		resultFrameWithGraph.setVisible(true);
 	}
 
-	public void showMainFrame() {
+	public void showMainFrame(boolean setmode) {
+		mainFrame = new MainFrame(this, setmode);
+		// 인자값을 넘겨주기 위해 showMainFrame 안으로 ..
 		mainFrame.setVisible(true);
+		
 	}
+	
+	public void showMainChoiceFrame() {
+		mainchoice.setVisible(true);
+	}
+
 
 	public void goMainFrame() {
 		resultFrameWithGraph.dispose();

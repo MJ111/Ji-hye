@@ -99,6 +99,23 @@ public class DatabaseManager {
 		}
 	}
 	
+	public String getPageTitleFromPageID(int page_id) {
+		String title = null;
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("select page_title from "
+					+ DATABASE_NAME + ".page where page_id=" + page_id);
+			
+			if(resultSet != null & resultSet.next()) {
+				title = resultSet.getString(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return title;
+	}
+	
 	public WikipediaPage getPageFromTitle(String page_title) {
 		WikipediaPage page = null;
 		
