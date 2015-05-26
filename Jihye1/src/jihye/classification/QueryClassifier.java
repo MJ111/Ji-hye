@@ -93,12 +93,7 @@ public class QueryClassifier {
 						}
 					}
 				}
-			}
-			
-//			String shortPs[] = shortProblems.split("\n"); 
-//			for (int i=0; i<shortPs.length; i+=2) {
-//				ArrayList<String> NNGs = keywordExtrator.analyzeNNG(shortPs[i]);
-//			}			
+			}		
 			
 			out.close();
 		} catch (IOException e) {

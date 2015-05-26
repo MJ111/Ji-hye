@@ -20,36 +20,36 @@ public class ClassifiedDocIdsLoader {
 	private ArrayList<Integer> placeNameDocIds;
 	private ArrayList<Integer> foodDocIds;
 	
-	public ArrayList<Integer> loadMatchingClassDocIdList(ClassTag classTag) {		
+	public ArrayList<Integer> getMatchingClassDocIds(ClassTag classTag) {		
 		switch (classTag) {
 		case CHARACTER:
-			return getDocIdList(characterDocIds, "37928");
+			return getDocIds(characterDocIds, "37928");
 		case ARCHITECTURE:
-			return getDocIdList(architectureDocIds, "240606");
+			return getDocIds(architectureDocIds, "240606");
 		case COUNTRY:
-			return getDocIdList(countryDocIds, "30737");
+			return getDocIds(countryDocIds, "30737");
 		case LIFE:
-			return getDocIdList(lifeDocIds, "9143");
+			return getDocIds(lifeDocIds, "9143");
 		case MUSIC:
-			return getDocIdList(musicDocIds, "11814");
+			return getDocIds(musicDocIds, "11814");
 		case SCIENCE:
-			return getDocIdList(scienceDocIds, "10480");
+			return getDocIds(scienceDocIds, "10480");
 		case LITERATURE:
-			return getDocIdList(literatureDocIds, "4392");
+			return getDocIds(literatureDocIds, "4392");
 		case ART:
-			return getDocIdList(artDocIds, "13227");
+			return getDocIds(artDocIds, "13227");
 		case PLACENAME:
-			return getDocIdList(placeNameDocIds, "343290");
+			return getDocIds(placeNameDocIds, "343290");
 		case EVENT:
-			return getDocIdList(eventDocIds, "254852");
+			return getDocIds(eventDocIds, "254852");
 		case FOOD:
-			return getDocIdList(foodDocIds, "10475");
+			return getDocIds(foodDocIds, "10475");
 		default:
 			return null;
 		}
 	}
 	
-	private ArrayList<Integer> getDocIdList(ArrayList<Integer> docIds, String classId) {
+	private ArrayList<Integer> getDocIds(ArrayList<Integer> docIds, String classId) {
 		if (docIds != null) {
 			return docIds;
 		} else {
