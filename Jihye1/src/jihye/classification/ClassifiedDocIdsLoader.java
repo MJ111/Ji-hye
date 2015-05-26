@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import jihye.classification.QueryClassification.ClassTag;
+import jihye.classification.QueryClassifier.ClassTag;
 
 public class ClassifiedDocIdsLoader {
 	private ArrayList<Integer> characterDocIds;

@@ -1,10 +1,10 @@
 package jihye.classification;
 
-import jihye.NLP.KeywordExtrator;
+import jihye.NLP.KeywordExtractor;
 
 public class ClassificationTester {
 	public static void main(String[] args) {
-		QueryClassification queryClassification = new QueryClassification(new KeywordExtrator());
+		QueryClassifier queryClassification = new QueryClassifier(new KeywordExtractor());
 		queryClassification.classifyAllQueryData();
 	}
 }

@@ -7,26 +7,29 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import jihye.DB.DatabaseManager;
-import jihye.NLP.KeywordExtrator;
+import jihye.NLP.KeywordExtractor;
 import jihye.Vector.Dictionary;
 import jihye.Vector.SimilarityResult;
 import jihye.Vector.SparseVector;
 import jihye.Vector.TermFrequencyMap;
 import jihye.Vector.VectorProcessor;
+import jihye.classification.QueryClassifier;
+import jihye.classification.QueryClassifier.ClassTag;
 
 public class ProblemSolver {
-
-	VectorProcessor vectorProcessor;
-	KeywordExtrator keywordExtractor;
-	IndexProcessor indexProcessor;
-	DatabaseManager databaseManager;
+	private VectorProcessor vectorProcessor;
+	private KeywordExtractor keywordExtractor;
+	private IndexProcessor indexProcessor;
+	private DatabaseManager databaseManager;
+	private QueryClassifier queryClassifier;
 	public TermFrequencyMap problemTF;
 	public ArrayList<TermFrequencyMap> maxSimilarityChoiceTFList;
 
 	public ProblemSolver() {
-		keywordExtractor = new KeywordExtrator();
+		keywordExtractor = new KeywordExtractor();
 		databaseManager = new DatabaseManager();
 		vectorProcessor = new VectorProcessor(keywordExtractor, databaseManager);
+		queryClassifier = new QueryClassifier(keywordExtractor);
 		try {
 			indexProcessor = new IndexProcessor("D:/WikiData/DeletedIndex.jhidxd");
 		} catch (Exception e) {
@@ -36,15 +39,19 @@ public class ProblemSolver {
 	}
 
 	public ResultData solve(ProblemData problemData) {
-		
 		maxSimilarityChoiceTFList = new ArrayList<TermFrequencyMap>();
 
-		// get problem tf
 		ArrayList<String> problemMorph = keywordExtractor
 				.analyzeDocument(problemData.problem);
 		
-		if(problemMorph == null || problemMorph.size() == 0)
+		if(problemMorph == null || problemMorph.size() == 0) {
 			return null;
+		}
+
+		ClassTag classTag = queryClassifier.classifyQuery(keywordExtractor.getLastNNG());
+		if (classTag != null) {
+			problemData.setClassTag(classTag);
+		}
 		
 		problemTF = new TermFrequencyMap("%problem%", problemMorph);
 		System.out.println(problemTF.toString());
@@ -120,13 +127,13 @@ public class ProblemSolver {
 		}
 		
 		if (noChoices) {
-			newTop4ResultData(resultData);
+			getTop4Answers(resultData);
 		}
 
 		return resultData;
 	}
 	
-	private void newTop4ResultData(ResultData resultData) {
+	private void getTop4Answers(ResultData resultData) {
 		TreeMap<Double, String> resultMap = new TreeMap<Double, String>(new SimComp());
 		
 		for (int index=0; index<resultData.choices.size(); index++) {
@@ -134,7 +141,7 @@ public class ProblemSolver {
 		
 			resultMap.put(resultData.similiarty.get(index), resultData.choices.get(index));
 		}
-		
+
 		resultData.clear();
 		Set<Double> set = resultMap.keySet();
         Object []resultMapKeys = set.toArray();
@@ -148,7 +155,6 @@ public class ProblemSolver {
         }
 	}
 }
-
 
 class SimComp implements Comparator<Double>{
 	 

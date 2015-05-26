@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import jihye.NLP.KeywordExtrator;
+import jihye.NLP.KeywordExtractor;
 
-public class QueryClassification {
-	private KeywordExtrator keywordExtrator;
+public class QueryClassifier {
+	private KeywordExtractor keywordExtrator;
 	private ArrayList<List<String>> tagWords;
 	private static final List<String> personWord = Arrays.asList(ClassTag.CHARACTER.getClassTag(), "사람","발핼인 ","화가", "음악가","작곡가", "철학자", "영화감독", "시인","작가", "정치인", "감독", "선교사", "실학자", "발명가","왕");
 	private static final List<String> countryWord = Arrays.asList(ClassTag.COUNTRY.getClassTag(), "섬나라");
@@ -40,7 +40,7 @@ public class QueryClassification {
 		}
 	}
 	
-	public QueryClassification(KeywordExtrator keywordExtrator) {
+	public QueryClassifier(KeywordExtractor keywordExtrator) {
 		this.keywordExtrator = keywordExtrator;
 		
 		tagWords = new ArrayList<List<String>>();
@@ -57,12 +57,10 @@ public class QueryClassification {
 		tagWords.add(scienceWord);
 	}
 	
-	public ClassTag classifyQuery(String query) {
-		ArrayList<String> NNGs = keywordExtrator.analyzeNNG(query);
-		
-		if (NNGs.size() > 0) {
+	public ClassTag classifyQuery(String lastNNG) {
+		if (lastNNG != null) {
 			for (List<String> word : tagWords) {
-				if (word.contains(NNGs.get(NNGs.size()-1))) {
+				if (word.contains(lastNNG)) {
 					return ClassTag.valueOf(word.get(0));
 				}
 			}
@@ -81,11 +79,12 @@ public class QueryClassification {
 			
 			String choicePs[] = choiceProblems.split("\n");			
 			for (int i=0; i<choicePs.length; i+=3) {
-				ArrayList<String> NNGs = keywordExtrator.analyzeNNG(choicePs[i]);
+				keywordExtrator.analyzeDocument(choicePs[i]);
+				String lastNNG = keywordExtrator.getLastNNG();
 				
-				if (NNGs.size() > 0) {
+				if (lastNNG != null) {
 					for (List<String> word : tagWords) {
-						if (word.contains(NNGs.get(NNGs.size()-1))) {
+						if (word.contains(lastNNG)) {
 							out.write(choicePs[i]);
 							out.newLine();
 							out.write(word.get(0));

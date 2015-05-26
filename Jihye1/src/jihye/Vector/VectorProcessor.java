@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 import jihye.DB.DatabaseManager;
 import jihye.DB.WikipediaPage;
-import jihye.NLP.KeywordExtrator;
+import jihye.NLP.KeywordExtractor;
 
 public class VectorProcessor {
 	// ArrayList<String> mDictionary;
 	DatabaseManager databaseManager;
-	KeywordExtrator keywordExtractor;
+	KeywordExtractor keywordExtractor;
 
-	public VectorProcessor(KeywordExtrator keywordExtractor, DatabaseManager databaseManager) {
+	public VectorProcessor(KeywordExtractor keywordExtractor, DatabaseManager databaseManager) {
 		this.databaseManager = databaseManager;
 		this.keywordExtractor = keywordExtractor;
 	}

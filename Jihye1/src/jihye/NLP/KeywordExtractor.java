@@ -7,17 +7,19 @@ import java.util.List;
 import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
 import kr.co.shineware.util.common.model.Pair;
 
-public class KeywordExtrator {
+public class KeywordExtractor {
 	private List<String> morphTag = Arrays.asList("NNG", "NNP", "NR", "SN", "VV", "VA", "VX", "XR", "NF", "NV", "XPN");
 	private List<String> verbTag = Arrays.asList("VV", "VA", "VX");
 	private Komoran komoran;
+	private String lastNNG;
 	
-	public KeywordExtrator() {
+	public KeywordExtractor() {
 		komoran = new Komoran("./resources/models-light");
 	}
 
 	public ArrayList<String> analyzeDocument(String document) {
 		ArrayList<String> morphArrayList = new ArrayList<String>();
+		lastNNG = null;
 		
 		@SuppressWarnings("unchecked")
 		List<List<Pair<String, String>>> result = komoran.analyze(document);
@@ -30,24 +32,17 @@ public class KeywordExtrator {
 					} else {
 						morphArrayList.add(wordMorph.getFirst());
 					}
+					
+					if (wordMorph.getSecond().equals("NNG")){
+						lastNNG = wordMorph.getFirst();
+					}
 				}
 			}
 		}
 		return morphArrayList;
 	}
-	
-	public ArrayList<String> analyzeNNG(String document) {
-		ArrayList<String> NNGList = new ArrayList<>();
 
-		@SuppressWarnings("unchecked")
-		List<List<Pair<String, String>>> result = komoran.analyze(document);
-		for (List<Pair<String, String>> eojeolResult : result) {
-			for (Pair<String, String> wordMorph : eojeolResult) {
-				if (wordMorph.getSecond().equals("NNG")){
-					NNGList.add(wordMorph.getFirst());
-				}
-			}
-		}
-		return NNGList;
+	public String getLastNNG() {
+		return lastNNG;
 	}
 }
