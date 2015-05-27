@@ -71,7 +71,8 @@ public class TestProblemsSolver {
 //	        		System.out.println("right answer");
 	        	} else {
 	        		if(resultData.getSimilarity(rightAnswer - 1) == 0)
-	        		if (resultData.similiarty.get(rightAnswer-1).isNaN()) {
+	        			
+	        		if (Double.isNaN(resultData.getSimilarity(rightAnswer - 1))) {
 	        			noData++;
 	        		}
 	        		

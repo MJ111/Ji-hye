@@ -85,8 +85,8 @@ public class DatabaseManager {
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement
-					.executeQuery("select page_title from " + DATABASE_NAME
-							+ ".page where page_id=" + page_id);
+					.executeQuery("select name from " + DATABASE_NAME
+							+ ".page where pageId=" + page_id);
 
 			if (resultSet != null & resultSet.next()) {
 				title = resultSet.getString(1);

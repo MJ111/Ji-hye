@@ -286,36 +286,15 @@ public class MainFrame extends javax.swing.JFrame {
 
 	}
 
-	private void setButtonEventListeners(final UserInterface ui) {
-		
-		if(!noChoiceModeFlag){
-			solveBtn.addActionListener(choiceActionListener);
-		}
-		else{
-			solveBtn.addActionListener(noChoiceActionListener);
-		}
+	private void setButtonEventListeners(final UserInterface ui) {	
 		//모드에 따른 버튼 액션 리스너 .. 위에서 boolean 값을 조정했으므로 반대로 .. 
-		
-		noChoiceActionListener = new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				solveNoChoiceProblem(ui);
-			}
-		};
-		
-		choiceActionListener = new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				solveChoiceProblem(evt, ui);
-			}
-		};
 		
 		closeBtn.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				dispose();
 				ui.terminateMainProgram();
 			}
-		});
-
-		
+		});		
 		
 		refreshBtn.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -342,6 +321,18 @@ public class MainFrame extends javax.swing.JFrame {
 				}				
 			}
 		});
+		
+		solveBtn.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(noChoiceModeFlag) {
+					solveNoChoiceProblem(ui);
+				} else {
+					solveChoiceProblem(ui);
+				}
+				
+			}
+			
+		});
 	}
 
 	private void refreshBtnActionPerformed(ActionEvent evt) {
@@ -352,7 +343,7 @@ public class MainFrame extends javax.swing.JFrame {
 		setTextField(choice4TextField, hintFont, "4번");
 	}
 
-	private void solveChoiceProblem(ActionEvent evt, final UserInterface ui) {
+	private void solveChoiceProblem(final UserInterface ui) {
 		ProblemData problemData = new ProblemData(problemTextArea.getText(),
 				choice1TextField.getText(), choice2TextField.getText(),
 				choice3TextField.getText(), choice4TextField.getText());

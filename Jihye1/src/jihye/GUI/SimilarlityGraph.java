@@ -65,6 +65,10 @@ public class SimilarlityGraph {
 			}
 		});
 		
+		for(Pair<String, Double> datum : data) {
+			System.out.println(datum.getFirst() + " : " + datum.getSecond());
+		}
+		
 		for(int i = 0; i < data.size() && i < 4; i++) {
 			Pair<String, Double> datum = data.get(i);
 			if(datum.getSecond() >= 0) {

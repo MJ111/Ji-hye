@@ -49,10 +49,10 @@ public class ProblemSolver {
 			return null;
 		}
 
-		ClassTag classTag = queryClassifier.classifyQuery(keywordExtractor.getLastNNG());
-		if (classTag != null) {
-			problemData.setClassTag(classTag);
-		}
+//		ClassTag classTag = queryClassifier.classifyQuery(keywordExtractor.getLastNNG());
+//		if (classTag != null) {
+//			problemData.setClassTag(classTag);
+//		}
 		
 		problemTF = new TermFrequencyMap("%problem%", problemMorph);
 		System.out.println(problemTF.toString());
