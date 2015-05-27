@@ -19,6 +19,8 @@ public class UserInterface {
 	private String answerText;
 	
 	private MainChoice mainchoice;
+	
+	
 
 	public UserInterface(JihyeController jc) {
 		jihyeController = jc;

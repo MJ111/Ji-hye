@@ -4,10 +4,13 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import jihye.classification.QueryClassifier.ClassTag;
+
 public class ProblemData {
 	private String problem;
 	private List<String> choices;
 	private boolean hasChoices;
+	private ClassTag classTag;
 
 	public ProblemData(String problem) {
 		this.problem = problem;
@@ -33,6 +36,14 @@ public class ProblemData {
 		this.hasChoices = true;
 	}
 	
+	public void setClassTag(ClassTag classTag) {
+		this.classTag = classTag;
+	}
+	
+	public ClassTag getClassTag() {
+		return classTag;
+	}
+
 	public boolean hasChoice() {
 		return this.hasChoices;
 	}
