@@ -22,7 +22,7 @@ public class NoChoiceTestProblemsSolver {
 	
 	public ArrayList<String> readFile() throws IOException {
 		ArrayList<String> fileString = new ArrayList<String>();
-		BufferedReader br = new BufferedReader(new FileReader("./resources/problems.txt"));
+		BufferedReader br = new BufferedReader(new FileReader("./resources/short_problems.txt"));
 	    try {
 	        String line = br.readLine();
 
@@ -41,28 +41,19 @@ public class NoChoiceTestProblemsSolver {
 			BufferedWriter out = new BufferedWriter(new FileWriter("noChoiceSolveData.txt"));
 			
 			int rightAnswerNum = 0;
-	        int count = 0;
-	        for(int index = 0; index < fileString.size(); index+=3) {
+	        int problemCount = 0;
+	        for(int index = 0; index < fileString.size(); index+=2) {
 	        	String problem = fileString.get(index);
-	        	if (!problem.contains("누구입니까?")) {
-	        		continue;
-	        	}
-	        	int rightAnswer = 0;
-	        	try {
-	        		rightAnswer = Integer.parseInt(fileString.get(index+2));
-	        	} catch (NumberFormatException e) {
-	        		e.printStackTrace();
-	        		continue;
-	        	}	        	
+
+	        	ResultData resultData = problemSolver.solve(new ProblemData(problem));
 	        	
-	        	ResultData resultData = problemSolver.solve(new ProblemData(fileString.get(index)));
-	        	String[] choices = fileString.get(index+1).split(",");
-	        	String rightAnswerString = choices[rightAnswer-1];
+	        	String rightAnswerString = fileString.get(index+1);
 	        	String jihyeAnswer  = resultData.getAnswerString();
+	        	
 	        	if(rightAnswerString.equals(jihyeAnswer)) {
 	        		rightAnswerNum++;
 	        	}else {     		
-	        		out.write(problemSolver.problemTF.toString());
+	        		out.write("문제: " + problemSolver.problemTF.toString());
 	        		out.newLine();
 	        		
 	        		for(Iterator<Triple<String, Double, String>> it = resultData.getIterator(); it != null && it.hasNext();) {
@@ -73,13 +64,13 @@ public class NoChoiceTestProblemsSolver {
 	        		out.write("정답 : " + rightAnswerString + " jihye : " + jihyeAnswer);
 	        		out.newLine();
 	        	}
-	        	count++;
+	        	problemCount++;
 	        }
 	        out.write("rightAnswerNum : " + rightAnswerNum);
 	        out.newLine();
-	        out.write("all : " + count);
+	        out.write("all : " + problemCount);
 	        out.newLine();
-		    out.write("percent : " + (double)rightAnswerNum/count);
+		    out.write("percent : " + (double)rightAnswerNum/problemCount);
 		    out.newLine();
 		      
 		    out.close();

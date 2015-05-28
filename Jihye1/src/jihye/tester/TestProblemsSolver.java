@@ -53,7 +53,7 @@ public class TestProblemsSolver {
 	        	}
 	        	int rightAnswer = 0;
 	        	try {
-	        		rightAnswer = Integer.parseInt(problemsString[index+2]);
+	        		rightAnswer = Integer.parseInt(problemsString[index+2].trim());
 	        	} catch (NumberFormatException e) {
 	        		e.printStackTrace();
 	        		continue;
