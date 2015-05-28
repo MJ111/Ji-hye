@@ -77,6 +77,10 @@ public class ExtractedDocument implements Comparator<ExtractedDocument> , Compar
 	public float getSimilarityWithProblem() {
 		return this.similarity;
 	}
+	
+	public void weightingToSimilarity() {
+		this.similarity *= 1.5;
+	}
 
 	@Override
 	public int compare(ExtractedDocument o1, ExtractedDocument o2) {

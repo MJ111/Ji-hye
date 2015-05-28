@@ -14,30 +14,20 @@ import jihye.NLP.KeywordExtractor;
 public class QueryClassifier {
 	private KeywordExtractor keywordExtrator;
 	private ArrayList<List<String>> tagWords;
-	private static final List<String> personWord = Arrays.asList(ClassTag.CHARACTER.getClassTag(), "사람","발핼인 ","화가", "음악가","작곡가", "철학자", "영화감독", "시인","작가", "정치인", "감독", "선교사", "실학자", "발명가","왕");
-	private static final List<String> countryWord = Arrays.asList(ClassTag.COUNTRY.getClassTag(), "섬나라");
-	private static final List<String> lifeWord = Arrays.asList(ClassTag.LIFE.getClassTag(), "공룡", "나무", "식물", "곤충","철새","매화");
-	private static final List<String> musicWord = Arrays.asList(ClassTag.MUSIC.getClassTag(), "곡", "타령", "교향곡", "창법", "악기","민요");
-	private static final List<String> literatureWord = Arrays.asList(ClassTag.LITERATURE.getClassTag(), "소설", "저서", "책", "신화", "서사시","역사서");
-	private static final List<String> artWord = Arrays.asList(ClassTag.ART.getClassTag(), "그림");
-	private static final List<String> architectureWord = Arrays.asList(ClassTag.ARCHITECTURE.getClassTag(), "탑", "건축물");
-	private static final List<String> placeNameWord = Arrays.asList(ClassTag.PLACENAME.getClassTag(), "도시", "강", "유적", "본거지", "유적지", "지역", "바다", "곳", "강","수도","고개","대륙");
-	private static final List<String> eventWord = Arrays.asList(ClassTag.EVENT.getClassTag(), "전투", "혁명", "대첩","전쟁");
-	private static final List<String> foodWord = Arrays.asList(ClassTag.FOOD.getClassTag());
-	private static final List<String> scienceWord = Arrays.asList(ClassTag.SCIENCE.getClassTag(), "비타민","호르몬", "원리", "지층", "핼설", "현상", "화석", "성분", "영양소", "기체", "원소", "기관","금속", "물질", "작용", "단백질","물질");
+	private static final List<String> personWord = Arrays.asList(ClassTag.CHARACTER.toString(), "인물", "사람","발핼인 ","화가", "음악가","작곡가", "철학자", "영화감독", "시인","작가", "정치인", "감독", "선교사", "실학자", "발명가","왕");
+	private static final List<String> countryWord = Arrays.asList(ClassTag.COUNTRY.toString(), "나라", "섬나라");
+	private static final List<String> lifeWord = Arrays.asList(ClassTag.LIFE.toString(), "생물","공룡", "나무", "식물", "곤충","철새","매화");
+	private static final List<String> musicWord = Arrays.asList(ClassTag.MUSIC.toString(), "음악","곡", "타령", "교향곡", "창법", "악기","민요","관악");
+	private static final List<String> literatureWord = Arrays.asList(ClassTag.LITERATURE.toString(), "문학","소설", "저서", "책", "신화", "서사시","역사서");
+	private static final List<String> artWord = Arrays.asList(ClassTag.ART.toString(), "그림");
+	private static final List<String> architectureWord = Arrays.asList(ClassTag.ARCHITECTURE.toString(), "탑", "건축물");
+	private static final List<String> placeNameWord = Arrays.asList(ClassTag.PLACENAME.toString(), "지명","도시", "강", "유적", "본거지", "유적지", "지역", "바다", "곳", "강","수도","고개","대륙");
+	private static final List<String> eventWord = Arrays.asList(ClassTag.EVENT.toString(), "사건","전투", "혁명", "대첩","전쟁");
+	private static final List<String> foodWord = Arrays.asList(ClassTag.FOOD.toString(),"음식","채소");
+	private static final List<String> scienceWord = Arrays.asList(ClassTag.SCIENCE.toString(), "비타민","호르몬", "원리", "지층", "핼설", "현상", "화석", "성분", "영양소", "기체", "원소", "기관","금속", "물질", "작용", "단백질","물질");
 	
 	public enum ClassTag {
-		CHARACTER("인물"), COUNTRY("나라"), LIFE("생물"), SCIENCE("과학"), MUSIC("음악"), LITERATURE("문학"), ART("미술"), ARCHITECTURE("건축"), PLACENAME("지명"), EVENT("사건"), FOOD("음식");
-		
-		private String classTag;
-		
-		ClassTag (String classTag) {
-			this.classTag = classTag;
-		}
-		
-		public String getClassTag() {
-			return this.classTag;
-		}
+		CHARACTER, COUNTRY, LIFE, SCIENCE, MUSIC, LITERATURE, ART, ARCHITECTURE, PLACENAME, EVENT, FOOD;
 	}
 	
 	public QueryClassifier(KeywordExtractor keywordExtrator) {

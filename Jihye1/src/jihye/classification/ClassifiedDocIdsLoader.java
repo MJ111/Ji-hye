@@ -61,7 +61,7 @@ public class ClassifiedDocIdsLoader {
 		ArrayList<Integer> docIds = new ArrayList<Integer>(); 
 		
 	    try {
-			BufferedReader br = new BufferedReader(new FileReader("./resources/" + fileName + ".txt"));
+			BufferedReader br = new BufferedReader(new FileReader("./resources/classified-documents/" + fileName + ".txt"));
 			
 	        String line = br.readLine();
 	        while (line != null) {

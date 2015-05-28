@@ -1,11 +1,8 @@
 package jihye.PS;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeMap;
 
 import jihye.DB.DatabaseManager;
 import jihye.NLP.KeywordExtractor;
@@ -14,6 +11,7 @@ import jihye.Vector.SimilarityResult;
 import jihye.Vector.SparseVector;
 import jihye.Vector.TermFrequencyMap;
 import jihye.Vector.VectorProcessor;
+import jihye.classification.ClassifiedDocIdsLoader;
 import jihye.classification.QueryClassifier;
 import jihye.classification.QueryClassifier.ClassTag;
 
@@ -23,6 +21,7 @@ public class ProblemSolver {
 	private IndexProcessor indexProcessor;
 	private DatabaseManager databaseManager;
 	private QueryClassifier queryClassifier;
+	private ClassifiedDocIdsLoader classifiedDocIdsLoader;
 	public TermFrequencyMap problemTF;
 	public ArrayList<TermFrequencyMap> maxSimilarityChoiceTFList;
 
@@ -31,52 +30,75 @@ public class ProblemSolver {
 		databaseManager = new DatabaseManager();
 		vectorProcessor = new VectorProcessor(keywordExtractor, databaseManager);
 		queryClassifier = new QueryClassifier(keywordExtractor);
+		classifiedDocIdsLoader = new ClassifiedDocIdsLoader();
 		try {
 			indexProcessor = new IndexProcessor("D:/WikiData/DeletedIndex.jhidxd");
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.exit(1);
 		}
 	}
 
 	public ResultData solve(ProblemData problemData) {
-		maxSimilarityChoiceTFList = new ArrayList<TermFrequencyMap>();
-
-		ArrayList<String> problemMorph = keywordExtractor
-				.analyzeDocument(problemData.getProblem());
-		
+		ArrayList<String> problemMorph = keywordExtractor.analyzeDocument(problemData.getProblem());
 		if(problemMorph == null || problemMorph.size() == 0) {
 			return null;
 		}
-
-//		ClassTag classTag = queryClassifier.classifyQuery(keywordExtractor.getLastNNG());
-//		if (classTag != null) {
-//			problemData.setClassTag(classTag);
-//		}
+		analyzeProblem(problemData, problemMorph);
+		
+		ResultData resultData = new ResultData(problemTF.toString());
+		
+		if(!problemData.hasChoice()) {
+			return getAnswerForNoChoiceProblem(resultData, problemMorph, problemData);
+		} else {
+			maxSimilarityChoiceTFList = new ArrayList<TermFrequencyMap>();
+			return getAnswerForChoiceProblem(problemData, resultData, false);
+		}
+	}
+	
+	private void analyzeProblem(ProblemData problemData, ArrayList<String> problemMorph) {
+		ClassTag classTag = queryClassifier.classifyQuery(keywordExtractor.getLastNNG());
+		if (classTag != null) {
+			problemData.setClassTag(classTag);
+		}
 		
 		problemTF = new TermFrequencyMap("%problem%", problemMorph);
 		System.out.println(problemTF.toString());
+	}
+	
+	private ResultData getAnswerForNoChoiceProblem(ResultData resultData, ArrayList<String> problemMorph, ProblemData problemData) {
+		List<ExtractedDocument> postings;
+		postings = indexProcessor.getDocumentsFromIndices(problemMorph, 0.9f);
+		indexProcessor.comparePostingsWithProblem(postings, problemMorph);
 
-		Dictionary dictionary = new Dictionary();
-		ResultData resultData = new ResultData(problemTF.toString());
+		weightingToMatchedClassDocuments(postings, problemData);
 		
-		boolean noChoices = false;
-		if(!problemData.hasChoice()) {
-			// 포스팅을 찾아온다.
-			noChoices = true;
-			List<ExtractedDocument> postings;
-			postings = indexProcessor.getDocumentsFromIndices(problemMorph, 0.9f);
-			indexProcessor.comparePostingsWithProblem(postings, problemMorph);
-			
-			ResultData rd = new ResultData(null);
-			for(ExtractedDocument ed : postings) {
-				String title = databaseManager.getPageTitleFromPageID(ed.getDocumentID());
-				rd.add(title,(double)ed.getSimilarityWithProblem());
-			}
-			postings.clear();
-			return rd;
+		for(ExtractedDocument ed : postings) {
+			String title = databaseManager.getPageTitleFromPageID(ed.getDocumentID());
+			resultData.add(title,(double)ed.getSimilarityWithProblem());
 		}
-
+		postings.clear();
+		
+		return resultData;
+	}
+	
+	private void weightingToMatchedClassDocuments(List<ExtractedDocument> postings, ProblemData problemData) {
+		ClassTag classTag = problemData.getClassTag();
+		if (classTag == null) {
+			return;
+		}
+		
+		ArrayList<Integer> docIds = classifiedDocIdsLoader.getMatchingClassDocIds(classTag);
+		
+		for (ExtractedDocument extractedDocument : postings) {
+			if (docIds.contains(new Integer(extractedDocument.getDocumentID()))) {
+				System.out.println("Matched class document : " + databaseManager.getPageTitleFromPageID(extractedDocument.getDocumentID()));
+				extractedDocument.weightingToSimilarity();
+			}
+		}
+	}
+	
+	private ResultData getAnswerForChoiceProblem(ProblemData problemData, ResultData resultData, Boolean noChoices) {
 		// get choice tf
 		for(Iterator<String> it = problemData.getChoiceIterator(); it != null && it.hasNext();) {
 			String choice = it.next();
@@ -110,6 +132,7 @@ public class ProblemSolver {
 		}
 
 		// 사전 생성
+		Dictionary dictionary = new Dictionary();
 		dictionary.add(problemTF);
 		for (TermFrequencyMap ctf : maxSimilarityChoiceTFList) {
 			dictionary.add(ctf);
@@ -129,38 +152,6 @@ public class ProblemSolver {
 			}
 		}
 		
-		if (noChoices) {
-			getTop4Answers(resultData);
-		}
-
 		return resultData;
 	}
-	
-	private void getTop4Answers(ResultData resultData) {
-		TreeMap<Double, String> resultMap = new TreeMap<Double, String>(new SimComp());
-		
-		for(Iterator<Triple<String, Double, String>> it = resultData.getIterator(); it != null && it.hasNext();) {
-			Triple<String, Double, String> val = it.next();
-			resultMap.put(val.getMiddle(), val.getLeft());
-		}
-
-		resultData.clear();
-		Set<Double> set = resultMap.keySet();
-        Object []resultMapKeys = set.toArray();
-        
-        int resultDataSize = resultMapKeys.length;
-        int choiceSize = resultDataSize < 4 ? resultDataSize : 4;
-        
-        for(int i = 0; i < choiceSize; i++) {
-        	Double key = (Double)resultMapKeys[i];            
-            resultData.add((String)resultMap.get(key), key);
-        }
-	}
-}
-
-class SimComp implements Comparator<Double>{	 
-    @Override
-    public int compare(Double d1, Double d2) {
-        return d1 > d2 ? -1 : d1 == d2 ? 0 : 1;
-    }    
 }
