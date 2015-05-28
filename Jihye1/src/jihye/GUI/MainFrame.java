@@ -1,12 +1,9 @@
 package jihye.GUI;
 
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +17,6 @@ import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.text.JTextComponent;
@@ -29,20 +25,14 @@ import jihye.PS.ProblemData;
 
 @SuppressWarnings("serial")
 public class MainFrame extends javax.swing.JFrame {
-	private Point mouseDownCompCoords = null;
+	private Point mouseDownCompCoords;
 	private Font hintFont;
-	private Boolean noChoiceModeFlag = null;
+	private Boolean isChoiceVisible;
 	private ActionListener noChoiceActionListener;
 	private ActionListener choiceActionListener;
-	
-	private Image mainImage;
 
-	/**
-	 * Creates new form frame1
-	 */
-	// 모드 인자 넘겨 받아 표시  
-	public MainFrame(UserInterface ui, boolean noChoiceModeFlagInput) {
-		noChoiceModeFlag = noChoiceModeFlagInput;
+	public MainFrame(UserInterface ui, boolean isChoiceVisible) {
+		this.isChoiceVisible = isChoiceVisible;
 		initComponents();
 		setButtonEventListeners(ui);
 	}
@@ -97,9 +87,8 @@ public class MainFrame extends javax.swing.JFrame {
 		setTextField(choice3TextField, hintFont, "3번");
 		setTextField(choice4TextField, hintFont, "4번");
 		
-		
 		//  모드 확인 
-		setChoicesVisible(noChoiceModeFlag);	
+		setChoicesVisible(isChoiceVisible);	
 
 		problemJScrollPane.setViewportView(problemTextArea);
 		
@@ -240,19 +229,17 @@ public class MainFrame extends javax.swing.JFrame {
 		});
 	}
 	
-	private void setChoicesVisible(boolean visible) {
-		if(visible) {
+	private void setChoicesVisible(boolean isChoiceVisible) {
+		if(isChoiceVisible) {
 			choice1TextField.setVisible(true);
 			choice2TextField.setVisible(true);
 			choice3TextField.setVisible(true);
 			choice4TextField.setVisible(true);
-			noChoiceModeFlag = false;
 		} else {
 			choice1TextField.setVisible(false);
 			choice2TextField.setVisible(false);
 			choice3TextField.setVisible(false);
 			choice4TextField.setVisible(false);
-			noChoiceModeFlag = true;
 		}
 	}
 
@@ -304,30 +291,30 @@ public class MainFrame extends javax.swing.JFrame {
 		
 		changeModeButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				if (noChoiceModeFlag) {
-					setChoicesVisible(true);
-					
-					solveBtn.removeActionListener(noChoiceActionListener);
-					solveBtn.addActionListener(choiceActionListener);
-					
-					noChoiceModeFlag = false;
-				} else {
+				if (isChoiceVisible) {
 					setChoicesVisible(false);
 					
 					solveBtn.removeActionListener(choiceActionListener);
 					solveBtn.addActionListener(noChoiceActionListener);
 					
-					noChoiceModeFlag = true;
+					isChoiceVisible = false;
+				} else {
+					setChoicesVisible(true);
+					
+					solveBtn.removeActionListener(noChoiceActionListener);
+					solveBtn.addActionListener(choiceActionListener);
+					
+					isChoiceVisible = true;
 				}				
 			}
 		});
 		
 		solveBtn.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(noChoiceModeFlag) {
-					solveNoChoiceProblem(ui);
-				} else {
+				if(isChoiceVisible) {
 					solveChoiceProblem(ui);
+				} else {
+					solveNoChoiceProblem(ui);
 				}
 				
 			}

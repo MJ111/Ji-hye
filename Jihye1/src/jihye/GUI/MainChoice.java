@@ -25,18 +25,10 @@ import javax.swing.plaf.basic.BasicButtonUI;
  *
  */
 public class MainChoice extends javax.swing.JFrame {
-	
+	private static final long serialVersionUID = -381282916207032721L;
 	private javax.swing.JPanel mainJPanel;
 	private javax.swing.JPanel btnJPanel;
 	private javax.swing.JPanel graphJPanel;
-
-	
-//	private Button SelectiveButton;
-//	private Button EssayButton;
-
-//	private ImageButton SelectiveButton;
-//	private ImageButton EssayButton;
-	
 	private JButton SelectiveButton ;
 	private JButton EssayButton ;
 	
@@ -107,24 +99,16 @@ public class MainChoice extends javax.swing.JFrame {
 		mainJPanel = new javax.swing.JPanel();
 		btnJPanel = new javax.swing.JPanel();
 		
-//		SelectiveButton = new Button("multiple choice");
-//		EssayButton = new Button("Essay choice");
-		
-//		SelectiveButton = new ImageButton("Selective.png");
-//		EssayButton = new ImageButton("Essay.png");
-		
 		SelectiveButton = new JButton("Multiple Choice");
 		SelectiveButton.setFont(new Font("Calibri", Font.BOLD, 16));
 		SelectiveButton.setBackground(new Color(218,81,83));
 		SelectiveButton.setForeground(Color.white);
-	        // customize the button with your own look
 		SelectiveButton.setUI(new StyledButtonUI());
 		
 		EssayButton = new JButton("Essay Choice");
 		EssayButton.setFont(new Font("Calibri", Font.BOLD, 16));
 		EssayButton.setBackground(new Color(218,81,83));
 		EssayButton.setForeground(Color.white);
-	        // customize the button with your own look
 		EssayButton.setUI(new StyledButtonUI());
 		
 		

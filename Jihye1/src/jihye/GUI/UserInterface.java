@@ -17,11 +17,8 @@ public class UserInterface {
 	private ResultFrameWithKeywords resultFrameWithKeywords;
 	private JihyeController jihyeController;
 	private String answerText;
-	
 	private MainChoice mainchoice;
 	
-	
-
 	public UserInterface(JihyeController jc) {
 		jihyeController = jc;
 
@@ -43,10 +40,7 @@ public class UserInterface {
 			}
 		}
 
-//		mainFrame = new MainFrame(this, true); 주석 처리 ..
 		mainchoice = new MainChoice(this);
-		
-		
 	}
 
 	public void initResultScreen(ResultData resultData, boolean hasChoice) {
@@ -73,9 +67,8 @@ public class UserInterface {
 		resultFrameWithGraph.setVisible(true);
 	}
 
-	public void showMainFrame(boolean setmode) {
-		mainFrame = new MainFrame(this, setmode);
-		// 인자값을 넘겨주기 위해 showMainFrame 안으로 ..
+	public void showMainFrame(boolean isChoiceVisible) {
+		mainFrame = new MainFrame(this, isChoiceVisible);
 		mainFrame.setVisible(true);
 		
 	}
