@@ -102,4 +102,8 @@ public class ResultData {
 			return data.get(choice - 1).getLeft();
 		}
 	}
+	
+	public int size() {
+		return data.size();
+	}
 }

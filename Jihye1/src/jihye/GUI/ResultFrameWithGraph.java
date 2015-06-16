@@ -67,8 +67,13 @@ public class ResultFrameWithGraph extends javax.swing.JFrame {
 		btnJPanel.add(moreJButton);
 
 		SimilarlityGraph similarlityGraph = new SimilarlityGraph();
-		graphJPanel = similarlityGraph.getChart(resultData,
-				resultData.getAnswer() - 1);
+		
+		if(resultData.size() != 4) {
+			graphJPanel = similarlityGraph.getChart(resultData, 0);
+		}else {
+			graphJPanel = similarlityGraph.getChart(resultData,
+					resultData.getAnswer() - 1);
+		}
 
 		javax.swing.GroupLayout graphJPanelLayout = new javax.swing.GroupLayout(
 				graphJPanel);
