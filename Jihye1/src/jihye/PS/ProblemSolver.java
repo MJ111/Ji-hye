@@ -32,7 +32,7 @@ public class ProblemSolver {
 		queryClassifier = new QueryClassifier(keywordExtractor);
 		classifiedDocIdsLoader = new ClassifiedDocIdsLoader();
 		try {
-			indexProcessor = new IndexProcessor("D:/WikiData/DeletedIndex.jhidxd");
+			indexProcessor = new IndexProcessor("./resources/DeletedIndex.jhidxd");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -68,7 +68,7 @@ public class ProblemSolver {
 	
 	private ResultData getAnswerForNoChoiceProblem(ResultData resultData, ArrayList<String> problemMorph, ProblemData problemData) {
 		List<ExtractedDocument> postings;
-		postings = indexProcessor.getDocumentsFromIndices(problemMorph, 0.9f);
+		postings = indexProcessor.getDocumentsFromIndices(problemMorph, 0.75f);
 		indexProcessor.comparePostingsWithProblem(postings, problemMorph);
 
 		weightingToMatchedClassDocuments(postings, problemData);

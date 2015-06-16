@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javafx.collections.transformation.SortedList;
 import jihye.Vector.SimilarityResult;
 
 public class ResultData {

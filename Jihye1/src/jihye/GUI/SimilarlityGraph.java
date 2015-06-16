@@ -3,6 +3,7 @@ package jihye.GUI;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -58,7 +59,7 @@ public class SimilarlityGraph {
 		}
 		
 		//sort similarities
-		data.sort(new Comparator<Pair<String, Double>>() {
+		Collections.sort(data,new Comparator<Pair<String, Double>>() {
 			@Override
 			public int compare(Pair<String, Double> o1, Pair<String, Double> o2) {
 				return o1.getSecond() == o2.getSecond() ? 0 : o1.getSecond() < o2.getSecond() ? 1 : -1;

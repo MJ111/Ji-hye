@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -175,7 +176,7 @@ public class IndexProcessor {
 			posting.innerProduct(problem);
 		}
 		
-		postings.sort(new Comparator<ExtractedDocument>() {
+		Collections.sort(postings, new Comparator<ExtractedDocument>() {
 			@Override
 			public int compare(ExtractedDocument o1, ExtractedDocument o2) {
 				return Float.compare(o1.getSimilarityWithProblem(), o2.getSimilarityWithProblem());
